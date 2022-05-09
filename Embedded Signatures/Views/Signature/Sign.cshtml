@@ -4,11 +4,23 @@
 }
 @section Scripts
 {
-    <script>var widget = new LacunaSignerWidget();
-    console.log(widget);
+    <script>
+
+		$(document).ready(function() {
+			sign();
+		});
+		
+        function sign() {
+			var widget = new LacunaSignerWidget({ disableDocumentPreview: true });
+			widget.on(widget.events.documentSigned, function (e) {
+				alert('Document ' + e.id + ' signed');
+			});
+			widget.render('@ViewData["embedUrl"]', 'embed-container');
+		}
     </script>
 }
 
 <h1>Sign</h1>
 <a href=@ViewData["embedUrl"]>Embed url</a>
+<div id="embed-container" class="frame-container"></div>
 

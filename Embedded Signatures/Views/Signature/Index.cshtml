@@ -4,4 +4,9 @@
 }
 
 <h1>Index</h1>
+<h2>@ViewData["response"]</h2>
+
+<button>@{
+    ViewData["fileUploadModel"] = uploadSampleFile(ViewData["endpoint"], ViewData["token"]);
+}</button>
 

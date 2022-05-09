@@ -1,13 +1,25 @@
-﻿@{
+﻿@model SignatureViewModel;
+@{
     ViewData["Title"] = "Sign";
 }
+<button id="Sign" onclick="sign('@Model.embedUrl')">Click here to sign</button>
 @section Scripts
 {
     <script>
-        var widget = new LacunaSignerWidget();
+
+		$(document).ready(function() {
+			$('#Sign');
+		});
+		
+        function sign(url) {
+			console.log(url);
+			var widget = new LacunaSignerWidget();
+			widget.on(widget.events.documentSigned, function (e) {
+				alert('Document ' + e.id + ' signed');
+			});
+			widget.render(url,'embed-container');
+		}
     </script>
 }
-
 <h1>Sign</h1>
-<a href=@ViewData["embedUrl"]>Embed url</a>
-
+<div id="embed-container" class="frame-container"></div>

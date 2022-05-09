@@ -1,5 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model SignatureViewModel;
 @{
+    ViewData["Title"] = "Sign";
 }
+<button id="Sign" onclick="sign('@Model.embedUrl')">Click here to sign</button>
+@section Scripts
+{
+    <script>
+
+		$(document).ready(function() {
+			$('#Sign');
+		});
+		
+        function sign(url) {
+			document.getElementById("Sign").disabled = true;
+			console.log(url);
+			var widget = new LacunaSignerWidget({ disableDocumentPreview: true });
+			widget.on(widget.events.documentSigned, function (e) {
+				alert('Document ' + e.id + ' signed');
+			});
+			widget.render(url,'embed-container');
+		}
+    </script>
+}
+<h1>Sign</h1>
+<div id="embed-container" class="frame-container"></div>

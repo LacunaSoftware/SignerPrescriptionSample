@@ -14,9 +14,13 @@ namespace Embedded_Signatures.Controllers
 {
     public class SignatureController : Controller
     {
-
-        [HttpGet]
         public async Task<IActionResult> Index()
+        {
+             return View();
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Sign()
         {
             var SignerClient = new SignerClient("https://signer-lac.azurewebsites.net", "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
             var filePath = "sample.pdf";
@@ -28,9 +32,9 @@ namespace Embedded_Signatures.Controllers
       
             var participantUser = new ParticipantUserModel()
             {
-                Name = "Jack Bauer",
-                Email = "jack.bauer@mailinator.com",
-                Identifier = "75502846369"
+                Name = "Alan Mathison Turing",
+                Email = "testturing@lacunasoftware.com",
+                Identifier = "56072386105"
             };
             var flowActionCreateModel = new FlowActionCreateModel()
             {
@@ -54,9 +58,9 @@ namespace Embedded_Signatures.Controllers
 
             Console.WriteLine(actionUrlResponse.EmbedUrl);
 
+         
             return View();
         }
-      
 
     }
 }

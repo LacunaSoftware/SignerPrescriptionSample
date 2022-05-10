@@ -12,6 +12,7 @@
 		});
 		
         function sign(url) {
+			document.getElementById("Sign").disabled = true;
 			console.log(url);
 			var widget = new LacunaSignerWidget();
 			widget.on(widget.events.documentSigned, function (e) {

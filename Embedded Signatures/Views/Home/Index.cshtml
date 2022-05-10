@@ -26,15 +26,15 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <div id="embed-container" class="frame-container"></div>
-            @*<label for="cars">Choose the Document Size:</label>
-            <select name="Size" id="Size">
-                <option value="s50">50%</option>
-                <option value="s100">100%</option>
-                <option value="s200">200%</option>
-                <option value="s500">500%</option>
-            </select>*@
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-12">
+                <button id="refresh-btn" hidden="true">
+                    Refresh page
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -49,31 +49,32 @@
 
     function sign(event, url, allowPreviewDocument) {
         console.log(this);
-        console.log(event.target.id);
-        disableOtherButtons();
+        console.log(event.target);
+        disableCurrentAndHideButtons(event.target);
+        $("#refresh-btn").hidden = false;
         console.log(url);
         var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
             { disableDocumentPreview: true, enableRefusal: true});
         widget.render(url,'embed-container');
         widget.on(widget.events.documentSigned, function (e) {
             alert('Document ' + e.id + ' signed');
-            enableAllButtons();
+            showAllButtons();
             $("#embed-container").empty();
         });
     }
 
-    function disableOtherButtons(){
+    function disableCurrentAndHideButtons(target){
+        target.disabled = true;
         for(i=1; i<=4; i++){
             var sign = "Sign" + i;
-                document.getElementById(sign).disabled = true;
-            
+            document.getElementById(sign).hidden = true;
         }
     }
 
-    function enableAllButtons(){
-        for(i=1; i<=4; i++){
+    function showAllButtons() {
+         for(i=1; i<=4; i++){
             var sign = "Sign" + i;
-                document.getElementById(sign).disabled = false;
+            document.getElementById(sign).hidden = false;
         }
     }
 

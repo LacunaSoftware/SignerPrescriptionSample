@@ -53,8 +53,9 @@
         disableOtherButtons();
         console.log(url);
         var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
-            { disableDocumentPreview: true, setEnableRefusal: true});
+            { disableDocumentPreview: true}, {setEnableRefusal: true});
         widget.render(url,'embed-container');
+        
         widget.on(widget.events.documentSigned, function (e) {
             alert('Document ' + e.id + ' signed');
             enableAllButtons();

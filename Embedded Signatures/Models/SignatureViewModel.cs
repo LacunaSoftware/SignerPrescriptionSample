@@ -2,7 +2,8 @@
 {
     public class SignatureViewModel
     {
+		internal string embedUrlDigital;
 
-        public string embedUrl { get; set; }
+		public string embedUrlEletronic { get; set; }
     }
 }

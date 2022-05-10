@@ -15,7 +15,7 @@ namespace Embedded_Signatures.Controllers
         public async Task<IActionResult> Sign()
         {
             var embed = new SignatureViewModel();
-            embed.embedUrl = await Util.UpdateAndEmbedSignatureRequest(false);
+            embed.embedUrlEletronic = await Util.UpdateAndEmbedSignatureRequest(false);
             return View(embed);
         }
 
@@ -23,21 +23,21 @@ namespace Embedded_Signatures.Controllers
         public async Task<IActionResult> SignWithoutPreview()
         {
             var embed = new SignatureViewModel();
-            embed.embedUrl = await Util.UpdateAndEmbedSignatureRequest(false);
+            embed.embedUrlEletronic = await Util.UpdateAndEmbedSignatureRequest(false);
             return View(embed);
         }
         [HttpGet]
         public async Task<IActionResult> SignElectronically()
         {
             var embed = new SignatureViewModel();
-            embed.embedUrl = await Util.UpdateAndEmbedSignatureRequest(true);
+            embed.embedUrlEletronic = await Util.UpdateAndEmbedSignatureRequest(true);
             return View(embed);
         }
         [HttpGet]
         public async Task<IActionResult> SignElectronicallyWithoutPreview()
         {
             var embed = new SignatureViewModel();
-            embed.embedUrl = await Util.UpdateAndEmbedSignatureRequest(true);
+            embed.embedUrlEletronic = await Util.UpdateAndEmbedSignatureRequest(true);
             return View(embed);
         }
 

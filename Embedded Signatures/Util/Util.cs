@@ -10,11 +10,11 @@ namespace Embedded_Signatures
     {
         public static async Task<string> UpdateAndEmbedSignatureRequest(Boolean allowElectronicSignature = false)
         {
-            var SignerClient = new SignerClient("https://signer-lac.azurewebsites.net", "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
+            var signerClient = new SignerClient("https://signer-lac.azurewebsites.net", "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
             var filePath = "sample.pdf";
             var fileName = Path.GetFileName(filePath);
             var file = System.IO.File.ReadAllBytes(filePath);
-            var uploadModel = await SignerClient.UploadFileAsync(fileName, file, "application/pdf");
+            var uploadModel = await signerClient.UploadFileAsync(fileName, file, "application/pdf");
             var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = "Embedded Signature Sample" };
 
 
@@ -36,14 +36,12 @@ namespace Embedded_Signatures
                 Files = new List<FileUploadModel>() { fileUploadModel },
                 FlowActions = new List<FlowActionCreateModel>() { flowActionCreateModel }
             };
-            var result = (await SignerClient.CreateDocumentAsync(documentRequest)).First();
+            var result = (await signerClient.CreateDocumentAsync(documentRequest)).First();
             var actionUrlRequest = new ActionUrlRequest()
             {
                 Identifier = participantUser.Identifier
             };
-            var actionUrlResponse = await SignerClient.GetActionUrlAsync(result.DocumentId, actionUrlRequest);
-
-          // ViewData["embedUrl"] = actionUrlResponse.EmbedUrl;
+            var actionUrlResponse = await signerClient.GetActionUrlAsync(result.DocumentId, actionUrlRequest);
 
             return actionUrlResponse.EmbedUrl;
         }

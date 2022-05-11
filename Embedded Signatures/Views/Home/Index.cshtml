@@ -50,7 +50,7 @@
     function sign(event, url, allowPreviewDocument) {
         console.log(this);
         console.log(event.target);
-        disableCurrentAndHideButtons(event.target);
+        HideButtons(event.target);
         $("#refresh-btn").hidden = false;
         console.log(url);
         var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
@@ -58,13 +58,16 @@
         widget.render(url,'embed-container');
         widget.on(widget.events.documentSigned, function (e) {
             alert('Document ' + e.id + ' signed');
-            showAllButtons();
+            $.blockUI({message: 'Initializing ...'});
+            //showAllButtons();
             $("#embed-container").empty();
+            window.location.reload(true);
+
         });
     }
 
-    function disableCurrentAndHideButtons(target){
-        target.disabled = true;
+    function HideButtons(target){
+        //target.disabled = true;
         for(i=1; i<=4; i++){
             var sign = "Sign" + i;
             document.getElementById(sign).hidden = true;
@@ -75,7 +78,7 @@
          for(i=1; i<=4; i++){
             var sign = "Sign" + i;
             document.getElementById(sign).hidden = false;
-        }
+        } 
     }
 
 </script>

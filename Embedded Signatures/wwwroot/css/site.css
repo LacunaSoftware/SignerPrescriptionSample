@@ -16,3 +16,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+.frame-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+
+.frame-responsive {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none;
+}
+
+.sign-btn {
+    width: 500px;
+}

@@ -1,8 +1,71 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model SignatureViewModel;
+@{
+    ViewData["Title"] = "Signer Embedded Signatures Examples";
 }
+<div class="container" style="margin-top:30px">
+    <div class="row col-sm-8">
+        <div class="top-0 position-relative">
+            <button class="btn btn-danger" hidden="hidden" id="restart-button" text="Click here to restart the example" onclick="reloadPage()">Click here to restart the example</button>
+        </div>
+    </div>
+    <div class="row form-group" style="height:600px">
+        <div id="rows" class="col-sm-4 justify-content-md-center">
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <button id="Sign1" onclick="sign(event, '@Model.embedUrlDigital', true)" class="sign-btn btn btn-primary">Click here to sign Digital With Preview</button>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <button id="Sign2" onclick="sign(event, '@Model.embedUrlDigital', false)" class="sign-btn btn btn-primary">Click here to sign Digital Without Preview</button>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <button id="Sign3" onclick="sign(event, '@Model.embedUrlEletronic', true)" class="sign-btn btn btn-primary">Click here to sign Electronic With Preview</button>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <button id="Sign4" onclick="sign(event, '@Model.embedUrlEletronic', false)" class="sign-btn btn btn-primary">Click here to sign Electronic Without Preview</button>
+                </div>
+            </div>
+        </div>
+        <div class=row-cols-auto>
+            <div class="col-sm-12">
+                <div id="embed-container" class="frame-container"></div>
+            </div>
+        </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+    @section Scripts
+    {
+    <script>
+
+        function sign(event, url, allowPreviewDocument){
+            HideButtons(event.target);
+            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
+                { disableDocumentPreview: true});
+            $("#rows").hide();
+            widget.render(url,'embed-container');
+            widget.on(widget.events.documentSigned, function (e) {
+               alert('Document ' + e.id + ' signed');
+            document.getElementById("restart-button").removeAttribute("hidden")
+            });
+        }
+
+        function HideButtons(target){
+            for(i=1; i<=4; i++){
+                var sign = "Sign" + i;
+                document.getElementById(sign).hidden = true;
+            }
+
+        }
+
+        function reloadPage(){
+            window.location.reload(true);
+        }
+
+    </script>
+    }
 </div>

@@ -21,7 +21,7 @@ namespace Embedded_Signatures
             var participantUser = new ParticipantUserModel()
             {
                 Name = "Alan Mathison Turing",
-                Email = "testturing@lacunasoftware.com",
+                Email = "lcnturing@mailinator.com",
                 Identifier = "56072386105"
             };
             var flowActionCreateModel = new FlowActionCreateModel()

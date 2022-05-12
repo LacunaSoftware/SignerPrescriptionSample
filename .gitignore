@@ -4,3 +4,4 @@ bin
 obj
 *.user
 App_Data/
+\Properties\launchSettings.json

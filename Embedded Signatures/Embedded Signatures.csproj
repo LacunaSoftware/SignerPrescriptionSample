@@ -10,7 +10,8 @@
   <ItemGroup>
     <PackageReference Include="Lacuna.RestClient" Version="1.15.0" />
     <PackageReference Include="Lacuna.Signer.Client" Version="1.17.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="6.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="6.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>

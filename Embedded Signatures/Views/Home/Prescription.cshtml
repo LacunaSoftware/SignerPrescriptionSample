@@ -1,0 +1,37 @@
+﻿@model Embedded_Signatures.Models.PrescriptionViewModel
+
+@{
+    ViewData["Title"] = "Prescription";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Prescription">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" align="center">
+               <div class="row-cols-4 mb-2">
+                   <div class="col-lg-4">
+                        <input type="text" class="form-control form-rounded" placeholder="Nome do paciente" id="patientName"/>
+                   </div>
+                </div>
+                <div class="row-cols-4 mb-2">
+                    <div class="col-lg-4">
+                        <select name="medication" id="medication" class="select-wrapper form-select">
+                            <option style="display:none">Medicação</option>
+                            <option value="medicationA">Medication A</option>
+                            <option value="medicationB">Medication B</option>
+                            <option value="medicationC">Medication C</option>
+                            <option value="medicationD">Medication D</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" value="Começar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

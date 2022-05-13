@@ -35,3 +35,31 @@ body {
 .sign-btn {
     width: 500px;
 }
+
+.form-rounded {
+    border-radius: 1rem;
+}
+
+.select-wrapper {
+    border-radius: 36px;
+    display: inline-block;
+    overflow: hidden;
+    border: 1px solid #cccccc;
+    text-align:center;
+}
+
+::-webkit-input-placeholder {
+    text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    text-align: center;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+    text-align: center;
+}
+
+:-ms-input-placeholder {
+    text-align: center;
+}

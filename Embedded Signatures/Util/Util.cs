@@ -34,13 +34,12 @@ namespace Embedded_Signatures
                 {
                     new PrePositionedDocumentMarkModel()
                     {
-                        Type = DocumentMarkType.SignatureVisualRepresentation, //This is the attribute responsible for defining the Type of signature you are going to use
-                        UploadId = fileUploadModel.Id, //Document id
-                        TopLeftX = 395.0, //Signature position, in pixels, over the X axis
-                        TopLeftY = 560.0, //Signature position, in pixels, over the Y axis
-                        Width = 170.0,    //Width of the rectagular where signature will be placed in (It already has a default value)
-                        Height = 94.0,    //Height of the rectagular where signature will be placed in (It already has a default value)
-                        PageNumber = 1   //Page where the signature wil be placed
+                        Type = DocumentMarkType.SignatureVisualRepresentation,
+                        UploadId = fileUploadModel.Id,
+                        TopLeftX = 228,
+                        TopLeftY = 656,
+                        Width = 170.0,
+                        Height = 94.0,
                     }
             }
             };
@@ -59,6 +58,6 @@ namespace Embedded_Signatures
 
             return actionUrlResponse.EmbedUrl;
         }
- 
+
     }
 }

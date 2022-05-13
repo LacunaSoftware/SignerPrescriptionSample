@@ -38,7 +38,7 @@ namespace Embedded_Signatures.Controllers
                 return View(model);
             }
 
-            return View(new PrescriptionViewModel());
+            return View();
         }
     }
 }

@@ -9,10 +9,16 @@ html {
 }
 
 body {
-    src: url(http://fonts.cdnfonts.com/css/le-havre) format("truetype");
+    background-image: url("1440pxbackground.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
     font-family: le-havre, sans-serif;
     font-style: normal;
     font-weight: 200;
+}
+
+.container{
+
 }
 
 html {
@@ -53,6 +59,11 @@ body {
     overflow: hidden;
     border: 1px solid #cccccc;
     text-align:center;
+}
+
+.navbar-img{
+    width: 45%;
+    height: auto;
 }
 
 ::-webkit-input-placeholder {

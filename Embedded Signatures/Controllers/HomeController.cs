@@ -35,6 +35,7 @@ namespace Embedded_Signatures.Controllers
                 Console.WriteLine("kk deu bom man");
                 Console.WriteLine("Option: " + model.MedicationOptions);
                 Console.WriteLine("Name: " + model.MedicationName);
+                return View(model);
             }
 
             return View(new PrescriptionViewModel());

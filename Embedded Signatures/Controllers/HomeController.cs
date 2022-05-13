@@ -28,8 +28,15 @@ namespace Embedded_Signatures.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Prescription()
+        public IActionResult Prescription(PrescriptionViewModel model)
         {
+            if (ModelState.IsValid)
+            {
+                Console.WriteLine("kk deu bom man");
+                Console.WriteLine("Option: " + model.MedicationOptions);
+                Console.WriteLine("Name: " + model.MedicationName);
+            }
+
             return View(new PrescriptionViewModel());
         }
     }

@@ -8,6 +8,13 @@ html {
   }
 }
 
+body {
+    src: url(http://fonts.cdnfonts.com/css/le-havre) format("truetype");
+    font-family: le-havre, sans-serif;
+    font-style: normal;
+    font-weight: 200;
+}
+
 html {
   position: relative;
   min-height: 100%;

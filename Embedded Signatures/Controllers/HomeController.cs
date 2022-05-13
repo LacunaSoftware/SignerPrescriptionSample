@@ -33,10 +33,26 @@ namespace Embedded_Signatures.Controllers
             if (ModelState.IsValid)
             {
                 Console.WriteLine("kk deu bom man");
-                Console.WriteLine("Option: " + model.MedicationOptions);
-                Console.WriteLine("Name: " + model.MedicationName);
+                Console.WriteLine("Name: " + model.PatientName);
+                Console.WriteLine("Option: " + model.MedicationName);
+                
+                return View();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(PrescriptionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
+
+            Console.WriteLine("kk deu bom man");
+            Console.WriteLine("Name: " + model.PatientName);
+            Console.WriteLine("Option: " + model.MedicationName);
 
             return View();
         }

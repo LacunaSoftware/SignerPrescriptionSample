@@ -4,10 +4,10 @@ namespace Embedded_Signatures.Models
 {
     public class PrescriptionViewModel
     {
-        public string? PatientName { get; set; }
-        public string? MedicationName { get; set; }
+        public string PatientName { get; set; }
+        public string MedicationName { get; set; }
 
-        public List<SelectListItem> MedicationOptions = new List<SelectListItem>
+        public List<SelectListItem>? MedicationOptions = new List<SelectListItem>
         {
             new SelectListItem { Value = "med_A", Text = "Medication A" },
             new SelectListItem { Value = "med_B", Text = "Medication B" },

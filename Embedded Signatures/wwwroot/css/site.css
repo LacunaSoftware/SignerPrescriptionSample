@@ -9,7 +9,7 @@ html {
 }
 
 body {
-    background-image: url("1440pxbackground.png");
+    background-image: url("../1440pxbackground.png");
     background-size: 100%;
     background-repeat: no-repeat;
     font-family: le-havre, sans-serif;

@@ -1,4 +1,5 @@
 ﻿using Lacuna.Signer.Api;
+using Lacuna.Signer.Api.DocumentMark;
 using Lacuna.Signer.Api.Documents;
 using Lacuna.Signer.Api.FlowActions;
 using Lacuna.Signer.Api.Users;
@@ -28,7 +29,20 @@ namespace Embedded_Signatures
             {
                 Type = FlowActionType.Signer,
                 User = participantUser,
-                AllowElectronicSignature = allowElectronicSignature
+                AllowElectronicSignature = allowElectronicSignature,
+                PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
+                {
+                    new PrePositionedDocumentMarkModel()
+                    {
+                        Type = DocumentMarkType.SignatureVisualRepresentation, //This is the attribute responsible for defining the Type of signature you are going to use
+                        UploadId = fileUploadModel.Id, //Document id
+                        TopLeftX = 395.0, //Signature position, in pixels, over the X axis
+                        TopLeftY = 560.0, //Signature position, in pixels, over the Y axis
+                        Width = 170.0,    //Width of the rectagular where signature will be placed in (It already has a default value)
+                        Height = 94.0,    //Height of the rectagular where signature will be placed in (It already has a default value)
+                        PageNumber = 1   //Page where the signature wil be placed
+                    }
+            }
             };
 
             var documentRequest = new CreateDocumentRequest()

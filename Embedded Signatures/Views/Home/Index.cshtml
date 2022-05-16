@@ -29,8 +29,8 @@
                                 @Html.DropDownListFor(m =>m.MedicationName,new List<SelectListItem>{
                             new SelectListItem{Text ="Medication A", Value = "Medication A"},
                             new SelectListItem{Text ="Medication B", Value = "Medication B"},
-                            new SelectListItem{Text ="Medication C", Value = "Medication C"}
-                            }, new {@class= "select-wrapper form-select transparent-input"})
+                            new SelectListItem{Text ="Medication C", Value = "Medication C"},
+                            }, "Selecione", new {@class= "select-wrapper form-select transparent-input"})
                             </div>
                         </div>
                         <div class="row-cols-4">
@@ -51,7 +51,7 @@
 </div>
 <div class="row-cols-4">
     <div class="col-lg-4">
-        <input id="Sign" onclick="runAgain()" value="Nova prescrição" class="sign-btn btn btn-primary" type="submit" />
+        <input id="Sign"  hidden ="hidden"  onclick="runAgain()" value="Nova prescrição" class="sign-btn btn btn-primary" type="submit" />
     </div>
 </div>
 
@@ -62,6 +62,7 @@
 <script>
     @if(ViewBag.embed != null){
         @:sign('@ViewBag.embed');
+        
     }
     function sign(url) {
         hideButtons();
@@ -69,6 +70,8 @@
         widget.render(url, 'embed-container');
         widget.on(widget.events.documentSigned, function(e) {
             alert('Document ' + e.id + ' signed');
+        document.getElementById("Sign").removeAttribute("hidden")
+        ViewData.Clear();
         });
     }
 
@@ -80,9 +83,10 @@
     }
 
     function runAgain(){
-        @ViewBag.embed = null;
-        window.location.reload(true);
+        window.location.replace("Home")
+        //window.location.reload(true);
     }
+    
 
 </script>
 

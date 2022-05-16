@@ -13,65 +13,64 @@
                     <div class="row justify-content-center">
                         <div class="col-sm-6 mb-4">
                             <h1 class="text-md-center">Criação de prescrição</h1>
-                            <h3 class="text-md-center">Informe os dados abaixo para começar:</h3>
+                            <h5 class="text-md-center">Informe os dados abaixo para começar:</h5>
                         </div>
                     </div>
                 </div>
-                <table cellpadding="0" cellspacing="0">
-                    <tr>
-                        <th colspan="2" aling="center">AAA</th>
-                    </tr>
-                    <tr>
-                        <td>Patient Name:</td>
-                        <td>@Html.TextBoxFor(m =>m.PatientName)</td>
-                    </tr>
-                    <tr>
-                        <td>Medication:</td>
-                        <td>
+                <div class="form-group" align="center">
+                    <div class="row-cols-4 mb-2">
+                        <div class="col-lg-4">
+                            @Html.TextBoxFor(m =>m.PatientName, new{ placeholder="Nome do paciente", @class= "form-control form-rounded transparent-input" })
+                        </div>
+                    </div>
+                    <div class="row-cols-4 mb-5">
+                        <div class="col-lg-4">
                             @Html.DropDownListFor(m =>m.MedicationName,new List<SelectListItem>{
                         new SelectListItem{Text ="MedicationA", Value = "A"},
                         new SelectListItem{Text ="MedicationB", Value = "B"},
                         new SelectListItem{Text ="MedicationC", Value = "C"}
-                        })
-                        </td>
-                        <td><input type="submit" value="Submit" /></td>
-                    </tr>
-                </table>
+                        }, new {@class= "select-wrapper form-select transparent-input"})
+                        </div>
+                    </div>
+                    <div class="row-cols-4">
+                        <div class="col-lg-4">
+                            <input type="submit" value="Create" placeholder="Começar" class="form-control btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-
     }
 </div>
- <div class=row-cols-auto>
-            <div class="col-sm-12">
-                <div id="embed-container" class="frame-container"></div>
-            </div>
+<div class=row-cols-auto>
+    <div class="col-sm-12">
+        <div id="embed-container" class="frame-container"></div>
+    </div>
 </div>
 <div class="row-cols-4">
     <div class="col-lg-4">
         <input id="Sign" onclick="sign(event, '@ViewBag.embed')" class="sign-btn btn btn-primary" type="submit" />
     </div>
 </div>
-    
+
 
 
 
 @section Scripts {
-    <script>
-        console.log("oi")
-        function sign(event, url ="www") {
-            console.log(url)
-            var widget = new LacunaSignerWidget();
-             console.log("chegou aqui")
-            widget.render(url, 'embed-container')
-            console.log("chegou aqui2")
-            widget.on(widget.events.documentSigned, function(e) {
-                alert('Document ' + e.id + ' signed');
-            });
-        }
+<script>
+    console.log("oi")
+    function sign(event, url ="www") {
+        console.log(url)
+        var widget = new LacunaSignerWidget();
+         console.log("chegou aqui")
+        widget.render(url, 'embed-container')
+        console.log("chegou aqui2")
+        widget.on(widget.events.documentSigned, function(e) {
+            alert('Document ' + e.id + ' signed');
+        });
+    }
 
-    </script>
+</script>
 
 
 

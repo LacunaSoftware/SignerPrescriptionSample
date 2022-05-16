@@ -14,21 +14,18 @@ namespace Embedded_Signatures.Controllers
         }
 
         public IActionResult Index()
-        { 
-        
-            return View();
-        }
-        
-        
-        [HttpPost]
-        public async Task<IActionResult> Index(CreatePrescriptionModel Prescription)
         {
 
-            var embed = Prescription.EmbedUrl;
-            embed = await Util.UploadDocument(Prescription.PatientName, Prescription.MedicationName);
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Index(CreatePrescriptionModel prescription)
+        {
+            var embed = await Util.UploadDocument(prescription.PatientName, prescription.MedicationName);
             ViewBag.embed = embed;
-           
-            
+
             return View();
         }
 
@@ -38,5 +35,5 @@ namespace Embedded_Signatures.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-   }
+    }
 }

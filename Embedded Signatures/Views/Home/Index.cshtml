@@ -49,6 +49,11 @@
         <div id="embed-container" class="frame-container"></div>
     </div>
 </div>
+<div class="row-cols-4">
+    <div class="col-lg-4">
+        <input id="Sign" onclick="runAgain()" value="Nova prescrição" class="sign-btn btn btn-primary" type="submit" />
+    </div>
+</div>
 
 
 
@@ -59,7 +64,6 @@
         @:sign('@ViewBag.embed');
     }
     function sign(url) {
-        console.log("kk eae men");
         hideButtons();
         var widget = new LacunaSignerWidget({enableRefusal : true});
         widget.render(url, 'embed-container');
@@ -73,6 +77,11 @@
         infoData.hidden = true;
         var formHide = document.getElementById("form-hide");
         formHide.hidden = true;
+    }
+
+    function runAgain(){
+        @ViewBag.embed = null;
+        window.location.reload(true);
     }
 
 </script>

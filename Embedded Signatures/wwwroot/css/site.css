@@ -70,6 +70,10 @@ body {
     height: auto;
 }
 
+.btn-clr {
+    background-color: #0A4EA1; 
+}
+
 .navbar-group{
    margin-right: 5%;
 }

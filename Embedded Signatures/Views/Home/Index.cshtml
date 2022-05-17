@@ -20,7 +20,7 @@
                     <div class="form-group" align="center">
                         <div class="row-cols-4 mb-2">
                             <div class="col-lg-4">
-                                @Html.TextBoxFor(m =>m.PatientName, new{ id="paciente",placeholder="Nome do paciente",onkeyup = "disableButtons()",@class= "form-control form-rounded transparent-input" })
+                                @Html.TextBoxFor(m =>m.PatientName, new{ id="paciente",placeholder="Nome do paciente",onkeyup = "enableButton()",@class= "form-control form-rounded transparent-input" })
                             </div>
                         </div>
                         <div class="row-cols-4 mb-5">
@@ -29,7 +29,7 @@
                                 new SelectListItem{Text ="Ibuprofeno", Value = "Ibuprofeno 6500mg _______________ 15cp"},
                                 new SelectListItem{Text ="Rivotril"  , Value = "Rivotril   1255mg _______________ 2cx"},
                                 new SelectListItem{Text ="Omeprazol" , Value = "Omeprazol    20mg _______________ 1cap"},
-                                }, "Medicamento", new { id = "medicamento", onchange = "disableButtons()", @class= "select-wrapper form-select transparent-input"})
+                                }, "Medicamento", new { id = "medicamento", onchange = "enableButton()", @class= "select-wrapper form-select transparent-input"})
                             </div>
                         </div>
                         <div class="my-lg-3">

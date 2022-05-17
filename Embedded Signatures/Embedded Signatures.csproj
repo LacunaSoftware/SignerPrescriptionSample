@@ -2,10 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Embedded_Signatures</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Template-Prescricao.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Template-Prescricao.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\1440pxbackground.png" />

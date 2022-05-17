@@ -64,59 +64,60 @@
 
 
 @section Scripts {
-<script>
+    <script>
 
 
-    function sign(data) {
-        hideButtons()
-        var widget = new LacunaSignerWidget({ enableRefusal: true });
-        widget.render(data, 'embed-container');
-        widget.on(widget.events.documentSigned, function(e) {
-            alert('Document ' + e.id + ' signed');
-        });
-    }
+        function sign(data,allowPreviewDocument) {
+            hideButtons()
+            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
+                { disableDocumentPreview: true });
+            widget.render(data, 'embed-container');
+            widget.on(widget.events.documentSigned, function(e) {
+                alert('Document ' + e.id + ' signed');
+            });
+        }
 
-    function startSignature(elem) {
-        // Patient name
-        var valuePatient = document.forms[0].PatientName.value;
-        // Medication name
-        var select = document.getElementById('MedicationName');
-        var valueMedication = select.options[select.selectedIndex].value;
+        function startSignature(elem) {
+            // Patient name
+            var valuePatient = document.forms[0].PatientName.value;
+            // Medication name
+            var select = document.getElementById('MedicationName');
+            var valueMedication = select.options[select.selectedIndex].value;
 
-        // Loading while the document is created
-        var loadingHidden = document.getElementById("loadingHeader");
-        loadingHidden.style.display = "block";
+            // Loading while the document is created
+            var loadingHidden = document.getElementById("loadingHeader");
+            loadingHidden.style.display = "block";
 
-        $.ajax({
-            type: 'POST',
-            url: '/Home/Prescription',
-            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
-            success: function(data) {
-                if (data) {
-                    loadingHidden.style.display = "none";
-                    sign(data.embedUrl);
-                    elem.style.visibility = "hidden";
-                } else {
-                    elem.innerHTML = 'Error';
-                }
-            },
-            contentType: "application/json",
-            dataType: 'json'
-        });
-    }
+            $.ajax({
+                type: 'POST',
+                url: '/Home/Prescription',
+                data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
+                success: function(data) {
+                    if (data) {
+                        loadingHidden.style.display = "none";
+                        sign(data.embedUrl);
+                        elem.style.visibility = "hidden";
+                    } else {
+                        elem.innerHTML = 'Error';
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
 
-    function hideButtons() {
-        var infoData = document.getElementById("infoData");
-        infoData.hidden = true;
-        var formHide = document.getElementById("form-hide");
-        formHide.hidden = true;
-    }
+        function hideButtons() {
+            var infoData = document.getElementById("infoData");
+            infoData.hidden = true;
+            var formHide = document.getElementById("form-hide");
+            formHide.hidden = true;
+        }
 
-    function runAgain() {
-        window.location.replace("Home")
-    }
+        function runAgain() {
+            window.location.replace("Home")
+        }
 
-</script>
+    </script>
 
 
 

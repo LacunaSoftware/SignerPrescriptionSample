@@ -62,15 +62,33 @@
         <div id="embed-container" class="frame-container"></div>
     </div>
 </div>
-<div class="row-cols-4">
-    <div class="col-lg-4">
-        @*<input id="Sign"  hidden ="hidden"  onclick="runAgain()" value="Nova prescrição" class="sign-btn btn btn-primary" type="submit" />*@
+<div class="row-cols-auto">
+    <div class="col-sm-12">
+        <div class="row justify-content-center" id="afterSigned" style="display: none">
+            <div class="container col-lg-6 p-3 my-5 border rounded-3 bg-white">
+                <div class="row justify-content-center">
+                    <div class="row justify-content-center p-5">
+                        <div class="col-md-auto">
+                            <img src="~/Group 159ok.png"></img>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <h4> Sua prescrição foi criada com sucesso!</h4>
+                    </div>
+                    <div class="btn-group col-lg-8">
+                        <button class="btn btn-outline-primary rounded btn-custom-outline m-2">FINALIZAR</button>
+                        <button class="btn btn-primary btn-clr m-2">NOVA PRESCRIÇÃO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
 
 @section Scripts {
+<<<<<<< Updated upstream
     <script>
 
 
@@ -125,6 +143,68 @@
         }
 
     </script>
+=======
+<script>
+
+
+    function sign(data,allowPreviewDocument) {
+        hideButtons()
+        var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
+            { disableDocumentPreview: true });
+        widget.render(data, 'embed-container');
+        widget.on(widget.events.documentSigned, function(e) {
+            // removes the widget
+            document.getElementById('embed-container').remove();
+            // Container after signature
+            var containerPanel = document.getElementById("afterSigned");
+            containerPanel.style.display = "block";
+            alert('Document ' + e.id + ' signed');
+        });
+    }
+
+    function startSignature(elem) {
+        // Patient name
+        var valuePatient = document.forms[0].PatientName.value;
+        // Medication name
+        var select = document.getElementById('MedicationName');
+        var valueMedication = select.options[select.selectedIndex].value;
+
+        // Loading while the document is created
+        var loadingHidden = document.getElementById("loadingHeader");
+        loadingHidden.style.display = "block";
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/Prescription',
+            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
+            success: function(data) {
+                if (data) {
+                    loadingHidden.style.display = "none";
+                    sign(data.embedUrl);
+                    elem.style.visibility = "hidden";
+
+                } else {
+                    elem.innerHTML = 'Error';
+                }
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    }
+
+    function hideButtons() {
+        var infoData = document.getElementById("infoData");
+        infoData.hidden = true;
+        var formHide = document.getElementById("form-hide");
+        formHide.hidden = true;
+    }
+
+    function runAgain() {
+        window.location.replace("Home")
+    }
+
+</script>
+>>>>>>> Stashed changes
 
 
 

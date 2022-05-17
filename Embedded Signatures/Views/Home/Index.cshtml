@@ -34,10 +34,14 @@
                         </div>
                         <div class="row-cols-4">
                             <div class="col-lg-4 mb-2">
-                                <input type="button" value="Começar" onclick="startSignature(event)" placeholder="Começar" class="form-control btn btn-primary" />
+                                <input type="button" value="Começar" onclick="startSignature(this)" placeholder="Começar" class="form-control btn btn-primary" />
                             </div>
                             <div class="col-lg-4 mt-3">
-                                <h1 style="display: none" id="loadingHeader"> Carregando... </h1>
+                                <div id="loadingHeader" class="center-div" style="display: none">
+                                    <div class="inner-div">
+                                        <div class="loader"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,7 +87,6 @@
         var loadingHidden = document.getElementById("loadingHeader");
         loadingHidden.style.display = "block";
 
-        elem.target.innerHTML = 'Loading ...';
         $.ajax({
             type: 'POST',
             url: '/Home/Prescription',

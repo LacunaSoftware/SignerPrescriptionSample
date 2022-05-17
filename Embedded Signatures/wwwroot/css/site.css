@@ -12,9 +12,10 @@ body {
     background-image: url("../1440pxbackground.png");
     background-size: 100%;
     background-repeat: no-repeat;
-    font-family: le-havre, sans-serif;
+    font-family: 'Lato', sans-serif;
     font-style: normal;
     font-weight: 200;
+    margin-bottom: 60px;
 }
 
 .container{
@@ -26,9 +27,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
 .frame-container {
     position: relative;
     width: 100%;

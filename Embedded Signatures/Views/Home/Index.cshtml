@@ -26,9 +26,9 @@
                         <div class="row-cols-4 mb-5">
                             <div class="col-lg-4">
                                 @Html.DropDownListFor(m =>m.MedicationName,new List<SelectListItem>{
-                                new SelectListItem{Text ="Medication A", Value = "Medication A"},
-                                new SelectListItem{Text ="Medication B", Value = "Medication B"},
-                                new SelectListItem{Text ="Medication C", Value = "Medication C"},
+                                new SelectListItem{Text ="Ibuprofeno", Value = "Ibuprofeno 6500mg _______________ 15cp"},
+                                new SelectListItem{Text ="Rivotril"  , Value = "Rivotril   1255mg _______________ 2cx"},
+                                new SelectListItem{Text ="Omeprazol" , Value = "Omeprazol    20mg _______________ 1cap"},
                                 }, "Selecione", new {@class= "select-wrapper form-select transparent-input"})
                             </div>
                         </div>
@@ -70,7 +70,7 @@
         function sign(data,allowPreviewDocument) {
             hideButtons()
             var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
-                { disableDocumentPreview: true });
+                { disableDocumentPreview: false });
             widget.render(data, 'embed-container');
             widget.on(widget.events.documentSigned, function(e) {
                 alert('Document ' + e.id + ' signed');

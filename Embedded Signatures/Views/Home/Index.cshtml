@@ -32,6 +32,13 @@
                                 }, "Medicamento", new {@class= "select-wrapper form-select transparent-input"})
                             </div>
                         </div>
+                        <div>
+                            <input type="checkbox" id="DocumentPreview" name="subscribe" value="AllowPreviewDocument">
+                            <label for="subscribeNews">Assinatura eletronica</label>
+                            <input type="checkbox" id="Signature" name="subscribe" value="AllowElectronicSignature">
+                            <label for="subscribeNews">Sem previsualização</label>
+                        </div><div>           
+                        </div>
                         <div class="row-cols-4">
                             <div class="col-lg-2 mb-2">
                                 <input type="button" value="COMEÇAR" onclick="startSignature(this)" placeholder="Começar" class="form-control btn btn-primary btn-clr" />
@@ -67,7 +74,7 @@
     <script>
 
 
-        function sign(data,allowPreviewDocument) {
+        function sign(data, allowPreviewDocument) {
             hideButtons()
             var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
                 { disableDocumentPreview: false });

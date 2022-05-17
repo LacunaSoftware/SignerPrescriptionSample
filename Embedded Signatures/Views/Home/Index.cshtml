@@ -33,14 +33,14 @@
                             </div>
                         </div>
                         <div class="my-lg-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="ElectronicSignature" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Assinatura Eletronica</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="DocumentPreview" value="option2">
-                            <label class="form-check-label" for="inlineCheckbox2">Ver Documento</label>
-                        </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="ElectronicSignature" value="option1">
+                                <label class="form-check-label" for="inlineCheckbox1">Assinatura Eletronica</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="DocumentPreview" value="option2">
+                                <label class="form-check-label" for="inlineCheckbox2">Ver Documento</label>
+                            </div>
                         </div>
                         <div class="row-cols-4">
                             <div class="col-lg-2 mb-2">
@@ -91,76 +91,72 @@
 
 
 @section Scripts {
-    <script>
+<script>
 
-
-        function sign(data, allowPreviewDocument) {
-            hideButtons()
-            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
-                { disableDocumentPreview: true });
-            widget.render(data, 'embed-container');
-            widget.on(widget.events.documentSigned, function(e) {
-                alert('Document ' + e.id + ' signed');
-            });
-        }
-
-        function startSignature(elem) {
-            // Patient name
-            var valuePatient = document.forms[0].PatientName.value;
-            // Medication name
-            var select = document.getElementById("MedicationName");
-            var valueMedication = select.options[select.selectedIndex].value;
-
-            // Loading while the document is created
-            var loadingHidden = document.getElementById("loadingHeader");
-            loadingHidden.style.display = "block";
+    function sign(data, allowPreviewDocument) {
+        console.log("allowPreviewDocument: ", allowPreviewDocument);
+        hideButtons()
+        var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
+            { disableDocumentPreview: true });
+        widget.render(data, 'embed-container');
+        widget.on(widget.events.documentSigned, function(e) {
+            // removes the widget
+            document.getElementById('embed-container').remove();
+            // Container after signature
+            var containerPanel = document.getElementById("afterSigned");
+            containerPanel.style.display = "block";
+            alert('Document ' + e.id + ' signed');
             
-            if (document.getElementById("DocumentPreview").checked = true) {
-                allowPreviewDocument = true
-            }
-            else {
-                allowPreviewDocument = false
-            }
-           
 
-            $.ajax({
-                type: 'POST',
-                url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
-                success: function(data) {
-                    if (data) {
-                        loadingHidden.style.display = "none";
-                        sign(data.embedUrl, allowPreviewDocument);
-                        elem.style.visibility = "hidden";
-                    } else {
-                        elem.innerHTML = 'Error';
-                    }
-                },
-                contentType: "application/json",
-                dataType: 'json'
-            });
-        }
+        });
+    }
 
-        function hideButtons() {
-            var infoData = document.getElementById("infoData");
-            infoData.hidden = true;
-            var formHide = document.getElementById("form-hide");
-            formHide.hidden = true;
-        }
+    function startSignature(elem) {
+        // Patient name
+        var valuePatient = document.forms[0].PatientName.value;
+        // Medication name
+        var select = document.getElementById('MedicationName');
+        var valueMedication = select.options[select.selectedIndex].value;
 
-        function runAgain() {
-            window.location.replace("Home")
-        }
+        // Loading while the document is created
+        var loadingHidden = document.getElementById("loadingHeader");
+        loadingHidden.style.display = "block";
 
+        // set to true if the user wants to see preview of the document
+        allowPreviewDocument = document.getElementById("DocumentPreview").checked == true ? true: false;
 
-    </script>
->>>>>>> Stashed changes
+        $.ajax({
+            type: 'POST',
+            url: '/Home/Prescription',
+            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
+            success: function(data) {
+                if (data) {
+                    loadingHidden.style.display = "none";
+                    sign(data.embedUrl, allowPreviewDocument);
+                    elem.style.visibility = "hidden";
+
+                } else {
+                    elem.innerHTML = 'Error';
+                }
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    }
+
+    function hideButtons() {
+        var infoData = document.getElementById("infoData");
+        infoData.hidden = true;
+        var formHide = document.getElementById("form-hide");
+        formHide.hidden = true;
+    }
+
+    function runAgain() {
+        window.location.replace("Home")
+    }
 
 </script>
-
-
-
-    }
+}
 
 
 

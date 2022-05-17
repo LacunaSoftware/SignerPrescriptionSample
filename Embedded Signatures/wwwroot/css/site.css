@@ -29,6 +29,9 @@ html {
     width: 100%;
     height: 0;
     padding-bottom: 56.25%;
+    outline-style: outset;
+    outline-color: white;
+    outline-width:thick;
 }
 
 .frame-responsive {
@@ -37,7 +40,6 @@ html {
     position: absolute;
     top: 0;
     left: 0;
-    border: none;
 }
 
 .sign-btn {
@@ -123,6 +125,7 @@ html {
 }
 
 .loader {
+    position: fixed;
     margin: auto;
     border: 16px solid #f3f3f3;
     border-radius: 50%;
@@ -135,7 +138,7 @@ html {
 }
 
 .inner-div {
-    background-color: white;
+    background-color: #FFF7EE;
     border-radius: 15px;
     margin: auto;
     padding: 2%;

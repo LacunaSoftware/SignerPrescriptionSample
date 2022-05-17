@@ -23,7 +23,7 @@ namespace Embedded_Signatures.Controllers
         [HttpPost]
         public async Task<IActionResult> Prescription([FromBody]CreatePrescriptionModel prescription)
         {
-            var embed = await SignerUtil.CreateDocument(prescription.PatientName, prescription.MedicationName);
+            var embed = await SignerUtil.CreateDocument(prescription.PatientName, prescription.MedicationName,prescription.AllowElectronicSignature);
 
             return Json(new {embedUrl = embed});
         }

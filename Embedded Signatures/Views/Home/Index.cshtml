@@ -80,7 +80,7 @@
                     </div>
                     <div class="btn-group col-lg-8">
                         <button class="btn btn-outline-primary rounded btn-custom-outline m-2">FINALIZAR</button>
-                        <button class="btn btn-primary rounded btn-clr m-2">NOVA PRESCRIÇÃO</button>
+                        <a class="btn btn-outline-primary rounded btn-custom-outline m-2" asp-area="" asp-controller="Home" asp-action="Index" role="button">NOVA PRESCRIÇÃO</a>
                     </div>
                 </div>
             </div>
@@ -123,11 +123,12 @@
 
         // set to true if the user wants to see preview of the document
         allowPreviewDocument = document.getElementById("DocumentPreview").checked == true ? true : false;
+        allowElectronicSignature = document.getElementById("ElectronicSignature").checked == true ? true : false;
 
         $.ajax({
             type: 'POST',
             url: '/Home/Prescription',
-            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
+            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication , AllowElectronicSignature: allowElectronicSignature }),
             success: function(data) {
                 if (data) {
                     loadingHidden.style.display = "none";

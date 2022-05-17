@@ -5,6 +5,7 @@ namespace Embedded_Signatures.Models
     {
         public string PatientName { get; set; }
         public string MedicationName { get; set; }
-   
+        public Boolean AllowElectronicSignature { get; set; }
+
     }
 }

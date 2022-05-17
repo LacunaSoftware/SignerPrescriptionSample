@@ -33,8 +33,11 @@
                             </div>
                         </div>
                         <div class="row-cols-4">
-                            <div class="col-lg-4">
-                                <input type="button" value="Começar" onclick="startSignature(this)" placeholder="Começar" class="form-control btn btn-primary" />
+                            <div class="col-lg-4 mb-2">
+                                <input type="button" value="Começar" onclick="startSignature(event)" placeholder="Começar" class="form-control btn btn-primary" />
+                            </div>
+                            <div class="col-lg-4 mt-3">
+                                <h1 style="display: none" id="loadingHeader"> Carregando... </h1>
                             </div>
                         </div>
                     </div>
@@ -57,62 +60,60 @@
 
 
 @section Scripts {
-    <script>
+<script>
 
 
-        function sign(data) {
-            hideButtons()
-            var widget = new LacunaSignerWidget({ enableRefusal: true });
-            console.log(data);
-            widget.render(data, 'embed-container');
-            widget.on(widget.events.documentSigned, function(e) {
-                alert('Document ' + e.id + ' signed');
-            });
-        }
+    function sign(data) {
+        hideButtons()
+        var widget = new LacunaSignerWidget({ enableRefusal: true });
+        widget.render(data, 'embed-container');
+        widget.on(widget.events.documentSigned, function(e) {
+            alert('Document ' + e.id + ' signed');
+        });
+    }
 
-        var select = document.getElementById('MedicationName');
-
-
+    function startSignature(elem) {
+        // Patient name
         var valuePatient = document.forms[0].PatientName.value;
+        // Medication name
+        var select = document.getElementById('MedicationName');
         var valueMedication = select.options[select.selectedIndex].value;
 
+        // Loading while the document is created
+        var loadingHidden = document.getElementById("loadingHeader");
+        loadingHidden.style.display = "block";
 
+        elem.target.innerHTML = 'Loading ...';
+        $.ajax({
+            type: 'POST',
+            url: '/Home/Prescription',
+            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
+            success: function(data) {
+                if (data) {
+                    loadingHidden.style.display = "none";
+                    sign(data.embedUrl);
+                    elem.style.visibility = "hidden";
+                } else {
+                    elem.innerHTML = 'Error';
+                }
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    }
 
-        function startSignature(elem) {
-            elem.innerHTML = 'Loading ...';
-            $.ajax({
-                type: 'POST',
-                url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
-                success: function(data) {
-                    if (data) {
-                        sign(data.embedUrl);
-                        elem.style.visibility = "hidden";
-                    } else {
-                        elem.innerHTML = 'Error';
-                    }
-                },
-                contentType: "application/json",
-                dataType: 'json'
-            });
-        }
+    function hideButtons() {
+        var infoData = document.getElementById("infoData");
+        infoData.hidden = true;
+        var formHide = document.getElementById("form-hide");
+        formHide.hidden = true;
+    }
 
+    function runAgain() {
+        window.location.replace("Home")
+    }
 
-
-
-        function hideButtons() {
-            var infoData = document.getElementById("infoData");
-            infoData.hidden = true;
-            var formHide = document.getElementById("form-hide");
-            formHide.hidden = true;
-        }
-
-        function runAgain() {
-            window.location.replace("Home")
-        }
-
-
-    </script>
+</script>
 
 
 

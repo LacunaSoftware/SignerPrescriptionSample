@@ -10,7 +10,7 @@ namespace Embedded_Signatures
 {
     public class SignerUtil
     {
-        public static async Task<string> CreateDocument(string name, string medicine)
+        public static async Task<string> CreateDocument(string name, string medicine, Boolean allowElectronicSignature = false)
         {
             var signerClient = new SignerClient("https://signer-lac.azurewebsites.net", "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
             var fileStream = CreatePrescriptionPdf(name, medicine);
@@ -29,6 +29,7 @@ namespace Embedded_Signatures
             {
                 Type = FlowActionType.Signer,
                 User = participantUser,
+                AllowElectronicSignature = allowElectronicSignature,
                 PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
                 {
                     new PrePositionedDocumentMarkModel()

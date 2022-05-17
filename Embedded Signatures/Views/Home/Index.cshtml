@@ -80,7 +80,7 @@
                     </div>
                     <div class="btn-group col-lg-8">
                         <button class="btn btn-outline-primary rounded btn-custom-outline m-2">FINALIZAR</button>
-                        <button class="btn btn-primary btn-clr m-2">NOVA PRESCRIÇÃO</button>
+                        <button class="btn btn-primary rounded btn-clr m-2">NOVA PRESCRIÇÃO</button>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,6 @@
 <script>
 
     function sign(data, allowPreviewDocument) {
-        console.log("allowPreviewDocument: ", allowPreviewDocument);
         hideButtons()
         var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
             { disableDocumentPreview: true });
@@ -123,7 +122,7 @@
         loadingHidden.style.display = "block";
 
         // set to true if the user wants to see preview of the document
-        allowPreviewDocument = document.getElementById("DocumentPreview").checked == true ? true: false;
+        allowPreviewDocument = document.getElementById("DocumentPreview").checked == true ? true : false;
 
         $.ajax({
             type: 'POST',

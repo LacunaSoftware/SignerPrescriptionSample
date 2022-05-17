@@ -39,7 +39,7 @@ namespace Embedded_Signatures
                         TopLeftX = 228,
                         TopLeftY = 656,
                         Width = 170.0,
-                        Height = 94.0,
+                        Height = 40.0,
                     }
             }
             };

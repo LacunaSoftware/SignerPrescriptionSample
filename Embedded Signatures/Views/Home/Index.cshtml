@@ -20,7 +20,7 @@
                     <div class="form-group" align="center">
                         <div class="row-cols-4 mb-2">
                             <div class="col-lg-4">
-                                @Html.TextBoxFor(m =>m.PatientName, new{ placeholder="Nome do paciente", @class= "form-control form-rounded transparent-input" })
+                                @Html.TextBoxFor(m =>m.PatientName, new{ id="paciente",placeholder="Nome do paciente",onkeyup = "disableButtons()",@class= "form-control form-rounded transparent-input" })
                             </div>
                         </div>
                         <div class="row-cols-4 mb-5">
@@ -29,7 +29,7 @@
                                 new SelectListItem{Text ="Ibuprofeno", Value = "Ibuprofeno 6500mg _______________ 15cp"},
                                 new SelectListItem{Text ="Rivotril"  , Value = "Rivotril   1255mg _______________ 2cx"},
                                 new SelectListItem{Text ="Omeprazol" , Value = "Omeprazol    20mg _______________ 1cap"},
-                                }, "Medicamento", new {@class= "select-wrapper form-select transparent-input"})
+                                }, "Medicamento", new { id = "medicamento", onchange = "disableButtons()", @class= "select-wrapper form-select transparent-input"})
                             </div>
                         </div>
                         <div class="my-lg-3">
@@ -44,7 +44,7 @@
                         </div>
                         <div class="row-cols-4">
                             <div class="col-lg-2 mb-2">
-                                <input type="button" value="COMEÇAR" onclick="startSignature(this)" placeholder="Começar" class="form-control btn btn-primary btn-clr" />
+                                <input id="start" type="button" disabled value="COMEÇAR" onclick="startSignature(this)" placeholder="Começar" class="form-control btn btn-primary btn-clr" />
                             </div>
                             <div class="col-lg-4 mt-3">
                                 <div id="loadingHeader" class="center-div" style="display: none">
@@ -61,8 +61,10 @@
     </form>
 </div>
 <div class=row-cols-auto>
-    <div class="col-sm-12">
-        <div id="embed-container" class="frame-container"></div>
+    <div class="padding" id="WhiteBoard" hidden>
+        <div class="col-sm-12">
+            <div id="embed-container" class="frame-container"></div>
+        </div>
     </div>
 </div>
 <div class="row-cols-auto">
@@ -79,7 +81,6 @@
                         <h4> Sua prescrição foi criada com sucesso!</h4>
                     </div>
                     <div class="btn-group col-lg-8">
-                        <button class="btn btn-outline-primary rounded btn-custom-outline m-2">FINALIZAR</button>
                         <a class="btn btn-outline-primary rounded btn-custom-outline m-2" asp-area="" asp-controller="Home" asp-action="Index" role="button">NOVA PRESCRIÇÃO</a>
                     </div>
                 </div>
@@ -91,71 +92,87 @@
 
 
 @section Scripts {
-<script>
+    <script>
 
-    function sign(data, allowPreviewDocument) {
-        hideButtons()
-        var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget(
-            { disableDocumentPreview: true });
-        widget.render(data, 'embed-container');
-        widget.on(widget.events.documentSigned, function(e) {
-            // removes the widget
-            document.getElementById('embed-container').remove();
-            // Container after signature
-            var containerPanel = document.getElementById("afterSigned");
-            containerPanel.style.display = "block";
-            alert('Document ' + e.id + ' signed');
-            
+        function sign(data, allowPreviewDocument) {
+            hideButtons();
 
-        });
-    }
+            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
+            widget.render(data, 'embed-container');
+            widget.on(widget.events.documentSigned, function(e) {
+                // removes the widget
+                document.getElementById('embed-container').remove();
+                // Container after signature
+                var containerPanel = document.getElementById("afterSigned");
+                containerPanel.style.display = "block";
+                alert('Document ' + e.id + ' signed');
+            });
+        }
 
-    function startSignature(elem) {
-        // Patient name
-        var valuePatient = document.forms[0].PatientName.value;
-        // Medication name
-        var select = document.getElementById('MedicationName');
-        var valueMedication = select.options[select.selectedIndex].value;
+        function startSignature(elem) {
 
-        // Loading while the document is created
-        var loadingHidden = document.getElementById("loadingHeader");
-        loadingHidden.style.display = "block";
+            // Patient name
+            var valuePatient = document.getElementById("paciente").value;
 
-        // set to true if the user wants to see preview of the document
-        allowPreviewDocument = document.getElementById("DocumentPreview").checked == true ? true : false;
-        allowElectronicSignature = document.getElementById("ElectronicSignature").checked == true ? true : false;
+            // Medication name
+            var medicationValue = document.getElementById("medicamento").value;
 
-        $.ajax({
-            type: 'POST',
-            url: '/Home/Prescription',
-            data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication , AllowElectronicSignature: allowElectronicSignature }),
-            success: function(data) {
-                if (data) {
-                    loadingHidden.style.display = "none";
-                    sign(data.embedUrl, allowPreviewDocument);
-                    elem.style.visibility = "hidden";
+            // Loading while the document is created
+            var loadingHidden = document.getElementById("loadingHeader");
+            loadingHidden.style.display = "block";
 
-                } else {
-                    elem.innerHTML = 'Error';
-                }
-            },
-            contentType: "application/json",
-            dataType: 'json'
-        });
-    }
+            // set to true if the user wants to see preview of the document
+            allowPreviewDocument = document.getElementById("DocumentPreview").checked == true;
+            allowElectronicSignature = document.getElementById("ElectronicSignature").checked == true;
 
-    function hideButtons() {
-        var infoData = document.getElementById("infoData");
-        infoData.hidden = true;
-        var formHide = document.getElementById("form-hide");
-        formHide.hidden = true;
-    }
+            $.ajax({
+                type: 'POST',
+                url: '/Home/Prescription',
+                data: JSON.stringify({ PatientName: valuePatient, MedicationName: medicationValue, AllowElectronicSignature: allowElectronicSignature }),
+                success: function(data) {
+                    if (data) {
+                        loadingHidden.style.display = "none";
+                        sign(data.embedUrl, allowPreviewDocument);
+                        elem.style.visibility = "hidden";
 
-    function runAgain() {
-        window.location.replace("Home")
-    }
+                    } else {
+                        onError(elem);
+                    }
+                },
+                error: function() {
+                    onError(elem);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
 
-</script>
+        function onError(elem) {
+            var loadingHidden = document.getElementById("loadingHeader");
+            loadingHidden.style.display = "none";
+            alert("Erro ao criar prescrição");
+        }
+
+        function hideButtons() {
+            var infoData = document.getElementById("infoData");
+            infoData.hidden = true;
+            var formHide = document.getElementById("form-hide");
+            formHide.hidden = true;
+            var padding = document.getElementById("WhiteBoard").removeAttribute("hidden")
+        }
+
+        function enableButton() {
+
+            var patientValue = document.getElementById("paciente").value;
+            var medicationValue = document.getElementById("medicamento").value;
+            if ((patientValue && medicationValue) !== "") {
+                document.getElementById("start").removeAttribute("disabled");
+            }
+
+        }
+
+
+    </script>
 }
 
 

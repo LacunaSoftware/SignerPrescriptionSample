@@ -5,8 +5,7 @@
 }
 <!DOCTYPE html>
 <div>
-    @using (@Html.BeginForm("Index", "Home", FormMethod.Post))
-    {
+    <form>
         <div class="container" style="margin-top:30px">
             <div class="row">
                 <div class="col-md-12">
@@ -27,22 +26,22 @@
                         <div class="row-cols-4 mb-5">
                             <div class="col-lg-4">
                                 @Html.DropDownListFor(m =>m.MedicationName,new List<SelectListItem>{
-                            new SelectListItem{Text ="Medication A", Value = "Medication A"},
-                            new SelectListItem{Text ="Medication B", Value = "Medication B"},
-                            new SelectListItem{Text ="Medication C", Value = "Medication C"},
-                            }, "Selecione", new {@class= "select-wrapper form-select transparent-input"})
+                                new SelectListItem{Text ="Medication A", Value = "Medication A"},
+                                new SelectListItem{Text ="Medication B", Value = "Medication B"},
+                                new SelectListItem{Text ="Medication C", Value = "Medication C"},
+                                }, "Selecione", new {@class= "select-wrapper form-select transparent-input"})
                             </div>
                         </div>
                         <div class="row-cols-4">
                             <div class="col-lg-4">
-                                <input type="submit" value="Começar" placeholder="Começar" class="form-control btn btn-primary" />
+                                <input type="button" value="Começar" onclick="startSignature(this)" placeholder="Começar" class="form-control btn btn-primary" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    }
+    </form>
 </div>
 <div class=row-cols-auto>
     <div class="col-sm-12">
@@ -51,44 +50,69 @@
 </div>
 <div class="row-cols-4">
     <div class="col-lg-4">
-        <input id="Sign"  hidden ="hidden"  onclick="runAgain()" value="Nova prescrição" class="sign-btn btn btn-primary" type="submit" />
+        @*<input id="Sign"  hidden ="hidden"  onclick="runAgain()" value="Nova prescrição" class="sign-btn btn btn-primary" type="submit" />*@
     </div>
 </div>
 
 
 
-
 @section Scripts {
-<script>
-    @if(ViewBag.embed != null){
-        @:sign('@ViewBag.embed');
-        
-    }
-    function sign(url) {
-        hideButtons();
-        var widget = new LacunaSignerWidget({enableRefusal : true});
-        widget.render(url, 'embed-container');
-        widget.on(widget.events.documentSigned, function(e) {
-            alert('Document ' + e.id + ' signed');
-        document.getElementById("Sign").removeAttribute("hidden")
-        ViewData.Clear();
-        });
-    }
+    <script>
 
-    function hideButtons() {
-        var infoData = document.getElementById("infoData");
-        infoData.hidden = true;
-        var formHide = document.getElementById("form-hide");
-        formHide.hidden = true;
-    }
 
-    function runAgain(){
-        window.location.replace("Home")
-        //window.location.reload(true);
-    }
-    
+        function sign(data) {
+            hideButtons()
+            var widget = new LacunaSignerWidget({ enableRefusal: true });
+            console.log(data);
+            widget.render(data, 'embed-container');
+            widget.on(widget.events.documentSigned, function(e) {
+                alert('Document ' + e.id + ' signed');
+            });
+        }
 
-</script>
+        var select = document.getElementById('MedicationName');
+
+
+        var valuePatient = document.forms[0].PatientName.value;
+        var valueMedication = select.options[select.selectedIndex].value;
+
+
+
+        function startSignature(elem) {
+            elem.innerHTML = 'Loading ...';
+            $.ajax({
+                type: 'POST',
+                url: '/Home/Prescription',
+                data: JSON.stringify({ PatientName: valuePatient, MedicationName: valueMedication }),
+                success: function(data) {
+                    if (data) {
+                        sign(data.embedUrl);
+                        elem.style.visibility = "hidden";
+                    } else {
+                        elem.innerHTML = 'Error';
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
+
+
+
+
+        function hideButtons() {
+            var infoData = document.getElementById("infoData");
+            infoData.hidden = true;
+            var formHide = document.getElementById("form-hide");
+            formHide.hidden = true;
+        }
+
+        function runAgain() {
+            window.location.replace("Home")
+        }
+
+
+    </script>
 
 
 

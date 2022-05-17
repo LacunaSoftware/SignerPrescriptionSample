@@ -21,12 +21,11 @@ namespace Embedded_Signatures.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Index(CreatePrescriptionModel prescription)
+        public async Task<IActionResult> Prescription([FromBody]CreatePrescriptionModel prescription)
         {
-            var embed = await Util.UploadDocument(prescription.PatientName, prescription.MedicationName);
-            ViewBag.embed = embed;
+            var embed = await SignerUtil.CreateDocument(prescription.PatientName, prescription.MedicationName);
 
-            return View();
+            return Json(new {embedUrl = embed});
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

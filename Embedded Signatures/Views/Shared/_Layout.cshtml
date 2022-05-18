@@ -4,15 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Embedded Signatures</title>
+    <link href="https://fonts.cdnfonts.com/css/le-havre" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Embedded Signatures</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="navbar-img" src="~/Group 174PrescricaoOnline.png" /></a>
+
             </div>
+            <ul class="navbar-nav navbar-group">
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary m-lg-2 btn-custom-outline" role="button">SOBRE NÓS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary btn-clr m-lg-2" asp-area="" asp-controller="Home" asp-action="Index" role="button">CRIAR PRESCRIÇÃO</a>
+                </li>
+            </ul>
+
         </nav>
     </header>
     <div class="container">

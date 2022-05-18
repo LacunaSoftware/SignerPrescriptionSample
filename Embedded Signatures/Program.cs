@@ -1,7 +1,11 @@
+using Embedded_Signatures.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<SignerService>();
 
 var app = builder.Build();
 

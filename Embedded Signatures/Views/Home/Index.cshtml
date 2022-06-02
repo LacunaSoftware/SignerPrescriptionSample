@@ -10,21 +10,32 @@
             <div id="signin">
                 <div class="row justify-content-center">
                     <div class="col-lg-4">
-                        <div class="row text-justify">
-                            <label class="form-check-label" for="doctor">Dr.Pierre de Fermat</label>
+                        <h1 class="text-md-center">Criação de prescrição</h1>
+                        <h5 id="infoData" class="text-md-center">Informe os dados do certificado:</h5>
+                        <div class="form-group">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="data" checked/>
+                            <label class="form-check-label" for="teste">Certificado de Teste</label>
                         </div>
-                        <div class="row justify-content-center text-justify">
-                            <label class="form-check-label" for="doctor">CPF: 473.633.618-86</label>
+                        <div class="row justify-content-center mb-4">
+                            <a href="https://docs.lacunasoftware.com/pt-BR/articles/pki-guide/test-certs.html">Como usar certificado de teste?</a>
                         </div>
-                        <div class="row justify-content-center">
-                            <a href="https://docs.lacunasoftware.com/pt-BR/articles/pki-guide/test-certs.html">Certificados de teste</a>
+                        <div id="box">
+                            <div class="row justify-content-center mb-2">
+                                @Html.TextBoxFor(m =>m.CertifiedName, new{id = "certName", placeholder="Usuario",@class= "form-control form-rounded transparent-input" })
+                            </div>
+                            <div class="row justify-content-center mb-2">
+                                @Html.TextBoxFor(m =>m.Email, new{id = "email" ,placeholder="Email",@class= "form-control form-rounded transparent-input" })
+                            </div>
+                            <div class="row justify-content-center mb-4">
+                                @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input" })
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-lg-4">
-                        <button id="doctor" onclick="showApp()" class="btn btn-primary rounded m-2" placeholder="Login" align="center" style="width:250px" type="button">Login</button>
-                    </div>
+                    <input id="doctor" type="button" value="Login" onclick="showApp()" placeholder="Login" class="form-control btn btn-primary btn-clr" />
                 </div>
             </div>
             <div id="main" hidden class="container" style="margin-top:30px">
@@ -33,7 +44,7 @@
                         <div class="row justify-content-center">
                             <div class="col-sm-6 mb-4">
                                 <h1 class="text-md-center">Criação de prescrição</h1>
-                                <h5 id="infoData" class="text-md-center">Informe os dados abaixo para começar:</h5>
+                                <h5 id="infoData" class="text-md-center">Informe os dados do paciente para começar:</h5>
                             </div>
                         </div>
                     </div>
@@ -143,6 +154,25 @@
             // Patient name
             var valuePatient = document.getElementById("paciente").value;
 
+            var certNameValue = document.getElementById("certName").value;
+            if (certNameValue == "") {
+                certNameValue = "Pierre de Fermat";
+            }
+            console.log(certNameValue)
+
+
+            var emailValue = document.getElementById("email").value;
+            if (emailValue == "") {
+                emailValue = "test@lacunasoftware.com";
+            }
+            console.log(emailValue)
+
+            var identifierValue = document.getElementById("cpf").value;
+            if (identifierValue == "") {
+                identifierValue = '47363361886';
+            }
+            console.log(identifierValue)
+
             // Medication name
             var medicationValue = document.getElementById("medicamento").value;
 
@@ -157,7 +187,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: valuePatient, MedicationName: medicationValue, Identifier: identifierValue = '47363361886', AllowElectronicSignature: allowElectronicSignature }),
+                data: JSON.stringify({ PatientName: valuePatient, CertifiedName: certNameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
                 success: function(data) {
                     if (data) {
                         loadingHidden.style.display = "none";
@@ -196,6 +226,17 @@
             var medicationValue = document.getElementById("medicamento").value;
             if ((patientValue && medicationValue) !== "") {
                 document.getElementById("start").removeAttribute("disabled");
+            }
+
+        }
+
+        function testType() {
+            
+            if( document.getElementById("data").checked = true) {
+               document.getElementById("certName").setAttribute("disabled")
+               document.getElementById("email").setAttribute("disabled")
+               document.getElementById("cpf").setAttribute("disabled")
+         
             }
 
         }

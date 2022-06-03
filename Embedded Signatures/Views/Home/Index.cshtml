@@ -156,10 +156,10 @@
         widget.render(data, 'embed-container');
         widget.on(widget.events.documentSigned, function(e) {
             // Removes the widget
-            document.getElementById('embed-container').remove();
+            $('#embed-container').remove();
             // Container after signature
-            var containerPanel = document.getElementById("afterSigned");
-            containerPanel.style.display = "block";
+            $("#msform").removeAttr("style");
+            $("#afterSigned").show();
             document.getElementById("whiteboard").hidden = true;
         });
     }

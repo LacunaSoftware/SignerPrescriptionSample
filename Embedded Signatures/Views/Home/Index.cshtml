@@ -141,7 +141,7 @@
 
 @section Scripts {
 <script>
-    var documentId = '';
+    
 
     function showApp() {
         $('#main').attr('hidden', false);
@@ -158,7 +158,6 @@
             // Removes the widget
             $('#embed-container').remove();
             // Container after signature
-            $('#msform').removeAttr('style');
             $('#afterSigned').show();
             $('#whiteboard').hide();
         });
@@ -167,37 +166,33 @@
     function startSignature(elem) {
 
         // Patient name
-        var valuePatient = document.getElementById("paciente").value;
+        var valuePatient = $('#paciente').val();
 
-        var certNameValue = document.getElementById("certName").value;
-        if (certNameValue == "") {
-            certNameValue = "Pierre de Fermat";
-        }
+        var certNameValue = $('#certName').val() || 'Pierre de Fermat';
+
+        //DEBUG
         console.log(certNameValue)
 
-
-        var emailValue = document.getElementById("email").value;
-        if (emailValue == "") {
-            emailValue = "test@lacunasoftware.com";
-        }
+        var emailValue = $('#email').val() || 'test@lacunasoftware.com';
+        
+        //DEBUG
         console.log(emailValue)
 
-        var identifierValue = document.getElementById("cpf").value;
-        if (identifierValue == "") {
-            identifierValue = '47363361886';
-        }
+        var identifierValue = $('#cpf').val() || '47363361886';
+
+        //DEBUG
         console.log(identifierValue)
 
         // Medication name
-        var medicationValue = document.getElementById("medicamento").value;
+        var medicationValue = $('#medicamento').val();
 
         // Loading while the document is created
-        var loadingHidden = document.getElementById("loadingHeader");
-        loadingHidden.style.display = "block";
+        var loadingHidden = $('#loadingHeader');
+        loadingHidden.show();
 
         // set to true if the user wants to see preview of the document
-        allowPreviewDocument = document.getElementById("DocumentPreview").checked == true;
-        allowElectronicSignature = document.getElementById("ElectronicSignature").checked == true;
+        allowPreviewDocument = $('#DocumentPreview').prop('checked');
+        allowElectronicSignature = $('#ElectronicSignature').prop('checked');
 
         $.ajax({
             type: 'POST',
@@ -205,10 +200,9 @@
             data: JSON.stringify({ PatientName: valuePatient, CertifiedName: certNameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
             success: function(data) {
                 if (data) {
-                    loadingHidden.style.display = "none";
+                    loadingHidden.hide();
                     sign(data.embedUrl, allowPreviewDocument);
-                    elem.style.visibility = "hidden";
-
+                    elem.style.visibility = 'hidden';
                 } else {
                     onError(elem);
                 }
@@ -222,32 +216,28 @@
     }
 
     function onError(elem) {
-        var loadingHidden = document.getElementById("loadingHeader");
-        loadingHidden.style.display = "none";
-        alert("Erro ao criar prescrição");
+        $('#loadingHeader').hide();
+        alert('Erro ao criar prescrição');
     }
 
     function hideButtons() {
-        var infoData = document.getElementById("infoData");
-        infoData.hidden = true;
-        var formHide = document.getElementById("form-hide");
-        formHide.hidden = true;
-        document.getElementById("whiteboard").removeAttribute("hidden");
+        $('infoData').prop('hidden', true);
+        $('#form-hide').prop('hidden', true);
+        $('#whiteboard').removeAttr('hidden');
+        $('#whiteboard').removeAttr('style').show();
     }
 
     function enableButton() {
-        var patientValue = document.getElementById("paciente").value;
-        var medicationValue = document.getElementById("medicamento").value;
-
-        if ((patientValue && medicationValue) !== "") {
-            document.getElementById("start").removeAttribute("disabled");
+        if (($('paciente').val() && $('medicamento').val()) !== "") {
+            $('#start').removeAttr('disabled');
         } else {
-            $("#start").attr("disabled", true);
+            $('#start').attr('disabled', true);
         }
 
     }
 
     function download() {
+        var documentId = '';
         if (documentId != null) {
             $.ajax({
                 type: 'GET',
@@ -267,9 +257,9 @@
 
     function hideFormEntries(elem){
         if(elem.checked){
-            $("#box").hide();
+            $('#box').hide();
         } else {
-            $("#box").show();
+            $('#box').show();
         }
     }
 

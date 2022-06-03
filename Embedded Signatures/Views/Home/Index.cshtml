@@ -144,8 +144,9 @@
     var documentId = '';
 
     function showApp() {
-        document.getElementById("main").removeAttribute("hidden");
-        document.getElementById("signin").hidden = true
+        $('#main').attr('hidden', false);
+        $('#main').show();
+        $('#signin').hide();
     }
 
     function sign(data, allowPreviewDocument) {

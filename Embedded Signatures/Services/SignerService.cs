@@ -49,7 +49,7 @@ namespace Embedded_Signatures.Services
                         Type = DocumentMarkType.SignatureVisualRepresentation,
                         UploadId = fileUploadModel.Id,
                         TopLeftX = 228,
-                        TopLeftY = 656,
+                        TopLeftY = 652,
                         Width = 170.0,
                         Height = 40.0,
                     }

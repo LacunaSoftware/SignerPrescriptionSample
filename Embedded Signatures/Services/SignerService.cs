@@ -23,9 +23,9 @@ namespace Embedded_Signatures.Services
             client = new SignerClient(url, "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
         }
 
-        public async Task<string> CreateDocument(string pacientName, string name, string email, string medicine, string identifier, bool allowElectronicSignature = false)
+        public async Task<string> CreateDocument(string patientName, string name, string email, string medicine, string identifier, bool allowElectronicSignature = false)
         {
-            var fileStream = CreatePrescriptionPdf(pacientName, medicine);
+            var fileStream = CreatePrescriptionPdf(patientName, medicine);
             var filePath = "Template-Prescricao.pdf";
             var fileName = Path.GetFileName(filePath);
             var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");

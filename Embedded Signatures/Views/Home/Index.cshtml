@@ -142,6 +142,7 @@
 @section Scripts {
 <script>
     
+    var documentId = '';
 
     function showApp() {
         $('#main').attr('hidden', false);
@@ -155,6 +156,7 @@
         var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
         widget.render(data, 'embed-container');
         widget.on(widget.events.documentSigned, function(e) {
+             documentId = e.id;
             // Removes the widget
             $('#embed-container').remove();
             // Container after signature
@@ -232,7 +234,6 @@
     }
 
     function download() {
-        var documentId = '';
         if (documentId != null) {
             $.ajax({
                 type: 'GET',
@@ -260,3 +261,11 @@
 
 </script>
 }
+
+
+
+
+
+
+
+

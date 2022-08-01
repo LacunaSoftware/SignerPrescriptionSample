@@ -26,7 +26,7 @@ namespace Embedded_Signatures.Controllers
         [HttpPost]
         public async Task<IActionResult> Prescription([FromBody]CreatePrescriptionModel prescription)
         {
-            var embed = await signerService.CreateDocument(prescription.PatientName , prescription.CertifiedName , prescription.Email , prescription.MedicationName , prescription.Identifier , prescription.AllowElectronicSignature);
+            var embed = await signerService.CreateDocument(prescription.PatientName, prescription.CertifiedName, prescription.Email, prescription.MedicationName, prescription.Identifier, prescription.AllowElectronicSignature);
 
             return Json(new {embedUrl = embed});
         }

@@ -4,7 +4,7 @@ namespace Embedded_Signatures.Models
     public class CreatePrescriptionModel
     {
         public string Identifier { get; set; }
-        public string? CertifiedName { get; set; }
+        public string? Name { get; set; }
         public string Email { get; set; }
         public string PatientName { get; set; }
         public string MedicationName { get; set; }

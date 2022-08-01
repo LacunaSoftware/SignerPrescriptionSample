@@ -30,7 +30,7 @@
                             <hr />
                             <div id="box">
                                 <div class="row justify-content-center mb-2">
-                                    @Html.TextBoxFor(m =>m.CertifiedName, new{id = "certName", placeholder="Usuario",@class= "form-control form-rounded transparent-input" })
+                                    @Html.TextBoxFor(m =>m.Name, new{id = "name", placeholder="Nome",@class= "form-control form-rounded transparent-input" })
                                 </div>
                                 <div class="row justify-content-center mb-2">
                                     @Html.TextBoxFor(m =>m.Email, new{id = "email" ,placeholder="Email",@class= "form-control form-rounded transparent-input" })
@@ -43,7 +43,7 @@
                     </div>
                     <div class="row">
                         <div class="text-md-center">
-                            <input type="button" value="Login" onclick="showApp()" placeholder="Login" class="btn btn-primary btn-clr col-lg-3" />
+                            <input type="button" value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr col-lg-3" />
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="row-cols-4">
                                 <div class="col-lg-3 mb-2">
-                                    <input id="start" type="button" disabled value="COMEÇAR" onclick="startSignature(this)" placeholder="Começar"
+                                    <input id="start" type="button" disabled value="Assinar" onclick="startSignature(this)" placeholder="Assinar"
                                            class="form-control btn btn-primary btn-clr" />
                                 </div>
                                 <div class="col-lg-4 mt-3">
@@ -168,10 +168,10 @@
         // Patient name
         var valuePatient = $('#paciente').val();
 
-        var certNameValue = $('#certName').val() || 'Pierre de Fermat';
+        var nameValue = $('#name').val() || 'Pierre de Fermat';
 
         //DEBUG
-        console.log(certNameValue)
+        console.log(nameValue)
 
         var emailValue = $('#email').val() || 'test@lacunasoftware.com';
         
@@ -197,7 +197,7 @@
         $.ajax({
             type: 'POST',
             url: '/Home/Prescription',
-            data: JSON.stringify({ PatientName: valuePatient, CertifiedName: certNameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
+            data: JSON.stringify({ PatientName: valuePatient, Name: nameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
             success: function(data) {
                 if (data) {
                     loadingHidden.hide();

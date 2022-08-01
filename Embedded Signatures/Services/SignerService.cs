@@ -23,7 +23,7 @@ namespace Embedded_Signatures.Services
             client = new SignerClient(url, "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
         }
 
-        public async Task<string> CreateDocument(string namePaciente, string certifiedName, string email, string medicine, string identifier, bool allowElectronicSignature = false)
+        public async Task<string> CreateDocument(string namePaciente, string name, string email, string medicine, string identifier, bool allowElectronicSignature = false)
         {
             var fileStream = CreatePrescriptionPdf(namePaciente, medicine);
             var filePath = "Template-Prescricao.pdf";
@@ -34,7 +34,7 @@ namespace Embedded_Signatures.Services
             var participantUser = new ParticipantUserModel();
 
             participantUser.Email = email;
-            participantUser.Name = certifiedName;
+            participantUser.Name = name;
             participantUser.Identifier = identifier;    
           
             var flowActionCreateModel = new FlowActionCreateModel()

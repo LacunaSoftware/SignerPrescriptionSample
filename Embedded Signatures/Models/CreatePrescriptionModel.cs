@@ -9,6 +9,7 @@ namespace Embedded_Signatures.Models
         public string PatientName { get; set; }
         public string MedicationName { get; set; }
         public bool AllowElectronicSignature { get; set; }
-
+        public string UF { get; set; }
+        public string CRM { get; set; }
     }
 }

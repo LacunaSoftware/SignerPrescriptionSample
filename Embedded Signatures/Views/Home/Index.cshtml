@@ -10,8 +10,8 @@
             <div id="signin">
                 <div class="row justify-content-center">
                     <div class="col-lg-4 mx-auto">
-                        <h1 class="text-md-center">Criação de prescrição</h1>
-                        <h5 id="infoData" class="text-md-center">Informe os dados do certificado:</h5>
+                        <h1 class="text-md-center">Informações do médico</h1>
+                        <h5 id="infoData" class="text-md-center">Informe os dados do médico que irá assinar esse documento:</h5>
                         <hr />
                         <div class="form-group">
                             <div class="row">
@@ -38,6 +38,43 @@
                                 <div class="row justify-content-center mb-4">
                                     @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input" })
                                 </div>
+
+                                <div class="row justify-content-center mb-2">
+                                    <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(m =>m.CRM, new{id = "id", placeholder="CRM",@class= "select-wrapper form-control transparent-input" })
+                                        <span class="input-group-addon">-</span>
+                                        @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
+                                        new SelectListItem{Text="Acre", Value="AC"},
+                                        new SelectListItem{Text="Alagoas", Value="AL"},
+                                        new SelectListItem{Text="Amapá", Value="AP"},
+                                        new SelectListItem{Text="Amazonas", Value="AM"},
+                                        new SelectListItem{Text="Bahia", Value="BA"},
+                                        new SelectListItem{Text="Ceará", Value="CE"},
+                                        new SelectListItem{Text="Distrito Federal", Value="DF"},
+                                        new SelectListItem{Text="Espírito Santo", Value="ES"},
+                                        new SelectListItem{Text="Goiás", Value="GO"},
+                                        new SelectListItem{Text="Maranhão", Value="MA"},
+                                        new SelectListItem{Text="Mato Grosso", Value="MT"},
+                                        new SelectListItem{Text="Mato Grosso do Sul", Value="MS"},
+                                        new SelectListItem{Text="Minas Gerais", Value="MG"},
+                                        new SelectListItem{Text="Pará", Value="PA"},
+                                        new SelectListItem{Text="Paraíba", Value="PB"},
+                                        new SelectListItem{Text="Paraná", Value="PR"},
+                                        new SelectListItem{Text="Pernambuco", Value="PE"},
+                                        new SelectListItem{Text="Piauí", Value="PI"},
+                                        new SelectListItem{Text="Rio de Janeiro", Value="RJ"},
+                                        new SelectListItem{Text="Rio Grande do Norte", Value="RN"},
+                                        new SelectListItem{Text="Rio Grande do Sul", Value="RS"},
+                                        new SelectListItem{Text="Rondônia", Value="RO"},
+                                        new SelectListItem{Text="Roraima", Value="RR"},
+                                        new SelectListItem{Text="Santa Catarina", Value="SC"},
+                                        new SelectListItem{Text="São Paulo", Value="SP"},
+                                        new SelectListItem{Text="Sergipe", Value="SE"},
+                                        new SelectListItem{Text="Tocantins", Value="TO"}
+                                        }, new {@class= "select-wrapper form-select transparent-input"})
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -54,7 +91,7 @@
                     <div class="col-md-12">
                         <div class="row justify-content-center">
                             <div class="col-sm-6 mb-4">
-                                <h1 class="text-md-center">Criação de prescrição</h1>
+                                <h1 class="text-md-center">Informações do paciente</h1>
                                 <h5 id="infoData" class="text-md-center">Informe os dados do paciente para começar:</h5>
                             </div>
                         </div>
@@ -70,11 +107,12 @@
                             </div>
                             <div class="row-cols-4 mb-3">
                                 <div class="col-lg-4">
-                                    @Html.DropDownListFor(m =>m.MedicationName,new List<SelectListItem>{
-                                    new SelectListItem{Text ="Ibuprofeno", Value = "Ibuprofeno 6500mg _______________ 15cp"},
-                                    new SelectListItem{Text ="Rivotril"  , Value = "Rivotril   1255mg _______________ 2cx"},
-                                    new SelectListItem{Text ="Omeprazol" , Value = "Omeprazol    20mg _______________ 1cap"},
-                                    }, "Medicamento", new { id = "medicamento", onchange = "enableButton()", @class= "select-wrapper form-select transparent-input"})
+                                     @Html.TextBoxFor(m =>m.MedicationName, new{ id="paciente",placeholder="Nome do medicamento",
+                                    onkeyup = "enableButton()",
+                                    @class= "form-control form-rounded transparent-input" })
+                                </div>
+                                <div class="col-lg-4">
+                                    <textarea placeholder="Description"></textarea>
                                 </div>
                             </div>
                             <div class="my-lg-3">
@@ -140,126 +178,126 @@
 
 
 @section Scripts {
-<script>
-    
-    var documentId = '';
+    <script>
 
-    function showApp() {
-        $('#main').attr('hidden', false);
-        $('#main').show();
-        $('#signin').hide();
-    }
+        var documentId = '';
 
-    function sign(data, allowPreviewDocument) {
-        hideButtons();
-
-        var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
-        widget.render(data, 'embed-container');
-        widget.on(widget.events.documentSigned, function(e) {
-             documentId = e.id;
-            // Removes the widget
-            $('#embed-container').remove();
-            // Container after signature
-            $('#afterSigned').show();
-            $('#whiteboard').hide();
-        });
-    }
-
-    function startSignature(elem) {
-
-        // Patient name
-        var valuePatient = $('#paciente').val();
-
-        // Signer name
-        var nameValue = $('#name').val() || 'Pierre de Fermat';
-
-        // Signer email
-        var emailValue = $('#email').val() || 'test@lacunasoftware.com';
-        
-        // Signer CPF
-        var identifierValue = $('#cpf').val() || '47363361886';
-
-
-        // Medication name
-        var medicationValue = $('#medicamento').val();
-
-        // Loading while the document is created
-        var loadingHidden = $('#loadingHeader');
-        loadingHidden.show();
-
-        // set to true if the user wants to see preview of the document
-        allowPreviewDocument = $('#DocumentPreview').prop('checked');
-        allowElectronicSignature = $('#ElectronicSignature').prop('checked');
-
-        $.ajax({
-            type: 'POST',
-            url: '/Home/Prescription',
-            data: JSON.stringify({ PatientName: valuePatient, Name: nameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
-            success: function(data) {
-                if (data) {
-                    loadingHidden.hide();
-                    sign(data.embedUrl, allowPreviewDocument);
-                    elem.style.visibility = 'hidden';
-                } else {
-                    onError(elem);
-                }
-            },
-            error: function() {
-                onError(elem);
-            },
-            contentType: "application/json",
-            dataType: 'json'
-        });
-    }
-
-    function onError(elem) {
-        $('#loadingHeader').hide();
-        alert('Erro ao criar prescrição');
-    }
-
-    function hideButtons() {
-        $('infoData').prop('hidden', true);
-        $('#form-hide').prop('hidden', true);
-        $('#whiteboard').removeAttr('hidden');
-        $('#whiteboard').removeAttr('style').show();
-    }
-
-    function enableButton() {
-        if (($('paciente').val() && $('medicamento').val()) !== "") {
-            $('#start').removeAttr('disabled');
-        } else {
-            $('#start').attr('disabled', true);
+        function showApp() {
+            $('#main').attr('hidden', false);
+            $('#main').show();
+            $('#signin').hide();
         }
 
-    }
+        function sign(data, allowPreviewDocument) {
+            hideButtons();
 
-    function download() {
-        if (documentId != null) {
+            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
+            widget.render(data, 'embed-container');
+            widget.on(widget.events.documentSigned, function(e) {
+                documentId = e.id;
+                // Removes the widget
+                $('#embed-container').remove();
+                // Container after signature
+                $('#afterSigned').show();
+                $('#whiteboard').hide();
+            });
+        }
+
+        function startSignature(elem) {
+
+            // Patient name
+            var valuePatient = $('#paciente').val();
+
+            // Signer name
+            var nameValue = $('#name').val() || 'Pierre de Fermat';
+
+            // Signer email
+            var emailValue = $('#email').val() || 'test@lacunasoftware.com';
+
+            // Signer CPF
+            var identifierValue = $('#cpf').val() || '47363361886';
+
+
+            // Medication name
+            var medicationValue = $('#medicamento').val();
+
+            // Loading while the document is created
+            var loadingHidden = $('#loadingHeader');
+            loadingHidden.show();
+
+            // set to true if the user wants to see preview of the document
+            allowPreviewDocument = $('#DocumentPreview').prop('checked');
+            allowElectronicSignature = $('#ElectronicSignature').prop('checked');
+
             $.ajax({
-                type: 'GET',
-                url: '/Home/Prescription?id=' + documentId,
-                dataType: 'json',
+                type: 'POST',
+                url: '/Home/Prescription',
+                data: JSON.stringify({ PatientName: valuePatient, Name: nameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
                 success: function(data) {
-                    if (data.url) {
-                        window.location.href = data.url;
+                    if (data) {
+                        loadingHidden.hide();
+                        sign(data.embedUrl, allowPreviewDocument);
+                        elem.style.visibility = 'hidden';
+                    } else {
+                        onError(elem);
                     }
                 },
                 error: function() {
-                    alert('Erro ao baixar prescrição');
-                }
+                    onError(elem);
+                },
+                contentType: "application/json",
+                dataType: 'json'
             });
         }
-    }
 
-    function hideFormEntries(elem){
-        if(elem.checked){
-            $('#box').hide();
-        } else {
-            $('#box').show();
+        function onError(elem) {
+            $('#loadingHeader').hide();
+            alert('Erro ao criar prescrição');
         }
-    }
 
-</script>
+        function hideButtons() {
+            $('infoData').prop('hidden', true);
+            $('#form-hide').prop('hidden', true);
+            $('#whiteboard').removeAttr('hidden');
+            $('#whiteboard').removeAttr('style').show();
+        }
+
+        function enableButton() {
+            if (($('paciente').val() && $('medicamento').val()) !== "") {
+                $('#start').removeAttr('disabled');
+            } else {
+                $('#start').attr('disabled', true);
+            }
+
+        }
+
+        function download() {
+            if (documentId != null) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/Prescription?id=' + documentId,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.url) {
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function() {
+                        alert('Erro ao baixar prescrição');
+                    }
+                });
+            }
+        }
+
+        function hideFormEntries(elem) {
+            if (elem.checked) {
+                $('#box').hide();
+            } else {
+                $('#box').show();
+            }
+        }
+
+    </script>
 }
 
 

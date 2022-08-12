@@ -38,12 +38,10 @@
                                 <div class="row justify-content-center mb-4">
                                     @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input" })
                                 </div>
-
                                 <div class="row justify-content-center mb-2">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">
-                                        @Html.TextBoxFor(m =>m.CRM, new{id = "id", placeholder="CRM",@class= "select-wrapper form-control transparent-input" })
-                                        <span class="input-group-addon">-</span>
+                                        @Html.TextBoxFor(m =>m.CRM, new{id = "id", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input" })
                                         @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
                                         new SelectListItem{Text="Acre", Value="AC"},
                                         new SelectListItem{Text="Alagoas", Value="AL"},
@@ -72,7 +70,7 @@
                                         new SelectListItem{Text="São Paulo", Value="SP"},
                                         new SelectListItem{Text="Sergipe", Value="SE"},
                                         new SelectListItem{Text="Tocantins", Value="TO"}
-                                        }, new {@class= "select-wrapper form-select transparent-input"})
+                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input"})
                                     </div>
                                 </div>
                             </div>
@@ -105,14 +103,25 @@
                                     @class= "form-control form-rounded transparent-input" })
                                 </div>
                             </div>
-                            <div class="row-cols-4 mb-3">
+                            <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4">
-                                     @Html.TextBoxFor(m =>m.MedicationName, new{ id="paciente",placeholder="Nome do medicamento",
+                                    @Html.TextBoxFor(m =>m.MedicationName, new{ id="medicamento",placeholder="Nome do medicamento",
                                     onkeyup = "enableButton()",
                                     @class= "form-control form-rounded transparent-input" })
                                 </div>
-                                <div class="col-lg-4">
-                                    <textarea placeholder="Description"></textarea>
+                                </div>
+                            <div class="row-cols-4 mb-2">
+                                <div class="col-lg-4 mb-2">
+                                    @Html.TextBoxFor(m => m.MedicationDosage, new{ id="posologia",placeholder="Posologia",
+                                    onkeyup = "enableButton()",
+                                    @class= "form-control form-rounded transparent-input" })
+                                </div>
+                                </div>
+                            <div class="row-cols-4 mb-2">
+                                <div class="col-lg-4 mb-2">
+                                    @Html.TextBoxFor(m => m.MedicationQuantity, new{ id="quantidade",placeholder="Quantidade",
+                                    onkeyup = "enableButton()",
+                                    @class= "form-control form-rounded transparent-input" })
                                 </div>
                             </div>
                             <div class="my-lg-3">
@@ -166,8 +175,13 @@
                         <h4> Sua prescrição foi criada com sucesso!</h4>
                     </div>
                     <div class="btn-group col-lg-8">
+                        <button class="btn btn-primary rounded m-2" placeholder="Começar" onclick="download()" type="button">VISUALIZAR PRESCRIÇÃO</button>
                         <button class="btn btn-primary rounded m-2" placeholder="Começar" onclick="download()" type="button">BAIXAR PRESCRIÇÃO</button>
-                        <a class="btn btn-outline-primary rounded btn-custom-outline m-2" asp-area="" asp-controller="Home" asp-action="Index" role="button">NOVA PRESCRIÇÃO</a>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="btn-group col-lg-4">
+                            <a class="btn btn-outline-primary rounded btn-custom-outline m-2" asp-area="" asp-controller="Home" asp-action="Index" role="button">NOVA PRESCRIÇÃO</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,6 +234,9 @@
 
             // Medication name
             var medicationValue = $('#medicamento').val();
+
+            // Append with attributes dosage and quantity, respecitvely
+            medicationValue += " " + $('#posologia').val() + " " + $('#quantidade').val();
 
             // Loading while the document is created
             var loadingHidden = $('#loadingHeader');

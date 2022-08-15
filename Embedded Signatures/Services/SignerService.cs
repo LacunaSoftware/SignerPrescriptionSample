@@ -4,6 +4,7 @@ using Lacuna.Signer.Api.DocumentMark;
 using Lacuna.Signer.Api.Documents;
 using Lacuna.Signer.Api.FlowActions;
 using Lacuna.Signer.Api.Users;
+using Lacuna.Signer.Api.HealthDocuments;
 using Lacuna.Signer.Client;
 
 namespace Embedded_Signatures.Services
@@ -35,8 +36,8 @@ namespace Embedded_Signatures.Services
 
             participantUser.Email = email;
             participantUser.Name = name;
-            participantUser.Identifier = identifier;    
-          
+            participantUser.Identifier = identifier;
+
             var flowActionCreateModel = new FlowActionCreateModel()
             {
                 Type = FlowActionType.Signer,
@@ -56,10 +57,32 @@ namespace Embedded_Signatures.Services
                 }
             };
 
+            // Item info for health document (patient name, medication and dosage)
+            var itemModel = new HealthItemModel()
+            {
+                Name = "Nome do remédio",
+                Description = "Posologia",
+                Description2 = "Quantidade"
+            };
+
             var documentRequest = new CreateDocumentRequest()
             {
                 Files = new List<FileUploadModel>() { fileUploadModel },
-                FlowActions = new List<FlowActionCreateModel>() { flowActionCreateModel }
+                FlowActions = new List<FlowActionCreateModel>() { flowActionCreateModel },
+                Type = DocumentTypes.Prescription,
+                AdditionalInfo = new DocumentAdditionalInfoData()
+                {
+                    HealthData = new HealthDocumentData()
+                    {
+                        Professional = new HealthProfessionalModel()
+                        {
+                            Name = "Nome do profissional",
+                            Id = "CRM",
+                            Region = "UF"
+                        },
+                        Items = new List<HealthItemModel>() { itemModel }
+                    }
+                }
             };
             var result = (await client.CreateDocumentAsync(documentRequest)).First();
             var actionUrlRequest = new ActionUrlRequest()
@@ -92,6 +115,8 @@ namespace Embedded_Signatures.Services
             stream.Position = 0;
             return stream;
         }
+
+
 
     }
 }

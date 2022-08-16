@@ -26,8 +26,8 @@ namespace Embedded_Signatures.Services
 
         public async Task<string> CreateDocument(
             string patientName,
-            string crm, 
-            string uf, 
+            string crm,
+            string uf,
             string medicationDosage,
             string medicationQuantity,
             string name,
@@ -54,7 +54,8 @@ namespace Embedded_Signatures.Services
                 Type = FlowActionType.Signer,
                 User = participantUser,
                 AllowElectronicSignature = allowElectronicSignature,
-                PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
+                // I believe this will not be used anymore in the new request
+                /*PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
                 {
                     new PrePositionedDocumentMarkModel()
                     {
@@ -65,7 +66,7 @@ namespace Embedded_Signatures.Services
                         Width = 170.0,
                         Height = 40.0,
                     }
-                }
+                }*/
             };
 
             // Item info for health document (patient name, medication and dosage)
@@ -95,7 +96,7 @@ namespace Embedded_Signatures.Services
                     },
                     Fields = new Dictionary<string, string>()
                     {
-                        { "Nome", patientName }, 
+                        { "Nome", patientName },
                         { "Medicamentos", $"{medicine}\r\n{medicationDosage}\r\n{medicationQuantity}" }
                     }
                 }
@@ -116,6 +117,14 @@ namespace Embedded_Signatures.Services
             var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Original);
 
             return new Uri(new Uri(url), response.Location).AbsoluteUri;
+        }
+
+        public async Task<string> GetPrescríptionViewUrl(Guid documentId)
+        {
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
+            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Signatures);
+
+            return new Uri(new Uri(url+"/health-document/"), response.Location).AbsoluteUri;
         }
 
         private MemoryStream CreatePrescriptionPdf(string name, string medicine)

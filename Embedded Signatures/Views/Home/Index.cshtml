@@ -38,7 +38,7 @@
                                 <div class="row justify-content-center mb-4">
                                     @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input" })
                                 </div>
-                                <div class="row justify-content-center mb-2">
+                                <div class="row justify-content-center mb-4">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">
                                         @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input" })
@@ -109,14 +109,14 @@
                                     onkeyup = "enableButton()",
                                     @class= "form-control form-rounded transparent-input" })
                                 </div>
-                                </div>
+                            </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4 mb-2">
                                     @Html.TextBoxFor(m => m.MedicationDosage, new{ id="posologia",placeholder="Posologia",
                                     onkeyup = "enableButton()",
                                     @class= "form-control form-rounded transparent-input" })
                                 </div>
-                                </div>
+                            </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4 mb-2">
                                     @Html.TextBoxFor(m => m.MedicationQuantity, new{ id="quantidade",placeholder="Quantidade",
@@ -175,7 +175,7 @@
                         <h4> Sua prescrição foi criada com sucesso!</h4>
                     </div>
                     <div class="btn-group col-lg-8">
-                        <button class="btn btn-primary rounded m-2" placeholder="Começar" onclick="download()" type="button">VISUALIZAR PRESCRIÇÃO</button>
+                        <button class="btn btn-primary rounded m-2" placeholder="Começar" onclick="openPrescriptionView()" type="button">VISUALIZAR PRESCRIÇÃO</button>
                         <button class="btn btn-primary rounded m-2" placeholder="Começar" onclick="download()" type="button">BAIXAR PRESCRIÇÃO</button>
                     </div>
                     <div class="row justify-content-center">
@@ -261,7 +261,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: valuePatient, Name: nameValue,CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
+                data: JSON.stringify({ PatientName: valuePatient, Name: nameValue, CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
                 success: function(data) {
                     if (data) {
                         loadingHidden.hide();
@@ -305,6 +305,24 @@
                 $.ajax({
                     type: 'GET',
                     url: '/Home/Prescription?id=' + documentId,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.url) {
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function() {
+                        alert('Erro ao baixar prescrição');
+                    }
+                });
+            }
+        }
+
+        function openPrescriptionView() {
+            if (documentId != null) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/OpenPrescription?id=' + documentId,
                     dataType: 'json',
                     success: function(data) {
                         if (data.url) {

@@ -93,7 +93,11 @@ namespace Embedded_Signatures.Services
                         },
                         Items = new List<HealthItemModel>() { itemModel }
                     },
-                  //Fields  
+                    Fields = new Dictionary<string, string>()
+                    {
+                        { "Nome", patientName }, 
+                        { "Medicamentos", $"{medicine}\r\n{medicationDosage}\r\n{medicationQuantity}" }
+                    }
                 }
             };
             var result = (await client.CreateDocumentAsync(documentRequest)).First();

@@ -10,7 +10,7 @@ namespace Embedded_Signatures.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly SignerService signerService;
 
-        
+
 
         public HomeController(ILogger<HomeController> logger, SignerService signerService)
         {
@@ -28,7 +28,18 @@ namespace Embedded_Signatures.Controllers
         [HttpPost]
         public async Task<IActionResult> Prescription([FromBody] CreatePrescriptionModel prescription)
         {
-            var embed = await signerService.CreateDocument(prescription.PatientName, prescription.Name, prescription.Email, prescription.MedicationName, prescription.Identifier, prescription.AllowElectronicSignature);
+            var embed = await signerService.CreateDocument(
+                patientName:prescription.PatientName,
+                crm:prescription.CRM,
+                uf: prescription.UF,
+                medicationDosage:prescription.MedicationDosage,
+                medicationQuantity:prescription.MedicationQuantity,
+                name:prescription.Name,
+                email:prescription.Email,
+                medicine:prescription.MedicationName,
+                identifier:prescription.Identifier,
+                allowElectronicSignature:prescription.AllowElectronicSignature 
+                );
 
             return Json(new { embedUrl = embed });
         }

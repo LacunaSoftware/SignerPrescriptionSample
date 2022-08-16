@@ -24,7 +24,18 @@ namespace Embedded_Signatures.Services
             client = new SignerClient(url, "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
         }
 
-        public async Task<string> CreateDocument(string patientName, string name, string email, string medicine, string identifier, bool allowElectronicSignature = false)
+        public async Task<string> CreateDocument(
+            string patientName,
+            string crm, 
+            string uf, 
+            string medicationDosage,
+            string medicationQuantity,
+            string name,
+            string email,
+            string medicine,
+            string identifier,
+            bool allowElectronicSignature = false
+            )
         {
             var fileStream = CreatePrescriptionPdf(patientName, medicine);
             var filePath = "Template-Prescricao.pdf";
@@ -60,9 +71,9 @@ namespace Embedded_Signatures.Services
             // Item info for health document (patient name, medication and dosage)
             var itemModel = new HealthItemModel()
             {
-                Name = "Nome do remédio",
-                Description = "Posologia",
-                Description2 = "Quantidade"
+                Name = medicine,
+                Description = medicationDosage,
+                Description2 = medicationQuantity
             };
 
             var documentRequest = new CreateDocumentRequest()
@@ -76,12 +87,13 @@ namespace Embedded_Signatures.Services
                     {
                         Professional = new HealthProfessionalModel()
                         {
-                            Name = "Nome do profissional",
-                            Id = "CRM",
-                            Region = "UF"
+                            Name = name,
+                            Id = crm,
+                            Region = uf
                         },
                         Items = new List<HealthItemModel>() { itemModel }
-                    }
+                    },
+                  //Fields  
                 }
             };
             var result = (await client.CreateDocumentAsync(documentRequest)).First();
@@ -97,7 +109,7 @@ namespace Embedded_Signatures.Services
         public async Task<string> GetDownloadUrl(Guid documentId)
         {
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
-            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.PrinterFriendlyVersion);
+            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Original);
 
             return new Uri(new Uri(url), response.Location).AbsoluteUri;
         }

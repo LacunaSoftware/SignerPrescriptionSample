@@ -30,7 +30,7 @@
                             <hr />
                             <div id="box">
                                 <div class="row justify-content-center mb-2">
-                                    @Html.TextBoxFor(m =>m.Name, new{id = "name", placeholder="Nome",@class= "form-control form-rounded transparent-input" })
+                                    @Html.TextBoxFor(m =>m.Name, new{id = "nome", placeholder="Nome",@class= "form-control form-rounded transparent-input" })
                                 </div>
                                 <div class="row justify-content-center mb-2">
                                     @Html.TextBoxFor(m =>m.Email, new{id = "email" ,placeholder="Email",@class= "form-control form-rounded transparent-input" })
@@ -41,7 +41,7 @@
                                 <div class="row justify-content-center mb-2">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">
-                                        @Html.TextBoxFor(m =>m.CRM, new{id = "id", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input" })
+                                        @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input" })
                                         @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
                                         new SelectListItem{Text="Acre", Value="AC"},
                                         new SelectListItem{Text="Alagoas", Value="AL"},
@@ -70,7 +70,7 @@
                                         new SelectListItem{Text="São Paulo", Value="SP"},
                                         new SelectListItem{Text="Sergipe", Value="SE"},
                                         new SelectListItem{Text="Tocantins", Value="TO"}
-                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input"})
+                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input",id = "uf"})
                                     </div>
                                 </div>
                             </div>
@@ -221,9 +221,10 @@
 
             // Patient name
             var valuePatient = $('#paciente').val();
+            console.log(valuePatient);
 
             // Signer name
-            var nameValue = $('#name').val() || 'Pierre de Fermat';
+            var nameValue = $('#nome').val() || 'Pierre de Fermat';
 
             // Signer email
             var emailValue = $('#email').val() || 'test@lacunasoftware.com';
@@ -231,9 +232,20 @@
             // Signer CPF
             var identifierValue = $('#cpf').val() || '47363361886';
 
+            // Signer CRM
+            var crmValue = $('crm').val() || '123456';
+
+            // CRM UF
+            var ufValue = $('uf').val() || 'DF';
 
             // Medication name
             var medicationValue = $('#medicamento').val();
+
+            //Medication Quantity
+            var medQuantity = $('#quantidade').val();
+
+            //Medication Dosage
+            var medicationDosage = $('#posologia').val();
 
             // Append with attributes dosage and quantity, respecitvely
             medicationValue += " " + $('#posologia').val() + " " + $('#quantidade').val();
@@ -249,7 +261,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: valuePatient, Name: nameValue, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
+                data: JSON.stringify({ PatientName: valuePatient, Name: nameValue,CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
                 success: function(data) {
                     if (data) {
                         loadingHidden.hide();

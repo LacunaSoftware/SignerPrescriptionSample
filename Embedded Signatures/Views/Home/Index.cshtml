@@ -105,6 +105,13 @@
                             </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4">
+                                    @Html.TextBoxFor(m =>m.PatientIdentifier, new{ id="cpf-paciente",placeholder="CPF do paciente",
+                                    onkeyup = "enableButton()",
+                                    @class= "form-control form-rounded transparent-input" })
+                                </div>
+                            </div>
+                            <div class="row-cols-4 mb-2">
+                                <div class="col-lg-4">
                                     @Html.TextBoxFor(m =>m.MedicationName, new{ id="medicamento",placeholder="Nome do medicamento",
                                     onkeyup = "enableButton()",
                                     @class= "form-control form-rounded transparent-input" })
@@ -221,10 +228,13 @@
         function startSignature(elem) {
 
             // Patient name
-            var valuePatient = $('#paciente').val();
+            var namePatient = $('#paciente').val();
+
+            // Patient CPF
+            var patientIdentifier = $('#cpf-paciente').val();
 
             // Signer name
-            var nameValue = $('#nome').val() || 'Pierre de Fermat';
+            var nameSigner = $('#nome').val() || 'Pierre de Fermat';
 
             // Signer email
             var emailValue = $('#email').val() || 'test@lacunasoftware.com';
@@ -261,7 +271,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: valuePatient, Name: nameValue, CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
+                data: JSON.stringify({ PatientName: namePatient, PatientIdentifier: patientIdentifier, Name: nameSigner, CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
                 success: function(data) {
                     if (data) {
                         loadingHidden.hide();

@@ -30,6 +30,7 @@ namespace Embedded_Signatures.Controllers
         {
             var embed = await signerService.CreateDocument(
                 patientName:prescription.PatientName,
+                patientIdentifier:prescription.PatientIdentifier,
                 crm:prescription.CRM,
                 uf: prescription.UF,
                 medicationDosage:prescription.MedicationDosage,

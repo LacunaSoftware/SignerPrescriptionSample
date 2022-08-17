@@ -34,6 +34,7 @@ namespace Embedded_Signatures.Services
             string email,
             string medicine,
             string identifier,
+            string patientIdentifier,
             bool allowElectronicSignature = false
             )
         {
@@ -41,7 +42,7 @@ namespace Embedded_Signatures.Services
             var filePath = "Template-Prescricao.pdf";
             var fileName = Path.GetFileName(filePath);
             var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");
-            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = name + " - " + identifier };
+            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = patientName + " - " + patientIdentifier };
 
             var participantUser = new ParticipantUserModel();
 

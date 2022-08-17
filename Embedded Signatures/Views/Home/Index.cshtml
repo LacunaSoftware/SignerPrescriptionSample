@@ -195,6 +195,7 @@
     <script>
 
         var documentId = '';
+        var embedUrl = '';
 
         function showApp() {
             $('#main').attr('hidden', false);
@@ -221,7 +222,6 @@
 
             // Patient name
             var valuePatient = $('#paciente').val();
-            console.log(valuePatient);
 
             // Signer name
             var nameValue = $('#nome').val() || 'Pierre de Fermat';
@@ -265,6 +265,7 @@
                 success: function(data) {
                     if (data) {
                         loadingHidden.hide();
+                        embedUrl = data.embedUrl;
                         sign(data.embedUrl, allowPreviewDocument);
                         elem.style.visibility = 'hidden';
                     } else {
@@ -318,21 +319,32 @@
             }
         }
 
+        function parseHtmlKey(embedUrl) {
+            var startString = "https://signer-lac.azurewebsites.net/document/key/";
+            var indexof = embedUrl.indexOf("/", startString.length + 1);
+            var key = embedUrl.substr(startString.length, indexof - startString.length);
+            return key
+        }
+
         function openPrescriptionView() {
-            if (documentId != null) {
+            if (embedUrl != null) {
+                var key = parseHtmlKey(embedUrl);
+
                 $.ajax({
                     type: 'GET',
-                    url: '/Home/OpenPrescription?id=' + documentId,
+                    url: '/Home/OpenPrescription?key=' + key,
                     dataType: 'json',
                     success: function(data) {
                         if (data.url) {
-                            window.location.href = data.url;
+                            window.open(data.url, '_blank');
                         }
                     },
                     error: function() {
-                        alert('Erro ao baixar prescrição');
+                        alert('Erro ao visualizar prescrição');
                     }
                 });
+
+
             }
         }
 

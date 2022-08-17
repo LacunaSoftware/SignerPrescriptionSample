@@ -41,7 +41,7 @@ namespace Embedded_Signatures.Services
             var filePath = "Template-Prescricao.pdf";
             var fileName = Path.GetFileName(filePath);
             var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");
-            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = "Embedded Signature Sample" };
+            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = name + " - " + identifier };
 
             var participantUser = new ParticipantUserModel();
 
@@ -114,17 +114,16 @@ namespace Embedded_Signatures.Services
         public async Task<string> GetDownloadUrl(Guid documentId)
         {
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
-            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Original);
+            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Signatures);
 
             return new Uri(new Uri(url), response.Location).AbsoluteUri;
         }
 
-        public async Task<string> GetPrescríptionViewUrl(Guid documentId)
+        public async Task<string> GetPrescríptionViewUrl(string key)
         {
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
-            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Signatures);
 
-            return new Uri(new Uri(url+"/health-document/"), response.Location).AbsoluteUri;
+            return new Uri(new Uri(url+"/health-document/"), key).AbsoluteUri;
         }
 
         private MemoryStream CreatePrescriptionPdf(string name, string medicine)

@@ -51,9 +51,9 @@ namespace Embedded_Signatures.Controllers
             return Json(new { url });
         }
 
-        public async Task<IActionResult> OpenPrescription(Guid id)
+        public async Task<IActionResult> OpenPrescription(string key)
         {
-            var url = await signerService.GetPrescríptionViewUrl(id);
+            var url = await signerService.GetPrescríptionViewUrl(key);
 
             return Json(new { url });
         }

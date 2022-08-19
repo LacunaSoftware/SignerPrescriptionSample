@@ -70,7 +70,7 @@
                                         new SelectListItem{Text="São Paulo", Value="SP"},
                                         new SelectListItem{Text="Sergipe", Value="SE"},
                                         new SelectListItem{Text="Tocantins", Value="TO"}
-                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input",id = "uf"})
+                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input",id = "uf", @placeholder="UF"})
                                     </div>
                                 </div>
                             </div>
@@ -112,23 +112,35 @@
                             </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4">
-                                    @Html.TextBoxFor(m =>m.MedicationName, new{ id="medicamento",placeholder="Nome do medicamento",
-                                    onkeyup = "enableButton()",
-                                    @class= "form-control form-rounded transparent-input" })
+                                    @Html.DropDownListFor(m => m.MedicationName, new List<SelectListItem>{
+                                        new SelectListItem{Text="Medicamento", Value="", Disabled=true, Selected=true},
+                                        new SelectListItem{Text="Aspirina", Value="Aspirina"},
+                                        new SelectListItem{Text="Paracetamol", Value="Paracetamol"},
+                                        new SelectListItem{Text="Tylenol", Value="Tylenol"},
+                                        new SelectListItem{Text="Amoxicilina", Value="Amoxicilina"},
+                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "medicamento", onchange="enableButton()"})
                                 </div>
                             </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4 mb-2">
-                                    @Html.TextBoxFor(m => m.MedicationDosage, new{ id="posologia",placeholder="Posologia",
-                                    onkeyup = "enableButton()",
-                                    @class= "form-control form-rounded transparent-input" })
+                                    @Html.DropDownListFor(m => m.MedicationDosage, new List<SelectListItem>{
+                                        new SelectListItem{Text="Posologia", Value="", Disabled=true, Selected=true},
+                                        new SelectListItem{Text="Diariamente", Value="Diariamente"},
+                                        new SelectListItem{Text="De 2 em 2 dias", Value="De 2 em 2 dias"},
+                                        new SelectListItem{Text="Semanalmente", Value="Semanalmente"},
+                                        new SelectListItem{Text="1 comprimido", Value="1 comprimido"},
+                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "posologia", onchange="enableButton()"})
                                 </div>
                             </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4 mb-2">
-                                    @Html.TextBoxFor(m => m.MedicationQuantity, new{ id="quantidade",placeholder="Quantidade",
-                                    onkeyup = "enableButton()",
-                                    @class= "form-control form-rounded transparent-input" })
+                                    @Html.DropDownListFor(m => m.MedicationDosage, new List<SelectListItem>{
+                                        new SelectListItem{Text="Quantidade", Value="", Disabled=true, Selected=true},
+                                        new SelectListItem{Text="1 caixa", Value="1 caixa"},
+                                        new SelectListItem{Text="2 caixas", Value="2 caixas"},
+                                        new SelectListItem{Text="3 caixas", Value="3 caixas"},
+                                        new SelectListItem{Text="4 caixas", Value="4 caixas"},
+                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "quantidade", onchange="enableButton()"})
                                 </div>
                             </div>
                             <div class="my-lg-3">
@@ -259,9 +271,6 @@
 
             //Medication Dosage
             var medicationDosage = $('#posologia').val();
-
-            // Append with attributes dosage and quantity, respecitvely
-            medicationValue += " " + $('#posologia').val() + " " + $('#quantidade').val();
 
             // Loading while the document is created
             var loadingHidden = $('#loadingHeader');

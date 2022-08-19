@@ -40,7 +40,7 @@ namespace Embedded_Signatures.Services
             // bool allowElectronicSignature = false
             )
         {
-            var fileStream = CreatePrescriptionPdf(patientName, medicine);
+            var fileStream = CreatePrescriptionPdf(patientName, medicine, medicationDosage, medicationQuantity);
             var filePath = "Template-Prescricao.pdf";
             var fileName = Path.GetFileName(filePath);
             var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");
@@ -59,9 +59,7 @@ namespace Embedded_Signatures.Services
                 // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
                 // feel free to uncomment if necessary
                 // AllowElectronicSignature = allowElectronicSignature,
-
-                // This will not be used anymore in the new version of this document request
-                /*PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
+                PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
                 {
                     new PrePositionedDocumentMarkModel()
                     {
@@ -72,7 +70,7 @@ namespace Embedded_Signatures.Services
                         Width = 170.0,
                         Height = 40.0,
                     }
-                }*/
+                }
             };
 
             // Item info for health document (patient name, medication and dosage)
@@ -132,14 +130,14 @@ namespace Embedded_Signatures.Services
             return new Uri(new Uri(url+"/health-document/"), key).AbsoluteUri;
         }
 
-        private MemoryStream CreatePrescriptionPdf(string name, string medicine)
+        private MemoryStream CreatePrescriptionPdf(string name, string medicine, string medicationDosage, string medicationQuantity)
         {
             var pdfFile = File.ReadAllBytes(Path.Combine(env.ContentRootPath, "Template-Prescricao.pdf"));
             var reader = new PdfReader(pdfFile);
             var stream = new MemoryStream();
             var stamper = new PdfStamper(reader, stream);
             stamper.AcroFields.SetField("Nome", name);
-            stamper.AcroFields.SetField("Medicamentos", medicine);
+            stamper.AcroFields.SetField("Medicamentos", medicine + " " + medicationDosage + " " + medicationQuantity);
             stamper.FormFlattening = true;
             stamper.Close();
             stream.Position = 0;

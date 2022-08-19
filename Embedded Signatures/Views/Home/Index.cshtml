@@ -33,7 +33,7 @@
                                     @Html.TextBoxFor(m =>m.Name, new{id = "nome", placeholder="Nome",@class= "form-control form-rounded transparent-input" })
                                 </div>
                                 <div class="row justify-content-center mb-2">
-                                    @Html.TextBoxFor(m =>m.Email, new{id = "email" ,placeholder="Email",@class= "form-control form-rounded transparent-input" })
+                                    @Html.TextBoxFor(m =>m.Email, new{id = "email", placeholder="Email",@class= "form-control form-rounded transparent-input" })
                                 </div>
                                 <div class="row justify-content-center mb-4">
                                     @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input" })
@@ -132,13 +132,15 @@
                                 </div>
                             </div>
                             <div class="my-lg-3">
-                                <div class="form-check form-check-inline">
+                                @*This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+                                feel free to uncomment if necessary*@
+                                @*<div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="ElectronicSignature" />
                                     <label class="form-check-label" for="ElectronicSignature">Assinatura Eletronica</label>
-                                </div>
+                                </div>*@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="DocumentPreview" checked />
-                                    <label class="form-check-label" for="DocumentPreview">Ver Documento</label>
+                                    <label class="form-check-label" for="DocumentPreview">Ver prévia do documento</label>
                                 </div>
                             </div>
                             <div class="row-cols-4">
@@ -204,6 +206,7 @@
         var documentId = '';
         var embedUrl = '';
 
+
         function showApp() {
             $('#main').attr('hidden', false);
             $('#main').show();
@@ -227,12 +230,6 @@
 
         function startSignature(elem) {
 
-            // Patient name
-            var namePatient = $('#paciente').val();
-
-            // Patient CPF
-            var patientIdentifier = $('#cpf-paciente').val();
-
             // Signer name
             var nameSigner = $('#nome').val() || 'Pierre de Fermat';
 
@@ -247,6 +244,12 @@
 
             // CRM UF
             var ufValue = $('uf').val() || 'DF';
+
+            // Patient name
+            var namePatient = $('#paciente').val();
+
+            // Patient CPF
+            var patientIdentifier = $('#cpf-paciente').val();
 
             // Medication name
             var medicationValue = $('#medicamento').val();
@@ -271,7 +274,11 @@
             $.ajax({
                 type: 'POST',
                 url: '/Home/Prescription',
-                data: JSON.stringify({ PatientName: namePatient, PatientIdentifier: patientIdentifier, Name: nameSigner, CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, AllowElectronicSignature: allowElectronicSignature }),
+                data: JSON.stringify({ PatientName: namePatient, PatientIdentifier: patientIdentifier, Name: nameSigner, CRM: crmValue, UF: ufValue, MedicationQuantity: medQuantity, MedicationDosage: medicationDosage, Email: emailValue, MedicationName: medicationValue, Identifier: identifierValue, 
+                    // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+                    // feel free to uncomment if necessary
+                    //AllowElectronicSignature: allowElectronicSignature 
+                }),
                 success: function(data) {
                     if (data) {
                         loadingHidden.hide();
@@ -302,8 +309,16 @@
             $('#whiteboard').removeAttr('style').show();
         }
 
+
         function enableButton() {
-            if (($('paciente').val() && $('medicamento').val()) !== "") {
+            // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
+            var patientValue = $('#paciente').val().trim();
+            var cpfPatientValue = $("#cpf-paciente").val().trim();
+            var medicationValue = $('#medicamento').val().trim();
+            var medicationDosage = $('#posologia').val().trim();
+            var medicationQuantity = $('#quantidade').val().trim();
+
+            if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "" && medicationDosage !== "" && medicationQuantity !== "") {
                 $('#start').removeAttr('disabled');
             } else {
                 $('#start').attr('disabled', true);

@@ -38,8 +38,10 @@ namespace Embedded_Signatures.Controllers
                 name:prescription.Name,
                 email:prescription.Email,
                 medicine:prescription.MedicationName,
-                identifier:prescription.Identifier,
-                allowElectronicSignature:prescription.AllowElectronicSignature 
+                identifier:prescription.Identifier
+                // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+                // feel free to uncomment if necessary
+                //allowElectronicSignature:prescription.AllowElectronicSignature 
                 );
 
             return Json(new { embedUrl = embed });

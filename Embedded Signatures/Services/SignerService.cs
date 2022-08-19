@@ -34,8 +34,10 @@ namespace Embedded_Signatures.Services
             string email,
             string medicine,
             string identifier,
-            string patientIdentifier,
-            bool allowElectronicSignature = false
+            string patientIdentifier
+            // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+            // feel free to uncomment if necessary
+            // bool allowElectronicSignature = false
             )
         {
             var fileStream = CreatePrescriptionPdf(patientName, medicine);
@@ -54,8 +56,11 @@ namespace Embedded_Signatures.Services
             {
                 Type = FlowActionType.Signer,
                 User = participantUser,
-                AllowElectronicSignature = allowElectronicSignature,
-                // I believe this will not be used anymore in the new request
+                // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+                // feel free to uncomment if necessary
+                // AllowElectronicSignature = allowElectronicSignature,
+
+                // This will not be used anymore in the new version of this document request
                 /*PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
                 {
                     new PrePositionedDocumentMarkModel()

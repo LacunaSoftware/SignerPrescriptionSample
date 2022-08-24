@@ -123,7 +123,7 @@ namespace Embedded_Signatures.Services
             return new Uri(new Uri(url), response.Location).AbsoluteUri;
         }
 
-        public async Task<string> GetPrescríptionViewUrl(string key)
+        public string GetPrescríptionViewUrl(string key)
         {
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
 

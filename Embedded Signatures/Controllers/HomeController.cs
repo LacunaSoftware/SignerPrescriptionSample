@@ -10,8 +10,6 @@ namespace Embedded_Signatures.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly SignerService signerService;
 
-
-
         public HomeController(ILogger<HomeController> logger, SignerService signerService)
         {
             _logger = logger;
@@ -20,7 +18,6 @@ namespace Embedded_Signatures.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -54,13 +51,12 @@ namespace Embedded_Signatures.Controllers
             return Json(new { url });
         }
 
-        public async Task<IActionResult> OpenPrescription(string key)
+        public IActionResult OpenPrescription(string key)
         {
-            var url = await signerService.GetPrescríptionViewUrl(key);
+            var url = signerService.GetPrescríptionViewUrl(key);
 
             return Json(new { url });
         }
-
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

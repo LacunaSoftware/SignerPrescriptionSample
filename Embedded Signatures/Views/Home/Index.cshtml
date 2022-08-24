@@ -17,7 +17,7 @@
                             <div class="row">
                                 <div class="text-md-center">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="data" onclick="hideFormEntries(this)" />
+                                        <input class="form-check-input" type="checkbox" id="certCheckbox" onclick="hideFormEntries(this)" />
                                         <label class="form-check-label" for="teste">Certificado de Teste</label>
                                     </div>
                                     <div class="row">
@@ -30,18 +30,21 @@
                             <hr />
                             <div id="box">
                                 <div class="row justify-content-center mb-2">
-                                    @Html.TextBoxFor(m =>m.Name, new{id = "nome", placeholder="Nome",@class= "form-control form-rounded transparent-input" })
+                                    @Html.TextBoxFor(m =>m.Name, new{id = "nome", placeholder="Nome",@class= "form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()"})
+                                    @Html.ValidationMessageFor(m => m.Name, "É necessário informar um nome", new { @class = "text-danger" })
                                 </div>
                                 <div class="row justify-content-center mb-2">
-                                    @Html.TextBoxFor(m =>m.Email, new{id = "email", placeholder="Email",@class= "form-control form-rounded transparent-input" })
+                                    @Html.TextBoxFor(m =>m.Email, new{id = "email", placeholder="Email",@class= "form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()" })
+                                    @Html.ValidationMessageFor(m => m.Email, "É necessário informar um e-mail", new { @class = "text-danger" })
                                 </div>
                                 <div class="row justify-content-center mb-4">
-                                    @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input" })
+                                    @Html.TextBoxFor(m =>m.Identifier, new{id = "cpf" ,placeholder="CPF",@class= "form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()" })
+                                    @Html.ValidationMessageFor(m => m.Identifier, "É necessário informar um CPF", new { @class = "text-danger" })
                                 </div>
                                 <div class="row justify-content-center mb-4">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">
-                                        @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input" })
+                                        @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()"})
                                         @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
                                         new SelectListItem{Text="Acre", Value="AC"},
                                         new SelectListItem{Text="Alagoas", Value="AL"},
@@ -72,13 +75,15 @@
                                         new SelectListItem{Text="Tocantins", Value="TO"}
                                         }, new {@class= "select-wrapper form-select form-rounded transparent-input",id = "uf", @placeholder="UF"})
                                     </div>
+                                        @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="text-md-center">
-                            <input type="button" value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr col-lg-3" />
+                            <input id="criarReceitaButton" type="button" disabled value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr col-lg-3" />
                         </div>
                     </div>
                 </div>
@@ -101,6 +106,7 @@
                                     @Html.TextBoxFor(m =>m.PatientName, new{ id="paciente",placeholder="Nome do paciente",
                                     onkeyup = "enableButton()",
                                     @class= "form-control form-rounded transparent-input" })
+                                    @Html.ValidationMessageFor(m => m.PatientName, "É necessário informar o nome do paciente", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="row-cols-4 mb-2">
@@ -108,6 +114,7 @@
                                     @Html.TextBoxFor(m =>m.PatientIdentifier, new{ id="cpf-paciente",placeholder="CPF do paciente",
                                     onkeyup = "enableButton()",
                                     @class= "form-control form-rounded transparent-input" })
+                                    @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o CPF do paciente", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="row-cols-4 mb-2">
@@ -119,17 +126,19 @@
                                         new SelectListItem{Text="Tylenol", Value="Tylenol"},
                                         new SelectListItem{Text="Amoxicilina", Value="Amoxicilina"},
                                         }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "medicamento", onchange="enableButton()"})
+                                        @Html.ValidationMessageFor(m => m.MedicationName, "É necessário informar o nome do medicamento", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="row-cols-4 mb-2">
                                 <div class="col-lg-4 mb-2">
                                     @Html.DropDownListFor(m => m.MedicationDosage, new List<SelectListItem>{
                                         new SelectListItem{Text="Posologia", Value="", Disabled=true, Selected=true},
-                                        new SelectListItem{Text="Diariamente", Value="Diariamente"},
-                                        new SelectListItem{Text="De 2 em 2 dias", Value="De 2 em 2 dias"},
-                                        new SelectListItem{Text="Semanalmente", Value="Semanalmente"},
-                                        new SelectListItem{Text="1 comprimido", Value="1 comprimido"},
+                                        new SelectListItem{Text="De 6 em 6 horas", Value="De 6 em 6 horas"},
+                                        new SelectListItem{Text="De 8 em 8 horas", Value="De 8 em 8 horas"},
+                                        new SelectListItem{Text="De 12 em 12 horas", Value="De 12 em 12 horas"},
+                                        new SelectListItem{Text="De 24 em 24 horas", Value="De 24 em 24 horas"},
                                         }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "posologia", onchange="enableButton()"})
+                                        @Html.ValidationMessageFor(m => m.MedicationDosage, "É necessário informar a posologia do medicamento", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="row-cols-4 mb-2">
@@ -141,6 +150,7 @@
                                         new SelectListItem{Text="3 caixas", Value="3 caixas"},
                                         new SelectListItem{Text="4 caixas", Value="4 caixas"},
                                         }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "quantidade", onchange="enableButton()"})
+                                        @Html.ValidationMessageFor(m => m.MedicationQuantity, "É necessário informar a quantidade do medicamento", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="my-lg-3">
@@ -218,11 +228,37 @@
         var documentId = '';
         var embedUrl = '';
 
+        
 
         function showApp() {
             $('#main').attr('hidden', false);
             $('#main').show();
             $('#signin').hide();
+        }
+
+        function enablePrescriptionButton() {
+            // Signer name
+            var nameSigner = $('#nome').val().trim();
+
+            // Signer email
+            var emailValue = $('#email').val().trim();
+
+            // Signer CPF
+            var identifierValue = $('#cpf').val().trim();
+
+            // Signer CRM
+            var crmValue = $('#crm').val().trim();
+
+            // Test certificate checkbox value
+            var checkboxValue = $('#certCheckbox').prop('checked');
+
+            console.log(checkboxValue);
+
+            if ((checkboxValue) || (nameSigner != "" && emailValue != "" && identifierValue != "" && crmValue != "") ) {
+                $("#criarReceitaButton").removeAttr('disabled');
+            } else {
+                $("#criarReceitaButton").attr('disabled', true);
+            }
         }
 
         function sign(data, allowPreviewDocument) {
@@ -239,6 +275,8 @@
                 $('#whiteboard').hide();
             });
         }
+
+
 
         function startSignature(elem) {
 
@@ -383,6 +421,7 @@
         }
 
         function hideFormEntries(elem) {
+            enablePrescriptionButton();
             if (elem.checked) {
                 $('#box').hide();
             } else {

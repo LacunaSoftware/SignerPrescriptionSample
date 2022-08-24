@@ -105,6 +105,15 @@ html {
     text-align: center;
 }
 
+/* Displaying error messages */
+.field-validation-error {
+    color: red;
+    font-weight: bold;
+}
+
+.field-validation-valid {
+    display: none;
+}
 
 
 /* Spinner related stuff */

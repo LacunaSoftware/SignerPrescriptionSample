@@ -404,7 +404,7 @@
 
                 $.ajax({
                     type: 'GET',
-                    url: '/Home/OpenPrescription?key=' + key,
+                    url: '/Home/GetPrescriptionViewFromDocumentKey?key=' + key,
                     dataType: 'json',
                     success: function(data) {
                         if (data.url) {

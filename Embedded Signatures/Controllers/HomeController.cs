@@ -51,7 +51,7 @@ namespace Embedded_Signatures.Controllers
             return Json(new { url });
         }
 
-        public IActionResult OpenPrescription(string key)
+        public IActionResult GetPrescriptionViewFromDocumentKey(string key)
         {
             var url = signerService.GetPrescríptionViewUrl(key);
 

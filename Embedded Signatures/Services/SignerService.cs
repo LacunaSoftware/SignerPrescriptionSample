@@ -40,10 +40,10 @@ namespace Embedded_Signatures.Services
             // bool allowElectronicSignature = false
             )
         {
-            var fileStream = CreatePrescriptionPdf(patientName, medicine, medicationDosage, medicationQuantity);
             var filePath = "Template-Prescricao.pdf";
+            var file = File.ReadAllBytes(filePath);
             var fileName = Path.GetFileName(filePath);
-            var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");
+            var uploadModel = await client.UploadFileAsync(fileName, file, "application/pdf");
             var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = patientName + " - " + patientIdentifier };
 
             var participantUser = new ParticipantUserModel();
@@ -129,22 +129,6 @@ namespace Embedded_Signatures.Services
 
             return new Uri(new Uri(url), "/health-document/" + key).AbsoluteUri;
         }
-
-        private MemoryStream CreatePrescriptionPdf(string name, string medicine, string medicationDosage, string medicationQuantity)
-        {
-            var pdfFile = File.ReadAllBytes(Path.Combine(env.ContentRootPath, "Template-Prescricao.pdf"));
-            var reader = new PdfReader(pdfFile);
-            var stream = new MemoryStream();
-            var stamper = new PdfStamper(reader, stream);
-            stamper.AcroFields.SetField("Nome", name);
-            stamper.AcroFields.SetField("Medicamentos", medicine + " " + medicationDosage + " " + medicationQuantity);
-            stamper.FormFlattening = true;
-            stamper.Close();
-            stream.Position = 0;
-            return stream;
-        }
-
-
 
     }
 }

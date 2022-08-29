@@ -127,7 +127,7 @@ namespace Embedded_Signatures.Services
         {
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
 
-            return new Uri(new Uri(url+"/health-document/"), key).AbsoluteUri;
+            return new Uri(new Uri(url), "/health-document/" + key).AbsoluteUri;
         }
 
         private MemoryStream CreatePrescriptionPdf(string name, string medicine, string medicationDosage, string medicationQuantity)

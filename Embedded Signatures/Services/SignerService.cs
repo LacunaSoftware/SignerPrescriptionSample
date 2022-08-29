@@ -101,7 +101,7 @@ namespace Embedded_Signatures.Services
                     Fields = new Dictionary<string, string>()
                     {
                         { "Nome", patientName },
-                        { "Medicamentos", $"{medicine}\r\n{medicationDosage}\r\n{medicationQuantity}" }
+                        { "Medicamentos", $"{medicine} - {medicationDosage} - {medicationQuantity}" }
                     }
                 }
             };

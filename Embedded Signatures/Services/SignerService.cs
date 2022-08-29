@@ -4,6 +4,7 @@ using Lacuna.Signer.Api.DocumentMark;
 using Lacuna.Signer.Api.Documents;
 using Lacuna.Signer.Api.FlowActions;
 using Lacuna.Signer.Api.Users;
+using Lacuna.Signer.Api.HealthDocuments;
 using Lacuna.Signer.Client;
 
 namespace Embedded_Signatures.Services
@@ -23,25 +24,41 @@ namespace Embedded_Signatures.Services
             client = new SignerClient(url, "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
         }
 
-        public async Task<string> CreateDocument(string patientName, string name, string email, string medicine, string identifier, bool allowElectronicSignature = false)
+        public async Task<string> CreateDocument(
+            string patientName,
+            string crm,
+            string uf,
+            string medicationDosage,
+            string medicationQuantity,
+            string name,
+            string email,
+            string medicine,
+            string identifier,
+            string patientIdentifier
+            // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+            // feel free to uncomment if necessary
+            // bool allowElectronicSignature = false
+            )
         {
-            var fileStream = CreatePrescriptionPdf(patientName, medicine);
             var filePath = "Template-Prescricao.pdf";
+            var file = File.ReadAllBytes(filePath);
             var fileName = Path.GetFileName(filePath);
-            var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");
-            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = "Embedded Signature Sample" };
+            var uploadModel = await client.UploadFileAsync(fileName, file, "application/pdf");
+            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = patientName + " - " + patientIdentifier };
 
             var participantUser = new ParticipantUserModel();
 
             participantUser.Email = email;
             participantUser.Name = name;
-            participantUser.Identifier = identifier;    
-          
+            participantUser.Identifier = identifier;
+
             var flowActionCreateModel = new FlowActionCreateModel()
             {
                 Type = FlowActionType.Signer,
                 User = participantUser,
-                AllowElectronicSignature = allowElectronicSignature,
+                // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+                // feel free to uncomment if necessary
+                // AllowElectronicSignature = allowElectronicSignature,
                 PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
                 {
                     new PrePositionedDocumentMarkModel()
@@ -56,10 +73,37 @@ namespace Embedded_Signatures.Services
                 }
             };
 
+            // Item info for health document (patient name, medication and dosage)
+            var itemModel = new HealthItemModel()
+            {
+                Name = medicine,
+                Description = medicationDosage,
+                Description2 = medicationQuantity
+            };
+
             var documentRequest = new CreateDocumentRequest()
             {
                 Files = new List<FileUploadModel>() { fileUploadModel },
-                FlowActions = new List<FlowActionCreateModel>() { flowActionCreateModel }
+                FlowActions = new List<FlowActionCreateModel>() { flowActionCreateModel },
+                Type = DocumentTypes.Prescription,
+                AdditionalInfo = new DocumentAdditionalInfoData()
+                {
+                    HealthData = new HealthDocumentData()
+                    {
+                        Professional = new HealthProfessionalModel()
+                        {
+                            Name = name,
+                            Id = crm,
+                            Region = uf
+                        },
+                        Items = new List<HealthItemModel>() { itemModel }
+                    },
+                    Fields = new Dictionary<string, string>()
+                    {
+                        { "Nome", patientName },
+                        { "Medicamentos", $"{medicine} - {medicationDosage} - {medicationQuantity}" }
+                    }
+                }
             };
             var result = (await client.CreateDocumentAsync(documentRequest)).First();
             var actionUrlRequest = new ActionUrlRequest()
@@ -74,23 +118,16 @@ namespace Embedded_Signatures.Services
         public async Task<string> GetDownloadUrl(Guid documentId)
         {
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
-            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.PrinterFriendlyVersion);
+            var response = await client.GetDocumentDownloadTicketAsync(documentId, DocumentTicketType.Signatures);
 
             return new Uri(new Uri(url), response.Location).AbsoluteUri;
         }
 
-        private MemoryStream CreatePrescriptionPdf(string name, string medicine)
+        public string GetPrescríptionViewUrl(string key)
         {
-            var pdfFile = File.ReadAllBytes(Path.Combine(env.ContentRootPath, "Template-Prescricao.pdf"));
-            var reader = new PdfReader(pdfFile);
-            var stream = new MemoryStream();
-            var stamper = new PdfStamper(reader, stream);
-            stamper.AcroFields.SetField("Nome", name);
-            stamper.AcroFields.SetField("Medicamentos", medicine);
-            stamper.FormFlattening = true;
-            stamper.Close();
-            stream.Position = 0;
-            return stream;
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt");
+
+            return new Uri(new Uri(url), "/health-document/" + key).AbsoluteUri;
         }
 
     }

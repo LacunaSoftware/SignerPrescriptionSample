@@ -18,17 +18,30 @@ namespace Embedded_Signatures.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Prescription([FromBody]CreatePrescriptionModel prescription)
+        public async Task<IActionResult> Prescription([FromBody] CreatePrescriptionModel prescription)
         {
-            var embed = await signerService.CreateDocument(prescription.PatientName, prescription.Name, prescription.Email, prescription.MedicationName, prescription.Identifier, prescription.AllowElectronicSignature);
+            var embed = await signerService.CreateDocument(
+                patientName:prescription.PatientName,
+                patientIdentifier:prescription.PatientIdentifier,
+                crm:prescription.CRM,
+                uf: prescription.UF,
+                medicationDosage:prescription.MedicationDosage,
+                medicationQuantity:prescription.MedicationQuantity,
+                name:prescription.Name,
+                email:prescription.Email,
+                medicine:prescription.MedicationName,
+                identifier:prescription.Identifier
+                // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
+                // feel free to uncomment if necessary
+                //allowElectronicSignature:prescription.AllowElectronicSignature 
+                );
 
-            return Json(new {embedUrl = embed});
+            return Json(new { embedUrl = embed });
         }
 
         public async Task<IActionResult> Prescription(Guid id)
@@ -37,6 +50,14 @@ namespace Embedded_Signatures.Controllers
 
             return Json(new { url });
         }
+
+        public IActionResult GetPrescriptionViewFromDocumentKey(string key)
+        {
+            var url = signerService.GetPrescríptionViewUrl(key);
+
+            return Json(new { url });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

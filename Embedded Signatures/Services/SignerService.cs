@@ -103,7 +103,8 @@ namespace Embedded_Signatures.Services
                         { "Nome", patientName },
                         { "Medicamentos", $"{medicine} - {medicationDosage} - {medicationQuantity}" }
                     }
-                }
+                },
+                DisablePendingActionNotifications = true
             };
             var result = (await client.CreateDocumentAsync(documentRequest)).First();
             var actionUrlRequest = new ActionUrlRequest()

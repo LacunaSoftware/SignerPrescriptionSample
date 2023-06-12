@@ -1,4 +1,4 @@
-namespace Embedded_Signatures.Models
+namespace SignerPrescriptionSample.Models
 {
     public class ErrorViewModel
     {

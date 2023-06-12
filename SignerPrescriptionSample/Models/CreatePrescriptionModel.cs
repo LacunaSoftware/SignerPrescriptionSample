@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace Embedded_Signatures.Models
+namespace SignerPrescriptionSample.Models
 {
     public class CreatePrescriptionModel
     {

@@ -12,8 +12,6 @@ html {
     position: relative;
 }
 
-
-
 body {
     background-image: url("../1440pxbackground.png");
     background-size: 100%;
@@ -33,7 +31,7 @@ html {
 .frame-container {
     position: relative;
     width: 100%;
-    height: 0;
+    height: 68%;
     padding-bottom: 56.25%;
     border-radius: 25px;
 }

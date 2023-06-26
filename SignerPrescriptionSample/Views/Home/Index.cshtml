@@ -114,6 +114,13 @@
                                     @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o CPF do paciente", new { @class = "text-danger" })
                                 </div>
                                 <div class="mb-2">
+                                    @Html.TextAreaFor(m =>m.PatientIdentifier, new{ id="medicamento",placeholder="Medicamento, posologia e quantidade",
+                                    onkeyup = "enableButton()",
+                                    @class= "form-control form-rounded transparent-input" })
+                                    @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o medicamento", new { @class = "text-danger" })
+                                </div>
+                                @* This is now commented as the new version will only contain one text field for all medication info
+                                <div class="mb-2">
                                     @Html.DropDownListFor(m => m.MedicationName, new List<SelectListItem>{
                                     new SelectListItem{Text="Medicamento", Value="", Disabled=true, Selected=true},
                                     new SelectListItem{Text="Aspirina", Value="Aspirina"},
@@ -142,7 +149,7 @@
                                     new SelectListItem{Text="4 caixas", Value="4 caixas"},
                                     }, new {@class= "select-wrapper form-select form-rounded transparent-input", id = "quantidade", onchange="enableButton()"})
                                     @Html.ValidationMessageFor(m => m.MedicationQuantity, "É necessário informar a quantidade do medicamento", new { @class = "text-danger" })
-                                </div>
+                                </div>*@
                                 <div class="mb-2">
                                     @*This has been removed since prescription no longer uses electronic signature for Prescription documents,
                                     feel free to uncomment if necessary*@
@@ -297,10 +304,10 @@
             var medicationValue = $('#medicamento').val();
 
             //Medication Quantity
-            var medQuantity = $('#quantidade').val();
+            //var medQuantity = $('#quantidade').val();
 
             //Medication Dosage
-            var medicationDosage = $('#posologia').val();
+            //var medicationDosage = $('#posologia').val();
 
             // Loading while the document is created
             var loadingHidden = $('#loadingHeader');
@@ -319,8 +326,6 @@
                     Name: nameSigner,
                     CRM: crmValue,
                     UF: ufValue,
-                    MedicationQuantity: medQuantity,
-                    MedicationDosage: medicationDosage,
                     Email: emailValue,
                     MedicationName: medicationValue,
                     Identifier: identifierValue,
@@ -364,15 +369,12 @@
             var patientValue = $('#paciente').val().trim();
             var cpfPatientValue = $("#cpf-paciente").val().trim();
             var medicationValue = $('#medicamento').val().trim();
-            var medicationDosage = $('#posologia').val().trim();
-            var medicationQuantity = $('#quantidade').val().trim();
 
-            if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "" && medicationDosage !== "" && medicationQuantity !== "") {
+            if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "") {
                 $('#start').removeAttr('disabled');
             } else {
                 $('#start').attr('disabled', true);
             }
-
         }
 
         function download() {

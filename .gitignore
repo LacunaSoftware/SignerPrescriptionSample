@@ -5,3 +5,4 @@ obj
 *.user
 App_Data/
 \Properties\launchSettings.json
+SignerPrescriptionSample/LacunaPkiLicense.config

@@ -1,5 +1,6 @@
 ﻿using SignerPrescriptionSample.Models;
 using SignerPrescriptionSample.Services;
+using Lacuna.Pki;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,39 +10,77 @@ namespace SignerPrescriptionSample.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly SignerService signerService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, SignerService signerService)
+        public HomeController(ILogger<HomeController> logger, SignerService signerService, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             this.signerService = signerService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var nonceStore = Utils.GetNonceStore(_webHostEnvironment);
+
+            var certAuth = new PKCertificateAuthentication(nonceStore);
+
+            var nonce = certAuth.Start();
+
+            var model = new AuthenticationModel()
+            {
+                Nonce = nonce,
+                DigestAlgorithm = PKCertificateAuthentication.DigestAlgorithm.Oid
+            };
+            var vr = TempData["ValidationResults"] as ValidationResults;
+            if (vr != null && !vr.IsValid)
+            {
+                ModelState.AddModelError("", vr.ToString());
+            }
+
+            return View(model);
         }
 
+		[HttpPost]
+		public IActionResult Index(AuthenticationModel model)
+        {
 
-        [HttpPost]
-        public async Task<IActionResult> Prescription([FromBody] CreatePrescriptionModel prescription)
+			var nonceStore = Utils.GetNonceStore(_webHostEnvironment);
+
+			var certAuth = new PKCertificateAuthentication(nonceStore);
+
+			PKCertificate certificate; 
+
+            var vr = certAuth.Complete(model.Nonce, model.Certificate, model.Signature, Utils.GetTrustArbitrator(), out certificate);
+
+            if (!vr.IsValid)
+            {
+                TempData["ValidationResults"] = vr;
+                return RedirectToAction("Index");
+            }
+
+			return View("Form", new CreatePrescriptionModel()
+			{
+				UserCert = PKCertificate.Decode(model.Certificate)
+			});
+		}
+
+		[HttpPost]
+        public async Task<IActionResult> Prescription([FromBody]CreatePrescriptionModel prescription)
         {
             var embed = await signerService.CreateDocument(
-                patientName:prescription.PatientName,
-                patientIdentifier:prescription.PatientIdentifier,
-                crm:prescription.CRM,
+                patientName: prescription.PatientName,
+                patientIdentifier: prescription.PatientIdentifier,
+                crm: prescription.CRM,
                 uf: prescription.UF,
-                medicationDosage:prescription.MedicationDosage,
-                medicationQuantity:prescription.MedicationQuantity,
-                name:prescription.Name,
-                email:prescription.Email,
-                medicine:prescription.MedicationName,
-                identifier:prescription.Identifier
-                // This has been removed since prescription no longer uses electronic signature for Prescription documents, 
-                // feel free to uncomment if necessary
-                //allowElectronicSignature:prescription.AllowElectronicSignature 
+                medicationDosage: prescription.MedicationDosage,
+                medicationQuantity: prescription.MedicationQuantity,
+                name: prescription.Name,
+                email: prescription.Email,
+                medicine: prescription.MedicationName,
+                identifier: prescription.Identifier
                 );
-
-            return Json(new { embedUrl = embed });
+            return Json(new {embedUrl = embed});
         }
 
         public async Task<IActionResult> Prescription(Guid id)

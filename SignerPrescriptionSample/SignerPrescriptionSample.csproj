@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.6.2" />
+    <PackageReference Include="Lacuna.Pki" Version="2.13.2" />
     <PackageReference Include="Lacuna.RestClient" Version="1.15.0" />
     <PackageReference Include="Lacuna.Signer.Api" Version="1.46.0" />
     <PackageReference Include="Lacuna.Signer.Client" Version="1.17.0" />

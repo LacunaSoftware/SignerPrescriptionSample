@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Lacuna.Pki;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace SignerPrescriptionSample.Models
 {
     public class CreatePrescriptionModel
     {
-        [Required (ErrorMessage="É necessário informar um CPF")]
+        [Required(ErrorMessage = "É necessário informar um CPF")]
         public string Identifier { get; set; }
         [Required(ErrorMessage = "É necessário informar um nome")]
         public string Name { get; set; }
@@ -26,5 +27,7 @@ namespace SignerPrescriptionSample.Models
         public string UF { get; set; }
         [Required(ErrorMessage = "É necessário informar um CRM válido")]
         public string CRM { get; set; }
-    }
+        public PKCertificate UserCert { get; set; }
+
+	}
 }

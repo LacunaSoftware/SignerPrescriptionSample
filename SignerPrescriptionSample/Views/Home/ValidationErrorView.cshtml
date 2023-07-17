@@ -1,0 +1,8 @@
+﻿@model ValidationErrorModel
+
+<h5>Authentication Failed <i class="fas fa-times-circle" style="color: red;"></i></h5>
+@{
+	var vrHtml = Model.Results.ToString().Replace("\n", "<br>").Replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+}
+<p>@Html.Raw(vrHtml)</p>
+<p><a href="/AuthenticationRest" class="btn btn-primary">Try again</a></p>

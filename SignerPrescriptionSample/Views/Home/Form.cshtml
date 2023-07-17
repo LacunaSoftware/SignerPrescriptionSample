@@ -12,27 +12,11 @@
                     <div class="col-lg-4 mx-auto">
                         <h1 class="text-md-center">Informações do médico</h1>
                         <h5 id="infoData" class="text-md-center">Informe os dados do médico que irá assinar esse documento:</h5>
-                        <hr />
                         <div class="form-group">
-                            <div class="row">
-                                <div class="text-md-center">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="certCheckbox" onclick="hideFormEntries(this)" />
-                                        <label class="form-check-label" for="teste">Certificado de Teste</label>
-                                    </div>
-                                    <div class="row">
-                                        <a href="https://docs.lacunasoftware.com/pt-BR/articles/pki-guide/test-certs.html" target="_blank">Como usar certificado de teste?</a>
-                                        @*Commented for now, need to add test-cert with Pierre de Fermat only*@
-                                        @*<a href="https://docs.lacunasoftware.com/pt-br/content/test-certs.zip"> Fazer download dos certificados de teste </a>*@
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
                             <div id="box">
                                     @Html.HiddenFor(m => m.UserCert.SubjectDisplayName, new { id = "nome" })
                                     @Html.HiddenFor(m => m.UserCert.EmailAddress, new { id = "email"})
                                     @Html.HiddenFor(m => m.UserCert.PkiBrazil.CpfFormatted, new { id = "cpf"})
-
                                 <div class="row justify-content-center mb-4">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">

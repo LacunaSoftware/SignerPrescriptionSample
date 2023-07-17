@@ -53,10 +53,13 @@ namespace SignerPrescriptionSample.Controllers
 
             var vr = certAuth.Complete(model.Nonce, model.Certificate, model.Signature, Utils.GetTrustArbitrator(), out certificate);
 
+            var validation = new ValidationErrorModel();
+
+            validation.Results = vr;
+
             if (!vr.IsValid)
             {
-                TempData["ValidationResults"] = vr;
-                return RedirectToAction("Index");
+                return View("ValidationErrorView", validation);
             }
 
 			return View("Form", new CreatePrescriptionModel()

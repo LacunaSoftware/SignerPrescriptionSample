@@ -27,7 +27,9 @@ namespace SignerPrescriptionSample.Models
         public string UF { get; set; }
         [Required(ErrorMessage = "É necessário informar um CRM válido")]
         public string CRM { get; set; }
-        public PKCertificate UserCert { get; set; }
+        public PKCertificate? UserCert { get; set; }
+        public string? CpfManual { get; set; }
 
-	}
+
+    }
 }

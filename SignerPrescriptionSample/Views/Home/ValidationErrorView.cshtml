@@ -1,8 +1,11 @@
 ﻿@model ValidationErrorModel
-
-<h5>Authentication Failed <i class="fas fa-times-circle" style="color: red;"></i></h5>
-@{
-	var vrHtml = Model.Results.ToString().Replace("\n", "<br>").Replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
-}
-<p>@Html.Raw(vrHtml)</p>
-<p><a href="/AuthenticationRest" class="btn btn-primary">Try again</a></p>
+<div style="margin-top: 30px">
+    <div class="col-lg-4 m-1 d-flex justify-content-center align-items-center card" style="width: 582px;">
+        <h5>Autenticação Falhou! <i class="fas fa-times-circle" style="color: red;"></i></h5>
+        @{
+            var vrHtml = Model.Results.Errors.FirstOrDefault().Detail.ToString().Replace("\n", "<br>").Replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+        }
+        <p>@Html.Raw(vrHtml)</p>
+        <p><a href="https://localhost:44365/" class="btn btn-primary">Tentar Novamente</a></p>
+    </div>
+</div>

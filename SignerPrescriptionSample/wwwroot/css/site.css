@@ -13,7 +13,7 @@ html {
 }
 
 body {
-    background-image: url("../background2.png");
+    background-image: url("../background.png");
     background-size: 100%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -137,7 +137,7 @@ html {
     top: 0;
     left: 0;
     background-color: Black;
-    filter: alpha(opacity=60);
+    filter: alpha(opacity=20);
     opacity: 0.6;
     -moz-opacity: 0.8;
 }
@@ -156,7 +156,6 @@ html {
 }
 
 .inner-div {
-    background-color: #FFF7EE;
     border-radius: 15px;
     margin: auto;
     padding: 2%;

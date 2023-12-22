@@ -6,6 +6,6 @@
             var vrHtml = Model.Results.Errors.FirstOrDefault().Detail.ToString().Replace("\n", "<br>").Replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
         }
         <p>@Html.Raw(vrHtml)</p>
-        <p><a href="https://localhost:44365/" class="btn btn-primary">Tentar Novamente</a></p>
+        <p><a href="@Url.Action("Index", "Home")" class="btn btn-primary">Tentar Novamente</a></p>
     </div>
 </div>

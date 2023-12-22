@@ -11,7 +11,7 @@
                 <div class="row">
                     <div id="patient-info-container" class="col-md-4 m-1 card">
                         <div class="row justify-content-center card-body">
-                            <div class="mb-4">
+
                         <h1 class="text-md-center">Informações do médico</h1>
                         <h5 id="infoData" class="text-md-center">Informe os dados do médico que irá assinar esse documento:</h5>
                         <div class="form-group">
@@ -20,11 +20,11 @@
                                     @Html.HiddenFor(m => m.UserCert.EmailAddress, new { id = "email"})
                                     @Html.HiddenFor(m => m.UserCert.PkiBrazil.CpfFormatted, new { id = "cpf"})
                                     @Html.HiddenFor(m => m.CpfManual, new { id = "cpfManual"})
-                                <div class="row justify-content-center mb-4">
+                                <div class="row justify-content-center mb-3">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">
-                                        @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()"})
-                                        @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
+                                            @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()"})
+                                            @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
                                         new SelectListItem{Text="Acre", Value="AC"},
                                         new SelectListItem{Text="Alagoas", Value="AL"},
                                         new SelectListItem{Text="Amapá", Value="AP"},
@@ -54,12 +54,11 @@
                                         new SelectListItem{Text="Tocantins", Value="TO"}
                                         }, new {@class= "select-wrapper form-select form-rounded transparent-input",id = "uf", @placeholder="UF"})
                                     </div>
-                                    @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
-                                    @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <div class="row">
                         <div class="text-md-center">
                             <input id="criarReceitaButton" type="button" disabled value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr" />
@@ -162,228 +161,228 @@
 
 
 @section Scripts {
-    <script>
+            <script>
 
-        var documentId = '';
-        var embedUrl = '';
-
-
-
-        function showApp() {
-            $('#main').attr('hidden', false);
-            $('#main').show();
-            $('#signin').hide();
-           
-        }
-
-        function enablePrescriptionButton() {
-            // Signer name
-            var nameSigner = $('#nome').val();
-
-            // Signer email
-            var emailValue = $('#email').val();
-
-            // Signer CPF
-            var identifierValue = $('#cpf').val();
-
-            // Signer CRM
-            var crmValue = $('#crm').val().trim();
-
-            // Test certificate checkbox value
-            var checkboxValue = $('#certCheckbox').prop('checked');
-
-            console.log(checkboxValue);
-
-            if ((checkboxValue) || (nameSigner != "" && emailValue != "" && identifierValue != "" && crmValue != "")) {
-                $("#criarReceitaButton").removeAttr('disabled');
-            } else {
-                $("#criarReceitaButton").attr('disabled', true);
-            }
-        }
-
-        function sign(data, allowPreviewDocument) {
-            hideButtons();
-
-            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
-            widget.render(data, 'embed-container');
-            widget.on(widget.events.documentSigned, function (e) {
-                documentId = e.id;
-                // Removes the widget
-                $('#embed-container').remove();
-                // Container after signature
-                $('#afterSigned').show();
-                $('#signature').hide();  
-                $('#whiteboard').hide();
-            });
-        }
+                var documentId = '';
+                var embedUrl = '';
 
 
 
-        function startSignature(elem) {
+                function showApp() {
+                    $('#main').attr('hidden', false);
+                    $('#main').show();
+                    $('#signin').hide();
 
-            // First disable all input fields so the user doesn't change them
-            // Patient name
-            var namePatient = $('#paciente').attr('disabled','true');
+                }
 
-            // Patient CPF
-            var patientIdentifier = $('#cpf-paciente').attr('disabled','true');
+                function enablePrescriptionButton() {
+                    // Signer name
+                    var nameSigner = $('#nome').val();
 
-            // Medication name
-            var medicationValue = $('#medicamento').attr('disabled','true');
+                    // Signer email
+                    var emailValue = $('#email').val();
 
+                    // Signer CPF
+                    var identifierValue = $('#cpf').val();
 
-            // Signer name
-            var nameSigner = $('#nome').val();
-            console.log("nome = ", nameSigner);
+                    // Signer CRM
+                    var crmValue = $('#crm').val().trim();
 
-            // Signer email
-            var emailValue = $('#email').val();
-            console.log("email = ", emailValue);
+                    // Test certificate checkbox value
+                    var checkboxValue = $('#certCheckbox').prop('checked');
 
-            // Signer CPF
-            var identifierValue = $('#cpf').val();
-            console.log("cpf = ", identifierValue);
+                    console.log(checkboxValue);
 
-            // Signer CRM
-            var crmValue = $('#crm').val() || '123456';
-
-            // CRM UF
-            var ufValue = $('#uf').val() || 'DF';
-
-            // Patient name
-            var namePatient = $('#paciente').val();
-
-            // Patient CPF
-            var patientIdentifier = $('#cpf-paciente').val();
-
-            // Medication name
-            var medicationValue = $('#medicamento').val();
-
-
-            // Loading while the document is created
-            var loadingHidden = $('#loadingHeader');
-            loadingHidden.show();
-
-            // set to true if the user wants to see preview of the document
-            allowPreviewDocument = $('#DocumentPreview').prop('checked');
-            allowElectronicSignature = $('#ElectronicSignature').prop('checked');
-
-            $.ajax({
-                type: 'POST',
-                url: '/Home/Prescription',
-                data: JSON.stringify({
-                    PatientName: namePatient,
-                    PatientIdentifier: patientIdentifier,
-                    Name: nameSigner,
-                    CRM: crmValue,
-                    UF: ufValue,
-                    Email: emailValue,
-                    MedicationName: medicationValue,
-                    Identifier: identifierValue,
-                    // This has been removed since prescription no longer uses electronic signature for Prescription documents,
-                    // feel free to uncomment if necessary
-                    //AllowElectronicSignature: allowElectronicSignature
-                }),
-                success: function (data) {
-                    if (data) {
-                        loadingHidden.hide();
-                        embedUrl = data.embedUrl;
-                        sign(data.embedUrl, allowPreviewDocument);
-                        elem.style.visibility = 'hidden';
+                    if ((checkboxValue) || (nameSigner != "" && emailValue != "" && identifierValue != "" && crmValue != "")) {
+                        $("#criarReceitaButton").removeAttr('disabled');
                     } else {
-                        onError(elem);
+                        $("#criarReceitaButton").attr('disabled', true);
                     }
-                },
-                error: function () {
-                    onError(elem);
-                },
-                contentType: "application/json",
-                dataType: 'json'
-            });
-        }
+                }
 
-        function onError(elem) {
-            $('#loadingHeader').hide();
-            alert('Erro ao criar prescrição');
-        }
+                function sign(data, allowPreviewDocument) {
+                    hideButtons();
 
-        function hideButtons() {
-            $('#infoData').prop('hidden', true);
-            //$('#form-hide').prop('hidden', true);
-            $('#whiteboard').removeAttr('hidden');
-            $('#whiteboard').removeAttr('style').show();
-        }
+                    var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
+                    widget.render(data, 'embed-container');
+                    widget.on(widget.events.documentSigned, function (e) {
+                        documentId = e.id;
+                        // Removes the widget
+                        $('#embed-container').remove();
+                        // Container after signature
+                        $('#afterSigned').show();
+                        $('#signature').hide();  
+                        $('#whiteboard').hide();
+                    });
+                }
 
 
-        function enableButton() {
-            // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
-            var patientValue = $('#paciente').val().trim();
-            var cpfPatientValue = $("#cpf-paciente").val().trim();
-            var medicationValue = $('#medicamento').val().trim();
 
-            if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "") {
-                $('#start').removeAttr('disabled');
-            } else {
-                $('#start').attr('disabled', true);
-            }
-        }
+                function startSignature(elem) {
 
-        function download() {
-            if (documentId != null) {
-                $.ajax({
-                    type: 'GET',
-                    url: '/Home/Prescription?id=' + documentId,
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.url) {
-                            window.location.href = data.url;
-                        }
-                    },
-                    error: function () {
-                        alert('Erro ao baixar prescrição');
+                    // First disable all input fields so the user doesn't change them
+                    // Patient name
+                    var namePatient = $('#paciente').attr('disabled','true');
+
+                    // Patient CPF
+                    var patientIdentifier = $('#cpf-paciente').attr('disabled','true');
+
+                    // Medication name
+                    var medicationValue = $('#medicamento').attr('disabled','true');
+
+
+                    // Signer name
+                    var nameSigner = $('#nome').val();
+                    console.log("nome = ", nameSigner);
+
+                    // Signer email
+                    var emailValue = $('#email').val();
+                    console.log("email = ", emailValue);
+
+                    // Signer CPF
+                    var identifierValue = $('#cpf').val();
+                    console.log("cpf = ", identifierValue);
+
+                    // Signer CRM
+                    var crmValue = $('#crm').val() || '123456';
+
+                    // CRM UF
+                    var ufValue = $('#uf').val() || 'DF';
+
+                    // Patient name
+                    var namePatient = $('#paciente').val();
+
+                    // Patient CPF
+                    var patientIdentifier = $('#cpf-paciente').val();
+
+                    // Medication name
+                    var medicationValue = $('#medicamento').val();
+
+
+                    // Loading while the document is created
+                    var loadingHidden = $('#loadingHeader');
+                    loadingHidden.show();
+
+                    // set to true if the user wants to see preview of the document
+                    allowPreviewDocument = $('#DocumentPreview').prop('checked');
+                    allowElectronicSignature = $('#ElectronicSignature').prop('checked');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/Prescription',
+                        data: JSON.stringify({
+                            PatientName: namePatient,
+                            PatientIdentifier: patientIdentifier,
+                            Name: nameSigner,
+                            CRM: crmValue,
+                            UF: ufValue,
+                            Email: emailValue,
+                            MedicationName: medicationValue,
+                            Identifier: identifierValue,
+                            // This has been removed since prescription no longer uses electronic signature for Prescription documents,
+                            // feel free to uncomment if necessary
+                            //AllowElectronicSignature: allowElectronicSignature
+                        }),
+                        success: function (data) {
+                            if (data) {
+                                loadingHidden.hide();
+                                embedUrl = data.embedUrl;
+                                sign(data.embedUrl, allowPreviewDocument);
+                                elem.style.visibility = 'hidden';
+                            } else {
+                                onError(elem);
+                            }
+                        },
+                        error: function () {
+                            onError(elem);
+                        },
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+                }
+
+                function onError(elem) {
+                    $('#loadingHeader').hide();
+                    alert('Erro ao criar prescrição');
+                }
+
+                function hideButtons() {
+                    $('#infoData').prop('hidden', true);
+                    //$('#form-hide').prop('hidden', true);
+                    $('#whiteboard').removeAttr('hidden');
+                    $('#whiteboard').removeAttr('style').show();
+                }
+
+
+                function enableButton() {
+                    // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
+                    var patientValue = $('#paciente').val().trim();
+                    var cpfPatientValue = $("#cpf-paciente").val().trim();
+                    var medicationValue = $('#medicamento').val().trim();
+
+                    if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "") {
+                        $('#start').removeAttr('disabled');
+                    } else {
+                        $('#start').attr('disabled', true);
                     }
-                });
-            }
-        }
+                }
 
-        function parseHtmlKey(embedUrl) {
-            var startString = "https://signer-lac.azurewebsites.net/document/key/";
-            var indexof = embedUrl.indexOf("/", startString.length + 1);
-            var key = embedUrl.substr(startString.length, indexof - startString.length);
-            return key
-        }
-
-        function openPrescriptionView() {
-            if (embedUrl != null) {
-                var key = parseHtmlKey(embedUrl);
-
-                $.ajax({
-                    type: 'GET',
-                    url: '/Home/GetPrescriptionViewFromDocumentKey?key=' + key,
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.url) {
-                            window.open(data.url, '_blank');
-                        }
-                    },
-                    error: function () {
-                        alert('Erro ao visualizar prescrição');
+                function download() {
+                    if (documentId != null) {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/Home/Prescription?id=' + documentId,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.url) {
+                                    window.location.href = data.url;
+                                }
+                            },
+                            error: function () {
+                                alert('Erro ao baixar prescrição');
+                            }
+                        });
                     }
-                });
+                }
+
+                function parseHtmlKey(embedUrl) {
+                    var startString = "https://signer-lac.azurewebsites.net/document/key/";
+                    var indexof = embedUrl.indexOf("/", startString.length + 1);
+                    var key = embedUrl.substr(startString.length, indexof - startString.length);
+                    return key
+                }
+
+                function openPrescriptionView() {
+                    if (embedUrl != null) {
+                        var key = parseHtmlKey(embedUrl);
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '/Home/GetPrescriptionViewFromDocumentKey?key=' + key,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.url) {
+                                    window.open(data.url, '_blank');
+                                }
+                            },
+                            error: function () {
+                                alert('Erro ao visualizar prescrição');
+                            }
+                        });
 
 
-            }
-        }
+                    }
+                }
 
-        function hideFormEntries(elem) {
-            enablePrescriptionButton();
-            if (elem.checked) {
-                $('#box').hide();
-            } else {
-                $('#box').show();
-            }
-        }
+                function hideFormEntries(elem) {
+                    enablePrescriptionButton();
+                    if (elem.checked) {
+                        $('#box').hide();
+                    } else {
+                        $('#box').show();
+                    }
+                }
 
-    </script>
+            </script>
 }
 

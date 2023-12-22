@@ -59,6 +59,10 @@ html {
     border-radius: 1rem;
 }
 
+.select-cert-with-arrow {
+    appearance: menulist-button;
+}
+
 .select-wrapper {
     border-radius: 36px;
     display: inline-block;

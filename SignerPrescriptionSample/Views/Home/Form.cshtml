@@ -118,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 m-1" id="whiteboard" hidden>
+                    <div class="m-1" id="whiteboard" hidden>
                         <div class="card h-100">
                             <div class="card-body h-100">
                                 <div id="embed-container" class="frame-container"></div>
@@ -202,7 +202,7 @@
 
                 function sign(data, allowPreviewDocument) {
                     hideButtons();
-
+                    allowPreviewDocument ? $("#whiteboard").addClass("col-md-7") : $("#whiteboard").addClass("col-md-4")
                     var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
                     widget.render(data, 'embed-container');
                     widget.on(widget.events.documentSigned, function (e) {

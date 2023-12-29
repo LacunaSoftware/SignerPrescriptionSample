@@ -76,19 +76,22 @@ html {
 }
 
 .navbar-img {
-    width: 45%;
+    width: 70%;
     height: auto;
 }
 
 .btn-clr {
-    background-color: #0A4EA1; 
-    font-weight: bold;
+    background-color: #0A4EA1;
 }
 
 .btn-custom-outline {
     border-color: #0A4EA1;
     color: #0A4EA1;
-    font-weight: bold;
+}
+
+.custom-padding {
+    padding-left: 1.5em; /* Adjust the left padding as needed */
+    padding-right: 1.5em; /* Adjust the right padding as needed */
 }
 
 .navbar-group{

@@ -83,7 +83,7 @@
             Other stuff unrelated to webpki load
             *@
 
-            $(window).keydown(function(event){
+            $("#cpfCnpjInput").keydown(function(event){
                 if(event.keyCode == 13) {
                   event.preventDefault(); // prevents POST method to happen when pressing ENTER
                   return false;
@@ -98,7 +98,6 @@
             });
             $('#cpfCnpjInput').on('input', function () {
                 var inputValue = $(this).val();
-                console.log(rawValue);
                 // Check if the input is likely to be a CNPJ (9 digits without dots and hyphens)
                 if (rawValueLen > 11) {
                     cleave.destroy();

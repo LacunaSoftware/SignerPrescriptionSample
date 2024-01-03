@@ -1,15 +1,69 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
+
 .padding {
     background: none no-repeat scroll 0 0 #fff;
     position: relative;
+}
+
+.cstm-font-clr {
+    color: #00255C
+}
+
+select .input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    border: 1px solid #313131;
+}
+
+/* Button Styles */
+.custom-btn-refresh {
+    background: none;
+    cursor: pointer;
+    border-right: 1px solid #cecece;
+    border-bottom: 1px solid #cecece;
+    border-end-end-radius: 0.5rem;
+    border-start-end-radius: 0.5rem;
+}
+
+.refresh-icon {
+    /* Vector */
+    width: 20.66px;
+    height: 14.3px;
+    left: 752.34px;
+    top: 435.74px;
+    background: #313131;
+}
+
+/* Separator Styles */
+.separator {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #000;
+    color: #313131;
+}
+
+.text {
+    padding: 0 10px;
+    color: #000;
 }
 
 body {
@@ -24,8 +78,8 @@ body {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 .frame-container {
@@ -34,6 +88,10 @@ html {
     height: 100%;
     padding-bottom: 56.25%;
     border-radius: 25px;
+}
+
+.card-text {
+    font-size: 1.1em;
 }
 
 .frame-responsive {
@@ -68,10 +126,10 @@ html {
     display: inline-block;
     overflow: hidden;
     border: 1px solid #cccccc;
-    text-align:center;
+    text-align: center;
 }
 
-.transparent-input{
+.transparent-input {
     background-color: rgba(0,0,0,0);
 }
 
@@ -94,8 +152,10 @@ html {
     padding-right: 1.5em; /* Adjust the right padding as needed */
 }
 
-.navbar-group{
-   margin-right: 5%;
+
+
+.navbar-group {
+    margin-right: 5%;
 }
 
 ::-webkit-input-placeholder {
@@ -150,7 +210,6 @@ html {
 }
 
 .loader {
-
     margin: auto;
     border: 16px solid #f3f3f3;
     border-radius: 50%;

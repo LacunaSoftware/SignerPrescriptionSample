@@ -13,19 +13,36 @@
     @Html.HiddenFor(m => m.DigestAlgorithm, new { id = "digestAlgorithmField" })
     @Html.HiddenFor(m => m.SignatureBase64, new { id = "signatureField" })
     <div style="margin-top:30px">
-        <div class="col-lg-4 m-1 card" style="width: 582px">
+        <div class="col-lg-5 m-1 card">
             <div class="card-body">
-                <h2 class="card-title">Informações do Médico</h2>
-                <h5 class="card-text">Escolha o certificado do médico que irá assinar esse documento</h5>
-                <div class="form-group mb-2">
-                    <label for="certificateSelect">Acesse com seu certificado digital</label>
-                    <select id="certificateSelect" class="select-cert-with-arrow form-control"></select>
+                <h2 class="card-title fw-bold cstm-font-clr">Informações do Médico</h2>
+                <h6 class="card-text mb-3">Informe os dados do médico que irá assinar esse documento:</h6>
+                <label class="mb-3 fs-5" for="certificateSelect">Acesse com o seu <b>certificado digital</b>:</label>
+                <div class="form-group mb-3 d-flex align-items-center">
+                    <div class="input-group">
+                        <select id="certificateSelect" class="select-cert-with-arrow form-control"></select>
+                        <div class="">
+                            <button id="refreshButton" type="button" class="custom-btn-refresh h-100">
+                                <img src="~/Vector.svg" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <button id="refreshButton" type="button" class="btn btn-outline-primary mr-3">Refresh Certificates</button>
-                    <button id="signInButton" type="button" class="btn btn-primary ml-2">Sign In</button>
+                <div class="separator mb-2">
+                    <div class="line"></div>
+                    <div class="text">OU</div>
+                    <div class="line"></div>
                 </div>
+                <form method="post" asp-controller="CloudAuth">
+                    <div class="form-group mb-5">
+                        <label class="mb-3 fs-5" for="cpfCnpjInput">Acesse com o seu <b>certificado em nuvem</b>:</label>
+                        <input id="cpfCnpjInput" type="text" class="w-100" placeholder="Informe seu CPF ou CNPJ">
 
+                    </div>
+                </form>
+
+
+                <button id="signInButton" type="button" class="btn btn-primary btn-clr ml-2 w-100">Criar prescrição</button>
             </div>
         </div>
     </div>
@@ -49,7 +66,7 @@
 		block below if you prefer.
 	*@
     <script>
-        $(document).ready(function () {
+        $(document).ready(function ($) {
             // Once the page is ready, we call the init() function on the javascript code
             // (see authentication-form.js).
             authenticationForm.init({
@@ -62,6 +79,60 @@
                 digestAlgorithmField: $('#digestAlgorithmField'), // The "digest algorithm" to be used on the signature.
                 signatureField: $('#signatureField')              // The "signature" computed.
             });
+            @*
+            Other stuff unrelated to webpki load
+            *@
+
+            $(window).keydown(function(event){
+                if(event.keyCode == 13) {
+                  event.preventDefault(); // prevents POST method to happen when pressing ENTER
+                  return false;
+                }
+              });
+            $('#cpfCnpjInput').on('input', disableWebPki);
+            var cleave = new Cleave('#cpfCnpjInput', {
+                blocks: [3, 3, 3, 2], // CPF mask
+                delimiters: ['.', '.', '-'],
+                uppercase: true,
+                delimiterLazyShow: true
+            });
+            $('#cpfCnpjInput').on('input', function () {
+                var inputValue = $(this).val();
+                var rawValue = inputValue.replace(/[.-\/]/g, '');
+                var rawValueLen = inputValue.replace(/[.-\/]/g, '').length;
+                console.log(rawValue);
+                // Check if the input is likely to be a CNPJ (9 digits without dots and hyphens)
+                if (rawValueLen > 11) {
+                    cleave.destroy();
+                    cleave = new Cleave('#cpfCnpjInput', {
+                        blocks: [2, 3, 3, 4, 2], // CNPJ mask
+                        delimiters: ['.', '.', '/', '-'],
+                        uppercase: true,
+                        delimiterLazyShow: true
+                    });
+                } else {
+                    cleave.destroy();
+                    $('#cpfCnpjInput').val('');
+                    $('#cpfCnpjInput').val(rawValue);
+                    cleave = new Cleave('#cpfCnpjInput', {
+                        blocks: [3, 3, 3, 2], // CPF mask
+                        delimiters: ['.', '.', '-'],
+                        uppercase: true,
+                        delimiterLazyShow: true
+                    });
+                }
+            });
         });
+
+        function disableWebPki() {
+            // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
+            var cpfValue = $('#cpfCnpjInput').val().trim();
+            if (cpfValue !== "") {
+                $('#certificateSelect').attr('disabled', true);
+            } else {
+                $('#certificateSelect').attr('disabled', false);
+            }
+        }
+
     </script>
 }

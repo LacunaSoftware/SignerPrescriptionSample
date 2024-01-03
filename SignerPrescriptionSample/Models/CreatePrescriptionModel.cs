@@ -24,12 +24,10 @@ namespace SignerPrescriptionSample.Models
         public string MedicationQuantity { get; set; }
         public bool AllowElectronicSignature { get; set; }
         [Required(ErrorMessage = "É necessário informar a unidade federativa")]
+        public PKCertificate? UserCert { get; set; }
+        public string? CpfManual { get; set; }
         public string UF { get; set; }
         [Required(ErrorMessage = "É necessário informar um CRM válido")]
         public string CRM { get; set; }
-        public PKCertificate? UserCert { get; set; }
-        public string? CpfManual { get; set; }
-
-
     }
 }

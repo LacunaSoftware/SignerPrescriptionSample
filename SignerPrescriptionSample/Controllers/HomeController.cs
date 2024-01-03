@@ -40,6 +40,7 @@ namespace SignerPrescriptionSample.Controllers
 
             return View(model);
         }
+    
 
 		[HttpPost]
 		public IActionResult Index(AuthenticationModel model)
@@ -74,8 +75,8 @@ namespace SignerPrescriptionSample.Controllers
             var embed = await signerService.CreateDocument(
                 patientName: prescription.PatientName,
                 patientIdentifier: prescription.PatientIdentifier,
-                crm: prescription.CRM,
-                uf: prescription.UF,
+                crm: "12345",
+                uf: "DF",
                 medicationDosage: prescription.MedicationDosage,
                 medicationQuantity: prescription.MedicationQuantity,
                 name: prescription.Name,

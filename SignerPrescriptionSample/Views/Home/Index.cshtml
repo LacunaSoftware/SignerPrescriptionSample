@@ -98,8 +98,6 @@
             });
             $('#cpfCnpjInput').on('input', function () {
                 var inputValue = $(this).val();
-                var rawValue = inputValue.replace(/[.-\/]/g, '');
-                var rawValueLen = inputValue.replace(/[.-\/]/g, '').length;
                 console.log(rawValue);
                 // Check if the input is likely to be a CNPJ (9 digits without dots and hyphens)
                 if (rawValueLen > 11) {

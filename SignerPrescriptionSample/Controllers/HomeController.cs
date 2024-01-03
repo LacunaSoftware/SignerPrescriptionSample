@@ -75,8 +75,8 @@ namespace SignerPrescriptionSample.Controllers
             var embed = await signerService.CreateDocument(
                 patientName: prescription.PatientName,
                 patientIdentifier: prescription.PatientIdentifier,
-                crm: "12345",
-                uf: "DF",
+                crm: prescription.CRM,
+                uf: prescription.UF,
                 medicationDosage: prescription.MedicationDosage,
                 medicationQuantity: prescription.MedicationQuantity,
                 name: prescription.Name,

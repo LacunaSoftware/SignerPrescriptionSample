@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -25,11 +25,11 @@
 
   <ItemGroup>
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.6.2" />
-    <PackageReference Include="Lacuna.RestClient" Version="1.15.0" />
+    <PackageReference Include="Lacuna.Cloudhub.Client" Version="1.0.0" />
+    <PackageReference Include="Lacuna.RestPki.Client" Version="2.3.0" />
     <PackageReference Include="Lacuna.Signer.Client" Version="1.17.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="6.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 

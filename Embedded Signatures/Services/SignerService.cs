@@ -1,17 +1,17 @@
 ﻿using iTextSharp.text.pdf;
+using Lacuna.RestPki.Api.PadesSignature;
+using Lacuna.RestPki.Api;
+using Lacuna.RestPki.Client;
 using Lacuna.Signer.Api;
-using Lacuna.Signer.Api.DocumentMark;
-using Lacuna.Signer.Api.Documents;
-using Lacuna.Signer.Api.FlowActions;
-using Lacuna.Signer.Api.Users;
 using Lacuna.Signer.Client;
+using PkiSuiteAspNetMvcSample.Classes;
 
-namespace Embedded_Signatures.Services
-{
+namespace Embedded_Signatures.Services {
     public class SignerService
     {
         private readonly IWebHostEnvironment env;
         private readonly SignerClient client;
+        private readonly RestPkiClient restPkiClient;
         private string url;
 
         public SignerService(
@@ -21,54 +21,53 @@ namespace Embedded_Signatures.Services
             this.env = env;
             url = "https://signer-lac.azurewebsites.net";
             client = new SignerClient(url, "API Sample App|43fc0da834e48b4b840fd6e8c37196cf29f919e5daedba0f1a5ec17406c13a99");
+            restPkiClient = new RestPkiClient("https://pki.rest/", "o-efxzcAO1hiK2KwTg9PcW0833MIAmcdvaHpsvYbSPGd245gkfS2IZRbdGV4pocDop9NyRIKpC5F1YUTjmhJWKgJVGb0u_flHbbvIWpObDQM44WfHpq2lP4TQsEZM4qqXEGniAsdlwjMm6xGFh_OUj-tSPSbyVxK1SO9cnCxhiQpqPTSHx1BnswWia0jFKtHSSIxUei8jyUq8AyRgnR6KMcbkqVJlOlP0TQ7l0IB1mea6_TGOghnxNPBjikVJTtkQ2ayRe9VZihNw2g03nH_qMGrQB1ZwBnphK9sRXXiHO4wn21ip0giNs3YkCIhndIi0pC7uxTtnIi0UaKhlYaik6rwFl5hoxC-170NfB59bPyq6dOgxcJVjhIXTc2p3-qwCXfRvlpVDh3JJ0MqiUGiDmIeus7aj5i5bXN--vG8Hi-Fj5_Io3SerFuZrpqfWLgS6foAVU2PuU2xuWUtKRsv9GUMSx5WbclnlhTqKnwyCtEcUnD1FMDUB6J3CewnocBEJhZ1ng");
         }
 
-        public async Task<string> CreateDocument(string name, string medicine, bool allowElectronicSignature = false)
+        public async Task<MemoryStream> CreateDocument(string name, string medicine)
         {
-            var fileStream = CreatePrescriptionPdf(name, medicine);
-            var filePath = "Template-Prescricao.pdf";
-            var fileName = Path.GetFileName(filePath);
-            var uploadModel = await client.UploadFileAsync(fileName, fileStream, "application/pdf");
-            var fileUploadModel = new FileUploadModel(uploadModel) { DisplayName = "Embedded Signature Sample" };
+            return CreatePrescriptionPdf(name, medicine);
+        }
 
-            var participantUser = new ParticipantUserModel()
-            {
-                Name = "Alan Mathison Turing",
-                Email = "lcnturing@mailinator.com",
-                Identifier = "56072386105"
-            };
-            var flowActionCreateModel = new FlowActionCreateModel()
-            {
-                Type = FlowActionType.Signer,
-                User = participantUser,
-                AllowElectronicSignature = allowElectronicSignature,
-                PrePositionedMarks = new List<PrePositionedDocumentMarkModel>
-                {
-                    new PrePositionedDocumentMarkModel()
-                    {
-                        Type = DocumentMarkType.SignatureVisualRepresentation,
-                        UploadId = fileUploadModel.Id,
-                        TopLeftX = 228,
-                        TopLeftY = 656,
-                        Width = 170.0,
-                        Height = 40.0,
-                    }
-                }
+        public async Task<ClientSideSignatureInstructions> StartSignature(MemoryStream fileStream, byte[] certificate) {
+            var signatureStarter = new PadesSignatureStarter(restPkiClient) {
+
+                // Set the unit of measurement used to edit the pdf marks and visual representations.
+                MeasurementUnits = PadesMeasurementUnits.Centimeters,
+
+                // Set the signature policy.
+                SignaturePolicyId = StandardPadesSignaturePolicies.Basic,
+                // Set the security context to be used to determine trust in the certificate chain. We have
+
+                // encapsulated the security context choice on Util.cs.
+                SecurityContextId = StandardSecurityContexts.PkiBrazil,
+                SignerCertificate = certificate,
+                VisualRepresentation = PadesVisualElements.GetVisualRepresentationForRestPki(restPkiClient),
             };
 
-            var documentRequest = new CreateDocumentRequest()
-            {
-                Files = new List<FileUploadModel>() { fileUploadModel },
-                FlowActions = new List<FlowActionCreateModel>() { flowActionCreateModel }
-            };
-            var result = (await client.CreateDocumentAsync(documentRequest)).First();
-            var actionUrlRequest = new ActionUrlRequest()
-            {
-                Identifier = participantUser.Identifier
-            };
-            var actionUrlResponse = await client.GetActionUrlAsync(result.DocumentId, actionUrlRequest);
+            // Set the file to be signed.
+            signatureStarter.SetPdfToSign(fileStream);
 
-            return actionUrlResponse.EmbedUrl;
+            var res = await signatureStarter.StartAsync();
+            return res;
+        }
+
+        public SignatureResult FinishSignature(string token, byte[] signedHash) {
+
+            // Get an instance of the PadesSignatureFinisher2 class, responsible for completing the
+            // signature process.
+            var signatureFinisher = new PadesSignatureFinisher2(restPkiClient) {
+
+                // Set the token for this signature. (rendered in a hidden input field, see the view)
+                Token = token,
+                Signature = signedHash
+            };
+
+            // Call the Finish() method, which finalizes the signature process and returns a
+            // SignatureResult object.
+            var result = signatureFinisher.Finish();
+
+            return result;
         }
 
         public async Task<string> GetDownloadUrl(Guid documentId)
@@ -81,7 +80,7 @@ namespace Embedded_Signatures.Services
 
         private MemoryStream CreatePrescriptionPdf(string name, string medicine)
         {
-            var pdfFile = File.ReadAllBytes(Path.Combine(env.ContentRootPath, "Template-Prescricao.pdf"));
+            var pdfFile = System.IO.File.ReadAllBytes(Path.Combine(env.ContentRootPath, "Template-Prescricao.pdf"));
             var reader = new PdfReader(pdfFile);
             var stream = new MemoryStream();
             var stamper = new PdfStamper(reader, stream);
@@ -93,5 +92,26 @@ namespace Embedded_Signatures.Services
             return stream;
         }
 
+
+        public string Store(Stream stream, string extension = "", string filename = null) {
+
+            var AppDataPath = "~/App_Data";
+            // Guarantees that the "App_Data" folder exists.
+            if (!Directory.Exists(AppDataPath)) {
+				Directory.CreateDirectory(AppDataPath);
+			}
+
+			if (string.IsNullOrEmpty(filename)) {
+				filename = Guid.NewGuid() + extension;
+			}
+
+			var path = Path.Combine(AppDataPath, filename.Replace("_", "."));
+			using (var fileStream = System.IO.File.Create(path)) {
+				stream.CopyTo(fileStream);
+			}
+
+			return filename.Replace(".", "_");
+			// Note: we're passing the filename argument with "." as "_" because of limitations of ASP.NET MVC.
+		}
     }
 }

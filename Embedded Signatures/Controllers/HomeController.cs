@@ -81,5 +81,36 @@ namespace Embedded_Signatures.Controllers {
             // Return JSON with the URL to redirect to
             return View("Result", model);
         }
-    }
+
+		// GET Download/File/{id}
+		[HttpGet]
+		public ActionResult File(string id) {
+			byte[] content;
+
+
+			string filename = "";
+			try {
+				content = SignerService.Read(id, out filename);
+			} catch (FileNotFoundException) {
+				throw new FileNotFoundException("File not found: " + filename);
+			}
+
+			return File(content, "application/pdf");
+		}
+
+		public static Stream OpenRead(string filename) {
+
+			if (string.IsNullOrEmpty(filename)) {
+				throw new ArgumentNullException("fileId");
+			}
+
+			var path = Path.Combine(SignerService.AppDataPath, filename);
+			var fileInfo = new FileInfo(path);
+			if (!fileInfo.Exists) {
+				throw new FileNotFoundException("File not found: " + filename);
+			}
+			return fileInfo.OpenRead();
+		}
+
+	}
 }

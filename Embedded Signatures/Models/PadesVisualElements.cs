@@ -14,7 +14,7 @@ namespace PkiSuiteAspNetMvcSample.Classes {
 
         // This function is called by the PAdES samples for REST PKI. It contains a example of signature visual
         // representation. This is only in a separate function in order to organize the various examples.
-        public static RestPki.PadesVisualRepresentation GetVisualRepresentationForRestPki(RestPkiClient restPkiClient) {
+        public static RestPki.PadesVisualRepresentation GetVisualRepresentationForRestPki(IWebHostEnvironment env, RestPkiClient restPkiClient) {
 
             // Create a visual representation.
             var visualRepresentation = new RestPki.PadesVisualRepresentation() {
@@ -38,7 +38,7 @@ namespace PkiSuiteAspNetMvcSample.Classes {
                         Bottom = 0.2
                     }
                 },
-                Image = new RestPki.PadesVisualImage(File.ReadAllBytes("D:\\Projetos\\SignerPrescriptionSample\\Embedded Signatures\\wwwroot\\PdfStamp.png"), "image/png") {
+                Image = new RestPki.PadesVisualImage(File.ReadAllBytes(Path.Combine(env.ContentRootPath + "\\wwwroot\\PdfStamp.png")), "image/png") {
                     // Align image to the right horizontally.
                     HorizontalAlign = PadesHorizontalAlign.Right,
                     // Align image to center vertically.

@@ -13,8 +13,9 @@ namespace Embedded_Signatures.Services {
         private readonly SignerClient client;
         private readonly RestPkiClient restPkiClient;
         private string url;
+		public static string AppDataPath = "~/App_Data";
 
-        public SignerService(
+		public SignerService(
             IWebHostEnvironment env
         )
         {
@@ -42,7 +43,7 @@ namespace Embedded_Signatures.Services {
                 // encapsulated the security context choice on Util.cs.
                 SecurityContextId = StandardSecurityContexts.PkiBrazil,
                 SignerCertificate = certificate,
-                VisualRepresentation = PadesVisualElements.GetVisualRepresentationForRestPki(restPkiClient),
+                VisualRepresentation = PadesVisualElements.GetVisualRepresentationForRestPki(env, restPkiClient),
             };
 
             // Set the file to be signed.
@@ -95,7 +96,7 @@ namespace Embedded_Signatures.Services {
 
         public string Store(Stream stream, string extension = "", string filename = null) {
 
-            var AppDataPath = "~/App_Data";
+            
             // Guarantees that the "App_Data" folder exists.
             if (!Directory.Exists(AppDataPath)) {
 				Directory.CreateDirectory(AppDataPath);
@@ -113,5 +114,36 @@ namespace Embedded_Signatures.Services {
 			return filename.Replace(".", "_");
 			// Note: we're passing the filename argument with "." as "_" because of limitations of ASP.NET MVC.
 		}
-    }
+
+        public static byte[] Read(string fileId, out string filename) {
+
+			if (string.IsNullOrEmpty(fileId)) {
+				throw new ArgumentNullException("fileId");
+			}
+			filename = fileId.Replace("_", ".");
+			// Note: we're receiving the fileId argument with "_" as "." because of limitations of ASP.NET MVC.
+
+			using (var inputStream = OpenRead(filename)) {
+				using (var buffer = new MemoryStream()) {
+					inputStream.CopyTo(buffer);
+					return buffer.ToArray();
+				}
+			}
+		}
+
+		public static Stream OpenRead(string filename) {
+
+			if (string.IsNullOrEmpty(filename)) {
+				throw new ArgumentNullException("fileId");
+			}
+
+			var path = Path.Combine(AppDataPath, filename);
+			var fileInfo = new FileInfo(path);
+			if (!fileInfo.Exists) {
+				throw new FileNotFoundException("File not found: " + filename);
+			}
+			return fileInfo.OpenRead();
+		}
+
+	}
 }

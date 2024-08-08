@@ -1,7 +1,7 @@
 ﻿@model ValidationErrorModel
 <div style="margin-top: 30px">
     <div class="col-lg-4 m-1 d-flex justify-content-center align-items-center card" style="width: 582px;">
-        <h5>Autenticação Falhou! <i class="fas fa-times-circle" style="color: red;"></i></h5>
+        <h1>Autenticação Falhou! <i class="fas fa-times-circle" style="color: red;"></i></h1>
         @{
             var vrHtml = Model.Results.Errors.FirstOrDefault().Detail.ToString().Replace("\n", "<br>").Replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
         }

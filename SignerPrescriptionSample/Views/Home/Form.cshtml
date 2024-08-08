@@ -4,27 +4,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!DOCTYPE html>
-<div id ="signature">
+<div id="signature">
     <form>
-        <div class="container">
-            <div id="signin">
-                <div class="row">
-                    <div id="patient-info-container" class="col-lg-5 m-1 card">
-                        <div class="row justify-content-center card-body">
-
+        <div id="signin" style="margin-top:30px">
+                <div id="patient-info-container" class="col-lg-5 card">
+                    <div class="row justify-content-center card-body">
                         <h2 class="card-title fw-bold cstm-font-clr">Informações do Médico</h2>
                         <h5 id="infoData" class="text-md-center">Informe os dados do médico que irá assinar esse documento:</h5>
                         <div class="form-group">
                             <div id="box">
-                                    @Html.HiddenFor(m => m.UserCert.SubjectDisplayName, new { id = "nome" })
-                                    @Html.HiddenFor(m => m.UserCert.EmailAddress, new { id = "email"})
-                                    @Html.HiddenFor(m => m.UserCert.PkiBrazil.CpfFormatted, new { id = "cpf"})
-                                    @Html.HiddenFor(m => m.CpfManual, new { id = "cpfManual"})
+                                @Html.HiddenFor(m => m.UserCert.SubjectDisplayName, new { id = "nome" })
+                                @Html.HiddenFor(m => m.UserCert.EmailAddress, new { id = "email" })
+                                @Html.HiddenFor(m => m.UserCert.PkiBrazil.CpfFormatted, new { id = "cpf" })
+                                @Html.HiddenFor(m => m.CpfManual, new { id = "cpfManual" })
                                 <div class="row justify-content-center mb-3">
                                     <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
                                     <div class="input-group">
-                                            @Html.TextBoxFor(m =>m.CRM, new{id = "crm", placeholder="CRM",@class= "select-wrapper form-control form-rounded transparent-input", onkeyup="enablePrescriptionButton()"})
-                                            @Html.DropDownListFor(m=>m.UF, new List<SelectListItem>{
+                                        @Html.TextBoxFor(m => m.CRM, new { id = "crm", placeholder = "CRM", @class = "select-wrapper form-control form-rounded transparent-input", onkeyup = "enablePrescriptionButton()" })
+                                        @Html.DropDownListFor(m => m.UF, new List<SelectListItem>{
                                         new SelectListItem{Text="Acre", Value="AC"},
                                         new SelectListItem{Text="Alagoas", Value="AL"},
                                         new SelectListItem{Text="Amapá", Value="AP"},
@@ -52,82 +49,91 @@
                                         new SelectListItem{Text="São Paulo", Value="SP"},
                                         new SelectListItem{Text="Sergipe", Value="SE"},
                                         new SelectListItem{Text="Tocantins", Value="TO"}
-                                        }, new {@class= "select-wrapper form-select form-rounded transparent-input",id = "uf", @placeholder="UF"})
+                                        }, new { @class = "select-wrapper form-select form-rounded transparent-input", id = "uf", @placeholder = "UF" })
                                     </div>
-                                        @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
-                                        @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
-                    <div class="row">
-                        <div class="text-md-center">
-                            <input id="criarReceitaButton" type="button" disabled value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr" />
+                        <div class="row">
+                            <div class="text-md-center">
+                                <input id="criarReceitaButton" type="button" disabled value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr" />
+                            </div>
                         </div>
                     </div>
                 </div>
-                  </div>
-                </div>
-            </div>
-            <div id="main" hidden class="container" style="margin-top:30px">
-                <div id="grid-separator" class="row">
-                    <div id="patient-info-container" class="col-md-4 m-1 card">
-                        <div class="row justify-content-center card-body">
+            
+        </div>
+        <div id="main" hidden class="container" style="margin-top:30px">
+            <div id="grid-separator" class="row">
+                <div id="patient-info-container" class="col-md-5 card">
+                    <div class="row justify-content-center card-body">
+                        <div class="mb-2">
+                            <h1 class="card-title fs-2 fw-bold cstm-font-clr">Informações da Prescrição</h1>
+                        </div>
+                    </div>
+                    <div id="form-hide" class="text-center">
+                        <div class="form-group">
                             <div class="mb-2">
-                                <h1 class="text-md-center">Informações da Prescrição</h1>
+                                @Html.TextBoxFor(m => m.PatientName, new {
+                                        id = "paciente",
+                                        placeholder = "Nome do paciente",
+                                        onkeyup = "enableButton()",
+                                        @class = "form-control form-rounded transparent-input"
+                                    })
+                                @Html.ValidationMessageFor(m => m.PatientName, "É necessário informar o nome do paciente", new { @class = "text-danger" })
                             </div>
-                        </div>
-                        <div id="form-hide" class="text-center">
-                            <div class="form-group">
-                                <div class="mb-2">
-                                    @Html.TextBoxFor(m =>m.PatientName, new{ id="paciente",placeholder="Nome do paciente",
-                                    onkeyup = "enableButton()",
-                                    @class= "form-control form-rounded transparent-input" })
-                                    @Html.ValidationMessageFor(m => m.PatientName, "É necessário informar o nome do paciente", new { @class = "text-danger" })
+                            <div class="mb-2">
+                                @Html.TextBoxFor(m => m.PatientIdentifier, new {
+                                        id = "cpf-paciente",
+                                        placeholder = "CPF do paciente",
+                                        onkeyup = "enableButton()",
+                                        @class = "form-control form-rounded transparent-input"
+                                    })
+                                @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o CPF do paciente", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-2">
+                                @Html.TextAreaFor(m => m.PatientIdentifier, new {
+                                        id = "medicamento",
+                                        placeholder = "Medicamento, posologia e quantidade",
+                                        onkeyup = "enableButton()",
+                                        @class = "form-control form-rounded transparent-input"
+                                    })
+                                @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o medicamento", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-2">
+                                <div class="text-center">
+                                    <input class="form-check-input" type="checkbox" id="DocumentPreview" />
+                                    <label class="form-check-label" for="DocumentPreview">Visualizar documento durante assinatura</label>
                                 </div>
-                                <div class="mb-2">
-                                    @Html.TextBoxFor(m =>m.PatientIdentifier, new{ id="cpf-paciente",placeholder="CPF do paciente",
-                                    onkeyup = "enableButton()",
-                                    @class= "form-control form-rounded transparent-input" })
-                                    @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o CPF do paciente", new { @class = "text-danger" })
+                            </div>
+                            <div class="col text-center">
+                                <div class="d-inline-block">
+                                    <input id="start" type="button" disabled value="Assinar" onclick="startSignature(this)" placeholder="Assinar"
+                                           class="form-control btn btn-primary btn-clr" />
                                 </div>
-                                <div class="mb-2">
-                                    @Html.TextAreaFor(m =>m.PatientIdentifier, new{ id="medicamento",placeholder="Medicamento, posologia e quantidade",
-                                    onkeyup = "enableButton()",
-                                    @class= "form-control form-rounded transparent-input" })
-                                    @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o medicamento", new { @class = "text-danger" })
-                                </div>
-                                <div class="mb-2">
-                                    <div class="text-center">
-                                        <input class="form-check-input" type="checkbox" id="DocumentPreview" />
-                                        <label class="form-check-label" for="DocumentPreview">Visualizar documento durante assinatura</label>
-                                    </div>
-                                </div>
-                                <div class="col text-center">
-                                    <div class="d-inline-block">
-                                        <input id="start" type="button" disabled value="Assinar" onclick="startSignature(this)" placeholder="Assinar"
-                                               class="form-control btn btn-primary btn-clr" />
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mt-3">
-                                    <div id="loadingHeader" class="center-div" style="display: none">
-                                        <div class="inner-div">
-                                            <div class="loader"></div>
-                                        </div>
+                            </div>
+                            <div class="col-md-3 mt-3">
+                                <div id="loadingHeader" class="center-div" style="display: none">
+                                    <div class="inner-div">
+                                        <div class="loader"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="m-1" id="whiteboard" hidden>
-                        <div class="card h-100">
-                            <div class="card-body h-100">
-                                <div id="embed-container" class="frame-container"></div>
-                            </div>
+                </div>
+                <div class="m-1" id="whiteboard" hidden>
+                    <div class="card h-100">
+                        <div class="card-body h-100">
+                            <div id="embed-container" class="frame-container"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </form>
 </div>
 <div class="row-cols-auto">
@@ -161,225 +167,225 @@
 
 
 @section Scripts {
-            <script>
+    <script>
 
-                var documentId = '';
-                var embedUrl = '';
+        var documentId = '';
+        var embedUrl = '';
 
 
 
-                function showApp() {
-                    $('#main').attr('hidden', false);
-                    $('#main').show();
-                    $('#signin').hide();
+        function showApp() {
+            $('#main').attr('hidden', false);
+            $('#main').show();
+            $('#signin').hide();
 
-                }
+        }
 
-                function enablePrescriptionButton() {
-                    // Signer name
-                    var nameSigner = $('#nome').val();
+        function enablePrescriptionButton() {
+            // Signer name
+            var nameSigner = $('#nome').val();
 
-                    // Signer email
-                    var emailValue = $('#email').val();
+            // Signer email
+            var emailValue = $('#email').val();
 
-                    // Signer CPF
-                    var identifierValue = $('#cpf').val();
+            // Signer CPF
+            var identifierValue = $('#cpf').val();
 
-                    // Signer CRM
-                    var crmValue = $('#crm').val().trim();
+            // Signer CRM
+            var crmValue = $('#crm').val().trim();
 
-                    // Test certificate checkbox value
-                    var checkboxValue = $('#certCheckbox').prop('checked');
+            // Test certificate checkbox value
+            var checkboxValue = $('#certCheckbox').prop('checked');
 
-                    console.log(checkboxValue);
+            console.log(checkboxValue);
 
-                    if ((checkboxValue) || (nameSigner != "" && emailValue != "" && identifierValue != "" && crmValue != "")) {
-                        $("#criarReceitaButton").removeAttr('disabled');
+            if ((checkboxValue) || (nameSigner != "" && emailValue != "" && identifierValue != "" && crmValue != "")) {
+                $("#criarReceitaButton").removeAttr('disabled');
+            } else {
+                $("#criarReceitaButton").attr('disabled', true);
+            }
+        }
+
+        function sign(data, allowPreviewDocument) {
+            hideButtons();
+            allowPreviewDocument ? $("#whiteboard").addClass("col-md-7") : $("#whiteboard").addClass("col-md-4")
+            var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
+            widget.render(data, 'embed-container');
+            widget.on(widget.events.documentSigned, function (e) {
+                documentId = e.id;
+                // Removes the widget
+                $('#embed-container').remove();
+                // Container after signature
+                $('#afterSigned').show();
+                $('#signature').hide();
+                $('#whiteboard').hide();
+            });
+        }
+
+
+
+        function startSignature(elem) {
+
+            // First disable all input fields so the user doesn't change them
+            // Patient name
+            var namePatient = $('#paciente').attr('disabled', 'true');
+
+            // Patient CPF
+            var patientIdentifier = $('#cpf-paciente').attr('disabled', 'true');
+
+            // Medication name
+            var medicationValue = $('#medicamento').attr('disabled', 'true');
+
+
+            // Signer name
+            var nameSigner = $('#nome').val();
+
+            // Signer email
+            var emailValue = $('#email').val();
+
+            // Signer CPF
+            var identifierValue = $('#cpf').val();
+
+            // Signer CRM
+            var crmValue = $('#crm').val() || '123456';
+
+            // CRM UF
+            var ufValue = $('#uf').val() || 'DF';
+
+            // Patient name
+            var namePatient = $('#paciente').val();
+
+            // Patient CPF
+            var patientIdentifier = $('#cpf-paciente').val();
+
+            // Medication name
+            var medicationValue = $('#medicamento').val();
+
+
+            // Loading while the document is created
+            var loadingHidden = $('#loadingHeader');
+            loadingHidden.show();
+
+            // set to true if the user wants to see preview of the document
+            allowPreviewDocument = $('#DocumentPreview').prop('checked');
+            allowElectronicSignature = $('#ElectronicSignature').prop('checked');
+
+            $.ajax({
+                type: 'POST',
+                url: '/Home/Prescription',
+                data: JSON.stringify({
+                    PatientName: namePatient,
+                    PatientIdentifier: patientIdentifier,
+                    Name: nameSigner,
+                    CRM: crmValue,
+                    UF: ufValue,
+                    Email: emailValue,
+                    MedicationName: medicationValue,
+                    Identifier: identifierValue,
+                    // This has been removed since prescription no longer uses electronic signature for Prescription documents,
+                    // feel free to uncomment if necessary
+                    //AllowElectronicSignature: allowElectronicSignature
+                }),
+                success: function (data) {
+                    if (data) {
+                        loadingHidden.hide();
+                        embedUrl = data.embedUrl;
+                        sign(data.embedUrl, allowPreviewDocument);
+                        elem.style.visibility = 'hidden';
                     } else {
-                        $("#criarReceitaButton").attr('disabled', true);
+                        onError(elem);
                     }
-                }
+                },
+                error: function () {
+                    onError(elem);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
 
-                function sign(data, allowPreviewDocument) {
-                    hideButtons();
-                    allowPreviewDocument ? $("#whiteboard").addClass("col-md-7") : $("#whiteboard").addClass("col-md-4")
-                    var widget = allowPreviewDocument ? new LacunaSignerWidget() : new LacunaSignerWidget({ disableDocumentPreview: true });
-                    widget.render(data, 'embed-container');
-                    widget.on(widget.events.documentSigned, function (e) {
-                        documentId = e.id;
-                        // Removes the widget
-                        $('#embed-container').remove();
-                        // Container after signature
-                        $('#afterSigned').show();
-                        $('#signature').hide();  
-                        $('#whiteboard').hide();
-                    });
-                }
+        function onError(elem) {
+            $('#loadingHeader').hide();
+            alert('Erro ao criar prescrição');
+        }
 
-
-
-                function startSignature(elem) {
-
-                    // First disable all input fields so the user doesn't change them
-                    // Patient name
-                    var namePatient = $('#paciente').attr('disabled','true');
-
-                    // Patient CPF
-                    var patientIdentifier = $('#cpf-paciente').attr('disabled','true');
-
-                    // Medication name
-                    var medicationValue = $('#medicamento').attr('disabled','true');
+        function hideButtons() {
+            $('#infoData').prop('hidden', true);
+            //$('#form-hide').prop('hidden', true);
+            $('#whiteboard').removeAttr('hidden');
+            $('#whiteboard').removeAttr('style').show();
+        }
 
 
-                    // Signer name
-                    var nameSigner = $('#nome').val();
+        function enableButton() {
+            // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
+            var patientValue = $('#paciente').val().trim();
+            var cpfPatientValue = $("#cpf-paciente").val().trim();
+            var medicationValue = $('#medicamento').val().trim();
 
-                    // Signer email
-                    var emailValue = $('#email').val();
+            if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "") {
+                $('#start').removeAttr('disabled');
+            } else {
+                $('#start').attr('disabled', true);
+            }
+        }
 
-                    // Signer CPF
-                    var identifierValue = $('#cpf').val();
-
-                    // Signer CRM
-                    var crmValue = $('#crm').val() || '123456';
-
-                    // CRM UF
-                    var ufValue = $('#uf').val() || 'DF';
-
-                    // Patient name
-                    var namePatient = $('#paciente').val();
-
-                    // Patient CPF
-                    var patientIdentifier = $('#cpf-paciente').val();
-
-                    // Medication name
-                    var medicationValue = $('#medicamento').val();
-
-
-                    // Loading while the document is created
-                    var loadingHidden = $('#loadingHeader');
-                    loadingHidden.show();
-
-                    // set to true if the user wants to see preview of the document
-                    allowPreviewDocument = $('#DocumentPreview').prop('checked');
-                    allowElectronicSignature = $('#ElectronicSignature').prop('checked');
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/Home/Prescription',
-                        data: JSON.stringify({
-                            PatientName: namePatient,
-                            PatientIdentifier: patientIdentifier,
-                            Name: nameSigner,
-                            CRM: crmValue,
-                            UF: ufValue,
-                            Email: emailValue,
-                            MedicationName: medicationValue,
-                            Identifier: identifierValue,
-                            // This has been removed since prescription no longer uses electronic signature for Prescription documents,
-                            // feel free to uncomment if necessary
-                            //AllowElectronicSignature: allowElectronicSignature
-                        }),
-                        success: function (data) {
-                            if (data) {
-                                loadingHidden.hide();
-                                embedUrl = data.embedUrl;
-                                sign(data.embedUrl, allowPreviewDocument);
-                                elem.style.visibility = 'hidden';
-                            } else {
-                                onError(elem);
-                            }
-                        },
-                        error: function () {
-                            onError(elem);
-                        },
-                        contentType: "application/json",
-                        dataType: 'json'
-                    });
-                }
-
-                function onError(elem) {
-                    $('#loadingHeader').hide();
-                    alert('Erro ao criar prescrição');
-                }
-
-                function hideButtons() {
-                    $('#infoData').prop('hidden', true);
-                    //$('#form-hide').prop('hidden', true);
-                    $('#whiteboard').removeAttr('hidden');
-                    $('#whiteboard').removeAttr('style').show();
-                }
-
-
-                function enableButton() {
-                    // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
-                    var patientValue = $('#paciente').val().trim();
-                    var cpfPatientValue = $("#cpf-paciente").val().trim();
-                    var medicationValue = $('#medicamento').val().trim();
-
-                    if (patientValue !== "" && cpfPatientValue !== "" && medicationValue !== "") {
-                        $('#start').removeAttr('disabled');
-                    } else {
-                        $('#start').attr('disabled', true);
+        function download() {
+            if (documentId != null) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/Prescription?id=' + documentId,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.url) {
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function () {
+                        alert('Erro ao baixar prescrição');
                     }
-                }
+                });
+            }
+        }
 
-                function download() {
-                    if (documentId != null) {
-                        $.ajax({
-                            type: 'GET',
-                            url: '/Home/Prescription?id=' + documentId,
-                            dataType: 'json',
-                            success: function (data) {
-                                if (data.url) {
-                                    window.location.href = data.url;
-                                }
-                            },
-                            error: function () {
-                                alert('Erro ao baixar prescrição');
-                            }
-                        });
+        function parseHtmlKey(embedUrl) {
+            var startString = "https://signer-lac.azurewebsites.net/document/key/";
+            var indexof = embedUrl.indexOf("/", startString.length + 1);
+            var key = embedUrl.substr(startString.length, indexof - startString.length);
+            return key
+        }
+
+        function openPrescriptionView() {
+            if (embedUrl != null) {
+                var key = parseHtmlKey(embedUrl);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/GetPrescriptionViewFromDocumentKey?key=' + key,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.url) {
+                            window.open(data.url, '_blank');
+                        }
+                    },
+                    error: function () {
+                        alert('Erro ao visualizar prescrição');
                     }
-                }
-
-                function parseHtmlKey(embedUrl) {
-                    var startString = "https://signer-lac.azurewebsites.net/document/key/";
-                    var indexof = embedUrl.indexOf("/", startString.length + 1);
-                    var key = embedUrl.substr(startString.length, indexof - startString.length);
-                    return key
-                }
-
-                function openPrescriptionView() {
-                    if (embedUrl != null) {
-                        var key = parseHtmlKey(embedUrl);
-
-                        $.ajax({
-                            type: 'GET',
-                            url: '/Home/GetPrescriptionViewFromDocumentKey?key=' + key,
-                            dataType: 'json',
-                            success: function (data) {
-                                if (data.url) {
-                                    window.open(data.url, '_blank');
-                                }
-                            },
-                            error: function () {
-                                alert('Erro ao visualizar prescrição');
-                            }
-                        });
+                });
 
 
-                    }
-                }
+            }
+        }
 
-                function hideFormEntries(elem) {
-                    enablePrescriptionButton();
-                    if (elem.checked) {
-                        $('#box').hide();
-                    } else {
-                        $('#box').show();
-                    }
-                }
+        function hideFormEntries(elem) {
+            enablePrescriptionButton();
+            if (elem.checked) {
+                $('#box').hide();
+            } else {
+                $('#box').show();
+            }
+        }
 
-            </script>
+    </script>
 }
 

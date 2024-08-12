@@ -30,8 +30,9 @@ select .input-group {
 .custom-btn-refresh {
     background: none;
     cursor: pointer;
-    border-right: 1px solid #cecece;
-    border-bottom: 1px solid #cecece;
+    border-bottom-left-radius: 0!important;
+    border-top-left-radius: 0!important;
+    border: 1px solid #cecece;
     border-end-end-radius: 0.5rem;
     border-start-end-radius: 0.5rem;
 }
@@ -92,6 +93,13 @@ html {
 
 .card-text {
     font-size: 1.1em;
+}
+
+.expandable-text-area {
+    min-height: 250px!important;
+    max-height: 500px!important;
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    resize: vertical; /* Disable manual resizing */
 }
 
 .frame-responsive {
@@ -247,3 +255,42 @@ html {
         transform: rotate(360deg);
     }
 }
+
+/* Custom input label things */
+.input-container {
+    position: relative;
+    margin: 20px;
+}
+
+.hint-label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #aaa;
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+}
+
+.styled-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+    .styled-input:focus {
+        border-color: #007bff;
+    }
+
+    .styled-input:not(:placeholder-shown) + .hint-label,
+    .styled-input:focus + .hint-label {
+        top: 0;
+        left: 10px;
+        font-size: 12px;
+        color: #007bff;
+        background: white;
+        padding: 0 5px;
+    }

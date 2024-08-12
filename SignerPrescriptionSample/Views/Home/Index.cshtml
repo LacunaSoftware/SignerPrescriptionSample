@@ -16,22 +16,21 @@
         <div class="col-lg-5 card">
             <div class="card-body">
                 <h2 class="card-title fw-bold cstm-font-clr">Informações do Médico</h2>
-                <h6 class="card-text mb-3">Informe os dados do médico que irá assinar esse documento:</h6>
                 <label class="mb-3 fs-5" for="certificateSelect">Acesse com o seu <b>certificado digital</b>:</label>
                 <div class="form-group mb-3 d-flex align-items-center">
                     <div class="input-group">
                         <select id="certificateSelect" class="select-cert-with-arrow form-control"></select>
                         <div class="">
-                            <button id="refreshButton" type="button" class="custom-btn-refresh h-100">
-                                <img src="~/Vector.svg" />
+                            <button id="refreshButton" type="button" class=" custom-btn-refresh h-100">
+                                <img class="mb-1" src="~/Vector.svg" />
                             </button>
                         </div>
                     </div>
                 </div>
-            <button id="signInButton" type="button" class="btn btn-primary btn-clr ml-2 mt-2 w-100">Criar prescrição</button>
+                <button id="signInButton" type="button" class="btn btn-primary btn-clr ml-2 mt-2 w-100">Autenticar com certificado</button>
+            </div>
         </div>
     </div>
-        </div>
 
 }
 
@@ -65,57 +64,11 @@
                 digestAlgorithmField: $('#digestAlgorithmField'), // The "digest algorithm" to be used on the signature.
                 signatureField: $('#signatureField')              // The "signature" computed.
             });
-        @*
+            @*
             Other stuff unrelated to webpki load
             *@
 
-                $("#cpfCnpjInput").keydown(function (event) {
-                    if (event.keyCode == 13) {
-                        event.preventDefault(); // prevents POST method to happen when pressing ENTER
-                        return false;
-                    }
-                });
-            $('#cpfCnpjInput').on('input', disableWebPki);
-            var cleave = new Cleave('#cpfCnpjInput', {
-                blocks: [3, 3, 3, 2], // CPF mask
-                delimiters: ['.', '.', '-'],
-                uppercase: true,
-                delimiterLazyShow: true
-            });
-            $('#cpfCnpjInput').on('input', function () {
-                var inputValue = $(this).val();
-                // Check if the input is likely to be a CNPJ (9 digits without dots and hyphens)
-                if (rawValueLen > 11) {
-                    cleave.destroy();
-                    cleave = new Cleave('#cpfCnpjInput', {
-                        blocks: [2, 3, 3, 4, 2], // CNPJ mask
-                        delimiters: ['.', '.', '/', '-'],
-                        uppercase: true,
-                        delimiterLazyShow: true
-                    });
-                } else {
-                    cleave.destroy();
-                    $('#cpfCnpjInput').val('');
-                    $('#cpfCnpjInput').val(rawValue);
-                    cleave = new Cleave('#cpfCnpjInput', {
-                        blocks: [3, 3, 3, 2], // CPF mask
-                        delimiters: ['.', '.', '-'],
-                        uppercase: true,
-                        delimiterLazyShow: true
-                    });
-                }
-            });
         });
-
-        function disableWebPki() {
-            // Due to many fields requiring validation, it is better to trim their values outside of "if" statement
-            var cpfValue = $('#cpfCnpjInput').val().trim();
-            if (cpfValue !== "") {
-                $('#certificateSelect').attr('disabled', true);
-            } else {
-                $('#certificateSelect').attr('disabled', false);
-            }
-        }
 
     </script>
 }

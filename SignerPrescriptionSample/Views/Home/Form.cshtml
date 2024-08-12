@@ -7,20 +7,27 @@
 <div id="signature">
     <form>
         <div id="signin" style="margin-top:30px">
-                <div id="patient-info-container" class="col-lg-5 card">
-                    <div class="row justify-content-center card-body">
-                        <h2 class="card-title fw-bold cstm-font-clr">Informações do Médico</h2>
-                        <h5 id="infoData" class="text-md-center">Informe os dados do médico que irá assinar esse documento:</h5>
-                        <div class="form-group">
-                            <div id="box">
-                                @Html.HiddenFor(m => m.UserCert.SubjectDisplayName, new { id = "nome" })
-                                @Html.HiddenFor(m => m.UserCert.EmailAddress, new { id = "email" })
-                                @Html.HiddenFor(m => m.UserCert.PkiBrazil.CpfFormatted, new { id = "cpf" })
-                                @Html.HiddenFor(m => m.CpfManual, new { id = "cpfManual" })
-                                <div class="row justify-content-center mb-3">
-                                    <h5 class="text-md-center">Por fim, informe o CRM e a UF:</h5>
-                                    <div class="input-group">
-                                        @Html.TextBoxFor(m => m.CRM, new { id = "crm", placeholder = "CRM", @class = "select-wrapper form-control form-rounded transparent-input", onkeyup = "enablePrescriptionButton()" })
+            <div id="patient-info-container" class="col-lg-5 card">
+                <div class="row justify-content-center card-body">
+                    <h2 class="card-title fw-bold cstm-font-clr">Informações do Médico</h2>
+                    <h5 id="infoData" class="text-md-start">Informe os dados do médico que irá assinar esse documento:</h5>
+                    <div class="form-group">
+                        <div id="box">
+                            @Html.HiddenFor(m => m.UserCert.SubjectDisplayName, new { id = "nome" })
+                            @Html.HiddenFor(m => m.UserCert.EmailAddress, new { id = "email" })
+                            @Html.HiddenFor(m => m.UserCert.PkiBrazil.CpfFormatted, new { id = "cpf" })
+                            @Html.HiddenFor(m => m.CpfManual, new { id = "cpfManual" })
+                            <div class="row mb-3 justify-content-center">
+                                <div class="col-md">
+                                    <div class="form-floating">
+                                        @Html.TextBoxFor(m => m.CRM, new { id = "crm", placeholder = "CRM", @class = "form-control transparent-input", onkeyup = "enablePrescriptionButton()" })
+                                        @Html.LabelFor(m => m.CRM, "CRM")
+                                    </div>
+                                </div>
+                                <div class="col-md">
+
+                                    <div class="form-floating">
+
                                         @Html.DropDownListFor(m => m.UF, new List<SelectListItem>{
                                         new SelectListItem{Text="Acre", Value="AC"},
                                         new SelectListItem{Text="Alagoas", Value="AL"},
@@ -49,21 +56,23 @@
                                         new SelectListItem{Text="São Paulo", Value="SP"},
                                         new SelectListItem{Text="Sergipe", Value="SE"},
                                         new SelectListItem{Text="Tocantins", Value="TO"}
-                                        }, new { @class = "select-wrapper form-select form-rounded transparent-input", id = "uf", @placeholder = "UF" })
+                                        }, new { @class = "form-select transparent-input", id = "uf", @placeholder = "UF" })
+                                        @Html.LabelFor(m => m.UF, "UF")
                                     </div>
-                                    @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
-                                    @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
                                 </div>
                             </div>
+                            @Html.ValidationMessageFor(m => m.CRM, "É necessário informar um CRM", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.UF, "É necessário informar uma unidade federativa", new { @class = "text-danger" })
                         </div>
-                        <div class="row">
-                            <div class="text-md-center">
-                                <input id="criarReceitaButton" type="button" disabled value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr" />
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-md-center">
+                            <input id="criarReceitaButton" type="button" disabled value="Criar prescrição" onclick="showApp()" placeholder="Criar prescrição" class="btn btn-primary btn-clr w-100" />
                         </div>
                     </div>
                 </div>
-            
+            </div>
+
         </div>
         <div id="main" hidden class="container" style="margin-top:30px">
             <div id="grid-separator" class="row">
@@ -76,30 +85,40 @@
                     <div id="form-hide" class="text-center">
                         <div class="form-group">
                             <div class="mb-2">
+                                <div class="form-floating">
                                 @Html.TextBoxFor(m => m.PatientName, new {
                                         id = "paciente",
                                         placeholder = "Nome do paciente",
                                         onkeyup = "enableButton()",
-                                        @class = "form-control form-rounded transparent-input"
+                                        @class = "form-control transparent-input"
                                     })
+                                    <label for="paciente">Nome do paciente</label>
+                                </div>
                                 @Html.ValidationMessageFor(m => m.PatientName, "É necessário informar o nome do paciente", new { @class = "text-danger" })
                             </div>
                             <div class="mb-2">
+                                <div class="form-floating">
                                 @Html.TextBoxFor(m => m.PatientIdentifier, new {
                                         id = "cpf-paciente",
                                         placeholder = "CPF do paciente",
                                         onkeyup = "enableButton()",
-                                        @class = "form-control form-rounded transparent-input"
+                                        @class = "form-control transparent-input"
                                     })
+                                <label for="cpf-paciente">CPF do paciente</label>
+                                </div>
                                 @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o CPF do paciente", new { @class = "text-danger" })
                             </div>
                             <div class="mb-2">
-                                @Html.TextAreaFor(m => m.PatientIdentifier, new {
-                                        id = "medicamento",
-                                        placeholder = "Medicamento, posologia e quantidade",
-                                        onkeyup = "enableButton()",
-                                        @class = "form-control form-rounded transparent-input"
-                                    })
+                                <div class="form-floating">
+                                    @Html.TextAreaFor(m => m.PatientIdentifier, new {
+                                            id = "medicamento",
+                                            maxlength = 500,
+                                            placeholder = "Medicamento, posologia e quantidade",
+                                            onkeyup = "enableButton()",
+                                            @class = "form-control transparent-input expandable-text-area"
+                                        })
+                                    <label for="medicamento">Medicamento, posologia e quantidade</label>
+                                </div>
                                 @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o medicamento", new { @class = "text-danger" })
                             </div>
                             <div class="mb-2">
@@ -108,10 +127,10 @@
                                     <label class="form-check-label" for="DocumentPreview">Visualizar documento durante assinatura</label>
                                 </div>
                             </div>
-                            <div class="col text-center">
+                            <div class="row text-center">
                                 <div class="d-inline-block">
                                     <input id="start" type="button" disabled value="Assinar" onclick="startSignature(this)" placeholder="Assinar"
-                                           class="form-control btn btn-primary btn-clr" />
+                                           class="form-control btn btn-primary btn-clr w-100" />
                                 </div>
                             </div>
                             <div class="col-md-3 mt-3">

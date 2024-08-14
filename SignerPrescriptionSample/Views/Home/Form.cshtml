@@ -86,25 +86,25 @@
                         <div class="form-group">
                             <div class="mb-2">
                                 <div class="form-floating">
-                                @Html.TextBoxFor(m => m.PatientName, new {
-                                        id = "paciente",
-                                        placeholder = "Nome do paciente",
-                                        onkeyup = "enableButton()",
-                                        @class = "form-control transparent-input"
-                                    })
+                                    @Html.TextBoxFor(m => m.PatientName, new {
+                                            id = "paciente",
+                                            placeholder = "Nome do paciente",
+                                            onkeyup = "enableButton()",
+                                            @class = "form-control transparent-input"
+                                        })
                                     <label for="paciente">Nome do paciente</label>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.PatientName, "É necessário informar o nome do paciente", new { @class = "text-danger" })
                             </div>
                             <div class="mb-2">
                                 <div class="form-floating">
-                                @Html.TextBoxFor(m => m.PatientIdentifier, new {
-                                        id = "cpf-paciente",
-                                        placeholder = "CPF do paciente",
-                                        onkeyup = "enableButton()",
-                                        @class = "form-control transparent-input"
-                                    })
-                                <label for="cpf-paciente">CPF do paciente</label>
+                                    @Html.TextBoxFor(m => m.PatientIdentifier, new {
+                                            id = "cpf-paciente",
+                                            placeholder = "CPF do paciente",
+                                            onkeyup = "enableButton();applyCpfMask(this)",
+                                            @class = "form-control transparent-input"
+                                        })
+                                    <label for="cpf-paciente">CPF do paciente</label>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.PatientIdentifier, "É necessário informar o CPF do paciente", new { @class = "text-danger" })
                             </div>
@@ -405,6 +405,18 @@
             }
         }
 
+        function applyCpfMask(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove qualquer caractere que não seja dígito
+            value = value.replace(/\D/g, "")                    //Remove tudo o que não é dígito
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos 
+            //de novo (para o segundo bloco de números)
+            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+            input.value = value;
+        }
+
     </script>
 }
+
+
 

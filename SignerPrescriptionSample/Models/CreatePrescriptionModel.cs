@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace SignerPrescriptionSample.Models
-{
-    public class CreatePrescriptionModel
-    {
+namespace SignerPrescriptionSample.Models {
+    public class CreatePrescriptionModel {
         [Required(ErrorMessage = "É necessário informar um CPF")]
         public string Identifier { get; set; }
         [Required(ErrorMessage = "É necessário informar um nome")]
@@ -32,58 +30,92 @@ namespace SignerPrescriptionSample.Models
         public string UF { get; set; }
         [Required(ErrorMessage = "É necessário informar um CRM válido")]
         public string CRM { get; set; }
-    }
 
-    public class CPFValidationAttribute : ValidationAttribute {
-        public override bool IsValid(object value) {
-            if (value == null) return false;
 
-            var cpf = value.ToString();
+        public static List<SelectListItem> GetUFs() {
+            return new List<SelectListItem>
+            {
+            new SelectListItem { Text = "Acre", Value = "AC" },
+            new SelectListItem { Text = "Alagoas", Value = "AL" },
+            new SelectListItem { Text = "Amapá", Value = "AP" },
+            new SelectListItem { Text = "Amazonas", Value = "AM" },
+            new SelectListItem { Text = "Bahia", Value = "BA" },
+            new SelectListItem { Text = "Ceará", Value = "CE" },
+            new SelectListItem { Text = "Distrito Federal", Value = "DF" },
+            new SelectListItem { Text = "Espírito Santo", Value = "ES" },
+            new SelectListItem { Text = "Goiás", Value = "GO" },
+            new SelectListItem { Text = "Maranhão", Value = "MA" },
+            new SelectListItem { Text = "Mato Grosso", Value = "MT" },
+            new SelectListItem { Text = "Mato Grosso do Sul", Value = "MS" },
+            new SelectListItem { Text = "Minas Gerais", Value = "MG" },
+            new SelectListItem { Text = "Pará", Value = "PA" },
+            new SelectListItem { Text = "Paraíba", Value = "PB" },
+            new SelectListItem { Text = "Paraná", Value = "PR" },
+            new SelectListItem { Text = "Pernambuco", Value = "PE" },
+            new SelectListItem { Text = "Piauí", Value = "PI" },
+            new SelectListItem { Text = "Rio de Janeiro", Value = "RJ" },
+            new SelectListItem { Text = "Rio Grande do Norte", Value = "RN" },
+            new SelectListItem { Text = "Rio Grande do Sul", Value = "RS" },
+            new SelectListItem { Text = "Rondônia", Value = "RO" },
+            new SelectListItem { Text = "Roraima", Value = "RR" },
+            new SelectListItem { Text = "Santa Catarina", Value = "SC" },
+            new SelectListItem { Text = "São Paulo", Value = "SP" },
+            new SelectListItem { Text = "Sergipe", Value = "SE" },
+            new SelectListItem { Text = "Tocantins", Value = "TO" }
+        };
+        }
 
-            // Remove todos os caracteres que não são dígitos
-            cpf = Regex.Replace(cpf, "[^0-9]", "");
+        public class CPFValidationAttribute : ValidationAttribute {
+            public override bool IsValid(object value) {
+                if (value == null) return false;
 
-            if (cpf.Length != 11) return false;
+                var cpf = value.ToString();
 
-            // Verifica se todos os dígitos são iguais
-            if (new string(cpf[0], 11) == cpf) return false;
+                // Remove todos os caracteres que não são dígitos
+                cpf = Regex.Replace(cpf, "[^0-9]", "");
 
-            // Realiza a validação de CPF com base nos dígitos verificadores
-            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            string tempCpf;
-            string digito;
-            int soma;
-            int resto;
+                if (cpf.Length != 11) return false;
 
-            tempCpf = cpf.Substring(0, 9);
-            soma = 0;
+                // Verifica se todos os dígitos são iguais
+                if (new string(cpf[0], 11) == cpf) return false;
 
-            for (int i = 0; i < 9; i++)
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+                // Realiza a validação de CPF com base nos dígitos verificadores
+                int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+                int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+                string tempCpf;
+                string digito;
+                int soma;
+                int resto;
 
-            resto = soma % 11;
-            if (resto < 2)
-                resto = 0;
-            else
-                resto = 11 - resto;
+                tempCpf = cpf.Substring(0, 9);
+                soma = 0;
 
-            digito = resto.ToString();
-            tempCpf = tempCpf + digito;
-            soma = 0;
+                for (int i = 0; i < 9; i++)
+                    soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
 
-            for (int i = 0; i < 10; i++)
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
+                resto = soma % 11;
+                if (resto < 2)
+                    resto = 0;
+                else
+                    resto = 11 - resto;
 
-            resto = soma % 11;
-            if (resto < 2)
-                resto = 0;
-            else
-                resto = 11 - resto;
+                digito = resto.ToString();
+                tempCpf = tempCpf + digito;
+                soma = 0;
 
-            digito = digito + resto.ToString();
+                for (int i = 0; i < 10; i++)
+                    soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
 
-            return cpf.EndsWith(digito);
+                resto = soma % 11;
+                if (resto < 2)
+                    resto = 0;
+                else
+                    resto = 11 - resto;
+
+                digito = digito + resto.ToString();
+
+                return cpf.EndsWith(digito);
+            }
         }
     }
 }

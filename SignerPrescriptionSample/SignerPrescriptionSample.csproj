@@ -37,9 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="LacunaPkiLicense.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\background.png">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

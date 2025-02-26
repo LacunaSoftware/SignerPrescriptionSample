@@ -3,25 +3,33 @@ using SignerPrescriptionSample.Services;
 using Lacuna.Pki;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace SignerPrescriptionSample.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
         private readonly SignerService signerService;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IConfiguration configuration;
 
-        public HomeController(ILogger<HomeController> logger, SignerService signerService, IWebHostEnvironment webHostEnvironment)
+        public HomeController(ILogger<HomeController> logger, SignerService signerService, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
-            _logger = logger;
+            this.logger = logger;
             this.signerService = signerService;
-            _webHostEnvironment = webHostEnvironment;
+            this.webHostEnvironment = webHostEnvironment;
+            this.configuration = configuration;
         }
 
         public IActionResult Index()
         {
-            var nonceStore = Utils.GetNonceStore(_webHostEnvironment);
+            
+            var sdkLicense = configuration.GetValue<string>("PkiSDKLicense");
+
+            PkiConfig.LoadLicense(Convert.FromBase64String(sdkLicense));
+
+            var nonceStore = Utils.GetNonceStore(webHostEnvironment);
 
             var certAuth = new PKCertificateAuthentication(nonceStore);
 
@@ -46,7 +54,7 @@ namespace SignerPrescriptionSample.Controllers
 		public IActionResult Index(AuthenticationModel model)
         {
 
-			var nonceStore = Utils.GetNonceStore(_webHostEnvironment);
+			var nonceStore = Utils.GetNonceStore(webHostEnvironment);
 
 			var certAuth = new PKCertificateAuthentication(nonceStore);
 

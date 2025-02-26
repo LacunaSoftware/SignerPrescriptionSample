@@ -1,0 +1,74 @@
+﻿@model AuthenticationModel
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "authForm", role = "form" })) {
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    @*
+		Hidden fields used to pass data from the action to the "signature form" javascript (see below) and
+		vice-versa.
+	*@
+    @Html.HiddenFor(m => m.CertificateBase64, new { id = "certificateField" })
+    @Html.HiddenFor(m => m.NonceBase64, new { id = "nonceField" })
+    @Html.HiddenFor(m => m.DigestAlgorithm, new { id = "digestAlgorithmField" })
+    @Html.HiddenFor(m => m.SignatureBase64, new { id = "signatureField" })
+    <div style="margin-top:30px">
+        <div class="col-lg-5 card">
+            <div class="card-body">
+                <h2 class="card-title fw-bold cstm-font-clr">Informações do Médico</h2>
+                <label class="mb-3 fs-5" for="certificateSelect">Acesse com o seu <b>certificado digital</b>:</label>
+                <div class="form-group mb-3 d-flex align-items-center">
+                    <div class="input-group">
+                        <select id="certificateSelect" class="select-cert-with-arrow form-control"></select>
+                        <div class="">
+                            <button id="refreshButton" type="button" class=" custom-btn-refresh h-100">
+                                <img class="mb-1" src="~/Vector.svg" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button id="signInButton" type="button" class="btn btn-primary btn-clr ml-2 mt-2 w-100">Autenticar com certificado</button>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+
+    @*
+		The file below contains the JS lib for accessing the Web PKI component. For more information, see:
+		https://webpki.lacunasoftware.com/#/Documentation
+	*@
+    <script type="text/javascript" src="https://cdn.lacunasoftware.com/libs/web-pki/lacuna-web-pki-2.14.3.min.js"
+            integrity="sha256-P92LF1ePw0qwnmbefDpDiMcr8rmwFkcxVX+utanmlek="
+            crossorigin="anonymous"></script>
+
+    @*
+		The file below contains the logic for calling the Web PKI component. It is only an example, feel
+		free to alter it to meet your application's needs. You can also bring the code into the javascript
+		block below if you prefer.
+	*@
+    <script>
+        $(document).ready(function ($) {
+            // Once the page is ready, we call the init() function on the javascript code
+            // (see authentication-form.js).
+            authenticationForm.init({
+                form: $('#authForm'),                             // The form that should be submitted when the operation is completed.
+                certificateSelect: $('#certificateSelect'),       // The <select> element (combo box) to list the certificates.
+                signInButton: $('#signInButton'),                 // The button "Sign In" that initiates the operation.
+                refreshButton: $('#refreshButton'),               // The "refresh" button.
+                certificateField: $('#certificateField'),         // The "certificate" content.
+                nonceField: $('#nonceField'),                     // The "nonce" to be signed.
+                digestAlgorithmField: $('#digestAlgorithmField'), // The "digest algorithm" to be used on the signature.
+                signatureField: $('#signatureField')              // The "signature" computed.
+            });
+            @*
+            Other stuff unrelated to webpki load
+            *@
+
+        });
+
+    </script>
+}

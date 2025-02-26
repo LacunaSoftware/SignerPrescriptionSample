@@ -1,4 +1,4 @@
-using Embedded_Signatures.Services;
+using SignerPrescriptionSample.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

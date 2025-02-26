@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Embedded_Signatures</RootNamespace>
+    <RootNamespace>SignerPrescriptionSample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,14 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\1440pxbackground.png" />
     <None Include="wwwroot\Frame 2PrescricaoOnline.png" />
     <None Include="wwwroot\Group 174PrescricaoOnline.png" />
     <None Include="wwwroot\Group 189PrescricaoOnline.png" />
+    <None Include="wwwroot\Vector.svg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.6.2" />
+    <PackageReference Include="Lacuna.Cloudhub.Api" Version="1.0.0" />
+    <PackageReference Include="Lacuna.Pki" Version="2.13.2" />
     <PackageReference Include="Lacuna.RestClient" Version="1.15.0" />
     <PackageReference Include="Lacuna.Signer.Api" Version="1.46.0" />
     <PackageReference Include="Lacuna.Signer.Client" Version="1.17.0" />
@@ -32,6 +34,16 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="LacunaPkiLicense.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\background.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

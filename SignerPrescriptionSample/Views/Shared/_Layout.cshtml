@@ -17,15 +17,15 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="navbar-img" src="~/Group 174PrescricaoOnline.png" /></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="navbar-img" src="~/Group 1230.png" /></a>
 
             </div>
             <ul class="navbar-nav navbar-group">
                 <li class="nav-item">
-                    <a href="https://docs.lacunasoftware.com/pt-BR/index.html" class="btn btn-outline-primary m-lg-2 btn-custom-outline" role="button">SOBRE NÓS</a>
+                    <a href="https://docs.lacunasoftware.com/pt-BR/index.html" class="btn btn-outline-primary m-lg-2 btn-custom-outline custom-padding" role="button">Sobre nós</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-primary btn-clr m-lg-2" asp-area="" asp-controller="Home" asp-action="Index" role="button">CRIAR PRESCRIÇÃO</a>
+                    <a class="btn btn-primary btn-clr m-lg-2 custom-padding" asp-area="" asp-controller="Home" asp-action="Index" role="button">Criar prescrição</a>
                 </li>
             </ul>
 
@@ -37,10 +37,15 @@
         </main>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/addons/cleave-phone.br.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/authentication-form.js"asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha384-Ct2s0NBxEbvJlnXHOZJheqOGKjX3Q4ewsYoJZYnLz/teMXnlGhim5o9305EkvlsN" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.lacunasoftware.com/libs/signer/lacuna-signer-widget-0.5.0.min.js" integrity="sha256-AVAkc2mvhbaWVqyfqHomvdnzhPOLHDn0QLCifiD/Zpk=" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

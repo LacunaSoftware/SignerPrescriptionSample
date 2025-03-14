@@ -19,6 +19,12 @@ namespace SignerPrescriptionSample.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        public IActionResult HomePage() {
+            return View();
+        }
+
+
+
         public IActionResult Index()
         {
             var nonceStore = Utils.GetNonceStore(_webHostEnvironment);

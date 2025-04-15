@@ -22,6 +22,12 @@ namespace SignerPrescriptionSample.Controllers
             this.configuration = configuration;
         }
 
+        public IActionResult HomePage() {
+            return View();
+        }
+
+
+
         public IActionResult Index()
         {
             

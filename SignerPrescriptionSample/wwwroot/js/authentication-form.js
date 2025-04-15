@@ -86,9 +86,6 @@
         if (console) {
             console.log('Web PKI error originated at ' + ex.origin + ': (' + ex.code + ') ' + ex.error);
         }
-
-
-        addAlert('danger', ex.userMessage);
     }
 
 	return {

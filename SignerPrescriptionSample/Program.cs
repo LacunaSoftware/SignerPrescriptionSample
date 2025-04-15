@@ -1,4 +1,4 @@
-using Embedded_Signatures.Services;
+using SignerPrescriptionSample.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +26,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=HomePage}/{id?}");
 
 app.Run();
